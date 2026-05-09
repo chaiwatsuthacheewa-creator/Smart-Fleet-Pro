@@ -100,9 +100,10 @@
         .view-section { display: none; animation: fadeIn 0.4s ease forwards; }
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(220,38,38,0.5)); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(220,38,38,1)); } 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(220,38,38,0.5)); } }
         
         .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; flex-wrap: wrap; gap: 20px;}
-        .header-title { font-size: 28px; font-weight: 700; margin: 0; color: var(--text-main); display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px;}
+        .header-title { font-size: 26px; font-weight: 700; margin: 0; color: var(--text-main); display: flex; align-items: center; gap: 12px; letter-spacing: -0.3px;}
         
         /* Buttons */
         .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; font-family: 'Sarabun'; font-weight: 600; font-size: 15px; display: flex; gap: 10px; align-items: center; justify-content: center; box-shadow: var(--shadow); transition: var(--transition); }
@@ -113,41 +114,42 @@
 
         /* Dashboard Cards */
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .stat-card { background: var(--card-bg); padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--border-color); box-shadow: var(--shadow); cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;}
+        .stat-card { background: var(--card-bg); padding: 22px; border-radius: var(--border-radius); border: 1px solid var(--border-color); box-shadow: var(--shadow); cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;}
         .stat-card::after { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--primary); transition: 0.3s; }
         .stat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px var(--theme-glow); border-color: var(--primary-light); }
         .stat-card:hover::after { width: 10px; }
-        .stat-title { color: var(--text-muted); font-size: 15px; margin-bottom: 10px; font-weight: 600; display: flex; align-items: center; justify-content: space-between;}
-        .stat-value { font-size: 38px; font-weight: 700; color: var(--text-main); line-height: 1; letter-spacing: -1px;}
+        .stat-title { color: var(--text-muted); font-size: 14px; margin-bottom: 8px; font-weight: 600; display: flex; align-items: center; justify-content: space-between;}
+        .stat-value { font-size: 34px; font-weight: 700; color: var(--text-main); line-height: 1;}
 
-        /* 🔥 Car Grid (Upgraded Glow & Ribbon) */
+        /* 🔥 Car Grid */
         .car-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
         .car-card { 
             background: var(--card-bg); 
-            padding: 24px; 
+            padding: 22px; 
             border-radius: var(--border-radius); 
             box-shadow: 0 4px 15px var(--theme-glow); 
             border: 1px solid var(--border-color); 
             transition: var(--transition); 
             position: relative; 
-            border-top: 14px solid var(--border-color); /* 🚀 Expanded Status Ribbon */
+            border-top: 14px solid var(--border-color); 
             cursor: pointer; 
             display: flex; 
             flex-direction: column;
         }
         .car-card:hover { 
             transform: translateY(-8px); 
-            box-shadow: 0 15px 35px var(--theme-glow), 0 0 15px var(--theme-glow); /* Glowing Aura */
+            box-shadow: 0 15px 35px var(--theme-glow), 0 0 15px var(--theme-glow);
         }
         .car-card.status-avail { border-top-color: var(--success); }
-        .car-card.status-inuse { border-top-color: var(--danger); }
+        .car-card.status-inuse { border-top-color: var(--primary); } 
         .car-card.status-maint { border-top-color: var(--warning); }
         
         .car-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px dashed var(--border-color); }
-        .car-plate { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--primary-dark);}
+        .car-plate { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--primary-dark);}
+        
         .badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; white-space: nowrap; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px;}
         .badge.green { background: rgba(16,185,129,0.15); color: var(--success); }
-        .badge.red { background: rgba(239,68,68,0.15); color: var(--danger); }
+        .badge.purple { background: var(--theme-glow); color: var(--primary); border: 1px solid var(--primary-light); }
         .badge.yellow { background: rgba(245,158,11,0.15); color: var(--warning); }
         
         .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; align-items: flex-start;}
@@ -155,9 +157,9 @@
         .info-val { font-weight: 600; text-align: right; color: var(--text-main); word-break: break-word; }
         
         .btn-return { width: 100%; margin-top: 20px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px; border-radius: 10px; cursor: pointer; font-family: 'Sarabun'; font-weight: 600; transition: var(--transition); display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-return:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px var(--theme-glow); }
+        .btn-return:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px var(--theme-glow); transform:translateY(-2px);}
         
-        .empty-state { grid-column: 1 / -1; padding: 60px 20px; text-align: center; color: var(--text-muted); background: var(--card-bg); border-radius: var(--border-radius); border: 2px dashed var(--border-color); font-size: 16px; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 15px;}
+        .empty-state { grid-column: 1 / -1; padding: 60px 20px; text-align: center; color: var(--text-muted); background: var(--card-bg); border-radius: var(--border-radius); border: 2px dashed var(--border-color); font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 15px;}
 
         /* Tables */
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--border-radius); box-shadow: var(--shadow); background: var(--card-bg); border: 1px solid var(--border-color);}
@@ -165,64 +167,108 @@
         .data-table th, .data-table td { padding: 16px 20px; border-bottom: 1px solid var(--border-color); }
         .data-table th { background: var(--bg-color); color: var(--text-muted); font-weight: 700; position: sticky; top: 0; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;}
         .data-table tbody tr { cursor: pointer; transition: var(--transition); }
-        .data-table tbody tr:hover { background: var(--primary-light); transform: scale(1.002); box-shadow: inset 2px 0 0 var(--primary);}
+        .data-table tbody tr:hover { background: var(--primary-light); transform: scale(1.002); box-shadow: inset 3px 0 0 var(--primary);}
         
         .row-warning { background-color: rgba(245,158,11,0.04) !important; border-left: 5px solid var(--warning); }
         .row-danger { background-color: rgba(239,68,68,0.06) !important; border-left: 5px solid var(--danger); font-weight: 600;}
 
         /* Modals & Forms */
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(17, 24, 39, 0.7); display: none; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); padding: 20px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(17, 24, 39, 0.7); display: none; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); padding: 15px; }
         .modal-content { background: var(--card-bg); width: 100%; max-width: 600px; max-height: 90vh; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; position: relative; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid rgba(255,255,255,0.1);}
         .modal-content.large { max-width: 950px; } 
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
-        .modal-header { background: linear-gradient(90deg, var(--primary), var(--primary-dark)); color: white; padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h2 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -0.5px;}
-        .btn-close { background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .modal-header { background: linear-gradient(90deg, var(--primary), var(--primary-dark)); color: white; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { margin: 0; font-size: 18px; display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -0.2px;}
+        .btn-close { background: rgba(255,255,255,0.2); border: none; width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
         .btn-close:hover { background: var(--danger); transform: rotate(90deg); }
         
-        .modal-body { padding: 25px; overflow-y: auto; flex: 1; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; grid-column: span 1; }
+        .modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; grid-column: span 1; }
         .form-group.full { grid-column: span 2; }
-        .form-group label { font-size: 14px; color: var(--text-muted); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .form-group label { font-size: 13px; color: var(--text-muted); font-weight: 700; display: flex; align-items: center; gap: 8px; }
         
-        .form-control { padding: 14px 16px; border: 2px solid var(--border-color); border-radius: 12px; font-family: 'Sarabun'; background: var(--bg-color); color: var(--text-main); font-size: 15px; font-weight: 500; transition: var(--transition); width: 100%;}
+        .form-control { padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 12px; font-family: 'Sarabun'; background: var(--bg-color); color: var(--text-main); font-size: 14px; font-weight: 500; transition: var(--transition); width: 100%;}
         .form-control:disabled { background: var(--border-color); opacity: 0.6; cursor: not-allowed; }
         .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--theme-glow); background: var(--card-bg);}
 
-        /* Detail Rows in Popup */
+        /* Professional Detail Rows (Static) */
         .detail-group { border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 20px; background: var(--card-bg); overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
-        .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 20px; border-bottom: 1px solid var(--border-color); gap: 15px; transition: 0.2s;}
+        .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 20px; border-bottom: 1px solid var(--border-color); gap: 15px; transition: 0.2s;}
         .detail-row:hover { background: var(--bg-color); }
         .detail-row:last-child { border-bottom: none; }
-        .detail-label { color: var(--text-muted); font-size: 14px; flex-shrink: 0; font-weight: 600; display: flex; align-items: center; gap: 8px;}
-        .detail-value { font-weight: 700; font-size: 15px; text-align: right; color: var(--text-main); word-break: break-word; }
+        .detail-label { color: var(--text-muted); font-size: 14px; flex-shrink: 0; font-weight: 500; display: flex; align-items: center; gap: 8px;}
+        .detail-value { font-weight: 600; font-size: 14px; text-align: right; color: var(--text-main); word-break: break-word; }
 
-        /* Calendar */
+        /* Accordion for Dashboard Popup */
+        .car-details-accordion {
+            margin-top: 15px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .car-details-accordion summary {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        .car-details-accordion summary::-webkit-details-marker { display: none; }
+        .car-details-accordion summary::after { content: '▼'; font-size: 12px; transition: transform 0.3s; opacity:0.6; }
+        .car-details-accordion[open] summary::after { transform: rotate(-180deg); }
+        .accordion-content {
+            padding: 10px 0;
+            border-top: 1px dashed var(--border-color);
+            background: var(--card-bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 🔥 CALENDAR PRO (Responsive Grid & Heatmap) */
         .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: var(--card-bg); padding: 15px 25px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow); }
         .btn-cal-nav { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: var(--transition); font-family: 'Sarabun'; display: flex; align-items: center; gap: 8px;}
         .btn-cal-nav:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px var(--theme-glow);}
-        .cal-month-title { font-size: 22px; font-weight: 700; color: var(--primary-dark); display: flex; align-items: center; gap: 10px;}
+        .cal-month-title { font-size: 20px; font-weight: 700; color: var(--primary-dark); display: flex; align-items: center; gap: 10px;}
         
         .calendar-wrap { background: var(--card-bg); border-radius: var(--border-radius); border: 1px solid var(--border-color); padding: 20px; box-shadow: var(--shadow); overflow-x: auto; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 10px; }
-        .day-header { text-align: center; font-weight: 700; padding: 12px 0; color: var(--text-muted); font-size: 15px; background: var(--bg-color); border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .cal-day { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px; min-height: 110px; cursor: pointer; transition: var(--transition); position: relative; }
-        .cal-day:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 20px var(--theme-glow); z-index: 10; border-color: var(--primary);}
-        .day-num { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
-        .cal-stat-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 6px; padding: 6px 10px; border-radius: 6px; font-weight: 700; letter-spacing: 0.5px;}
+        
+        /* 🚨 ปรับปฏิทินให้เป็น 7 คอลัมน์ 100% ไม่ต้อง Scroll */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr) !important; gap: 8px; }
+        .day-header { text-align: center; font-weight: 700; padding: 10px 0; color: var(--text-muted); font-size: 14px; background: var(--bg-color); border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .cal-day { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 6px; min-height: 110px; cursor: pointer; transition: var(--transition); position: relative; display: flex; flex-direction: column;}
+        .cal-day:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 25px var(--theme-glow); z-index: 10; border-color: var(--primary) !important;}
+        .day-num { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text-main); text-align: center; }
+        
+        /* แถบสีม่วง/เขียว ในปฏิทิน */
+        .cal-bar-container { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
+        .cal-stat-bar { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 6px 2px; border-radius: 8px; font-weight: 700; color: white; letter-spacing: 0.5px;}
+        .cal-stat-bar.used { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); box-shadow: 0 2px 6px var(--theme-glow);}
+        .cal-stat-bar.avail { background: linear-gradient(135deg, #10b981, #047857); box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);}
+        .cal-stat-bar span:last-child { font-size: 16px; line-height: 1; margin-top:4px;}
+        .cal-label { font-size: 11px; opacity: 0.9; line-height: 1;}
+
+        /* Popup แบบแนวตั้ง (Card Style) */
+        .v-book-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 15px; box-shadow: var(--shadow); transition: var(--transition); border-left: 4px solid var(--primary);}
+        .v-book-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--theme-glow); border-color: var(--primary-light);}
 
         /* Toast */
         #toast-container { position: fixed; top: 24px; right: 24px; z-index: 10000; display: flex; flex-direction: column; gap: 12px; max-width: calc(100vw - 48px); }
-        .toast { background: var(--card-bg); border-left: 6px solid var(--success); color: var(--text-main); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 14px; font-weight: 600; font-family: 'Sarabun'; font-size: 15px; animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .toast { background: var(--card-bg); border-left: 6px solid var(--success); color: var(--text-main); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 14px; font-weight: 600; font-family: 'Sarabun'; font-size: 14px; animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .toast.danger { border-left-color: var(--danger); }
         .toast.warning { border-left-color: var(--warning); }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        #mobile-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(17, 24, 39, 0.5); display: none; z-index: 150; backdrop-filter: blur(2px);}
+        #mobile-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(17, 24, 39, 0.6); display: none; z-index: 150; backdrop-filter: blur(3px);}
 
-        /* Responsive */
+        /* 📱 Mobile Responsive (Mobile-First Adjustments) */
         @media (max-width: 1024px) {
             .summary-grid { grid-template-columns: repeat(2, 1fr); }
             .car-grid { grid-template-columns: repeat(2, 1fr); }
@@ -234,19 +280,34 @@
             .btn-toggle { display: none; } 
             .top-nav { padding: 0 20px; }
             .sync-status { display: none; } 
-            .content-area { padding: 20px; }
+            .content-area { padding: 15px; }
             .header-flex { flex-direction: column; align-items: stretch; gap: 15px; margin-bottom: 20px; }
             .btn-primary, .btn-secondary { width: 100%; justify-content: center;}
             .car-grid { grid-template-columns: 1fr; }
             .form-grid { grid-template-columns: 1fr; }
             .form-group.full { grid-column: span 1; }
-            .calendar-nav { flex-direction: column; gap: 15px;}
+            
             .theme-picker { max-width: 150px; }
+            .bg-watermark { display: none; }
+
+            /* 📅 ปฏิทินโหมดมือถือ บีบ 7 วันให้พอดีจอ ไม่ต้องเลื่อน */
+            .calendar-wrap { padding: 10px; border-radius: 12px; }
+            .calendar-nav { flex-direction: column; gap: 10px; padding: 12px; }
+            .calendar-grid { grid-template-columns: repeat(7, 1fr) !important; gap: 5px; }
+            .day-header { font-size: 12px !important; padding: 6px 0; }
+            .cal-day { padding: 8px 4px; min-height: 90px; border-radius: 8px;}
+            .day-num { font-size: 16px; margin-bottom: 6px;}
+            
+            /* แถบสีมือถือ แนวตั้ง ให้ตัวเลขใหญ่สะใจ */
+            .cal-stat-bar { padding: 4px 2px; flex-direction: column; justify-content: center; border-radius: 6px;}
+            .cal-label { font-size: 10px; margin-bottom: 2px; line-height:1;}
+            .cal-stat-bar span:last-child { font-size: 16px; line-height:1;}
+            .alert-svg { width: 14px !important; height: 14px !important; top: 4px !important; right: 4px !important; }
         }
         @media (max-width: 480px) {
-            .summary-grid { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: 1fr; gap: 10px;}
             .modal-content { max-height: 95vh; padding: 0; border-radius: 16px;}
-            .detail-row { flex-direction: column; gap: 8px;}
+            .detail-row { flex-direction: column; gap: 4px; padding: 12px 16px;}
             .detail-value { text-align: left; width: 100%; white-space: normal;}
             .color-dot { width: 16px; height: 16px; } 
             #live-time { display: none; }
@@ -255,7 +316,7 @@
 </head>
 <body class="theme-blue">
 
-    <!-- 🌟 SVG Icons Library (Full Enterprise Set) -->
+    <!-- 🌟 SVG Icons Library -->
     <svg style="display:none;">
         <symbol id="icon-dash" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></symbol>
         <symbol id="icon-cal" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></symbol>
@@ -280,12 +341,8 @@
         <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></symbol>
     </svg>
 
-    <!-- 🏎️ พื้นหลังภาพรถ Blueprint -->
     <div class="bg-watermark"></div>
-    
-    <!-- 🚀 ไฟวิ่ง Scanner สไตล์ IT -->
     <div class="smart-bar-container"><div class="smart-bar"></div></div>
-    
     <div id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
 
     <!-- SIDEBAR -->
@@ -324,7 +381,6 @@
                     <svg width="18" height="18"><use href="#icon-time"/></svg> 00:00 น.
                 </div>
                 
-                <!-- 🎨 10 Color Theme Selectors -->
                 <div class="theme-picker hide-on-mobile">
                     <div class="color-dot" style="background: #e11d48;" onclick="setTheme('theme-red')" title="Red"></div>
                     <div class="color-dot" style="background: #ea580c;" onclick="setTheme('theme-orange')" title="Orange"></div>
@@ -360,7 +416,7 @@
                 <div class="summary-grid">
                     <div class="stat-card" onclick="showSummaryPopup('ทั้งหมด')"><div class="stat-title">รถในระบบทั้งหมด <svg width="20" height="20"><use href="#icon-car"/></svg></div><div class="stat-value" id="st-total">0</div></div>
                     <div class="stat-card" onclick="showSummaryPopup('ว่าง')"><div class="stat-title">ว่างในวันที่เลือก <span style="color:var(--success)"><svg width="20" height="20"><use href="#icon-check"/></svg></span></div><div class="stat-value" style="color: var(--success);" id="st-avail">0</div></div>
-                    <div class="stat-card" onclick="showSummaryPopup('ใช้งาน')"><div class="stat-title">ใช้งานในวันที่เลือก <span style="color:var(--danger)"><svg width="20" height="20"><use href="#icon-time"/></svg></span></div><div class="stat-value" style="color: var(--danger);" id="st-inuse">0</div></div>
+                    <div class="stat-card" onclick="showSummaryPopup('ใช้งาน')"><div class="stat-title">ใช้งานในวันที่เลือก <span style="color:var(--primary)"><svg width="20" height="20"><use href="#icon-time"/></svg></span></div><div class="stat-value" style="color: var(--primary);" id="st-inuse">0</div></div>
                     <div class="stat-card" onclick="showSummaryPopup('ซ่อม')"><div class="stat-title">ส่งซ่อม/เช็คระยะ <span style="color:var(--warning)"><svg width="20" height="20"><use href="#icon-tool"/></svg></span></div><div class="stat-value" style="color: var(--warning);" id="st-maint">0</div></div>
                 </div>
 
@@ -581,18 +637,13 @@
 
     <!-- 3: Summary List -->
     <div class="modal-overlay" id="modal-summary">
-        <div class="modal-content large">
+        <div class="modal-content">
             <div class="modal-header">
                 <h2 id="summary-title"><svg width="24" height="24"><use href="#icon-list"/></svg> รายละเอียดเชิงลึก</h2>
                 <button class="btn-close" onclick="closeModal('modal-summary')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
             </div>
-            <div class="modal-body" style="padding: 0;">
-                <div class="table-responsive" style="border-radius:0; box-shadow:none; max-height: 65vh; border:none;">
-                    <table class="data-table" style="box-shadow: none; border-radius: 0;">
-                        <thead id="summary-thead"></thead>
-                        <tbody id="summary-tbody"></tbody>
-                    </table>
-                </div>
+            <div class="modal-body" id="summary-modal-body" style="background: var(--bg-color); padding:20px;">
+                <!-- Content Injected via JS -->
             </div>
         </div>
     </div>
@@ -604,8 +655,8 @@
                 <h2 style="margin:0;"><svg width="24" height="24"><use href="#icon-car"/></svg> ข้อมูลรถแบบละเอียด</h2>
                 <button class="btn-close" onclick="closeModal('modal-car-detail')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
             </div>
-            <div class="modal-body" id="car-detail-body" style="padding-bottom:15px;"></div>
-            <div id="car-detail-admin-area" style="padding: 20px 25px; background: var(--bg-color); border-top: 1px solid var(--border-color); display: none; gap: 15px;"></div>
+            <div class="modal-body" id="car-detail-body" style="padding-bottom:15px; background:var(--bg-color);"></div>
+            <div id="car-detail-admin-area" style="padding: 20px 25px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: none; gap: 15px;"></div>
         </div>
     </div>
 
@@ -630,7 +681,7 @@
         </div>
     </div>
 
-    <!-- 6: Maint Warning (🚨 Popup แดงบังคับแจ้งเตือน 100%) -->
+    <!-- 6: Maint Warning -->
     <div class="modal-overlay" id="modal-maint-warning" style="z-index: 10001;">
         <div class="modal-content" style="max-width: 450px; text-align: center; padding: 40px 30px; border: 3px solid var(--danger); box-shadow: 0 0 30px rgba(239,68,68,0.3);">
             <div style="color: var(--danger); margin-bottom: 20px; animation: pulse 1s infinite;"><svg width="70" height="70"><use href="#icon-warning"/></svg></div>
@@ -642,7 +693,6 @@
             <button class="btn-primary" style="width: 100%; justify-content: center; background: linear-gradient(135deg, var(--danger), #991b1b); padding:14px; font-size:16px;" onclick="closeModal('modal-maint-warning')">รับทราบคำเตือน</button>
         </div>
     </div>
-    <style>@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }</style>
 
     <!-- 7: Admin Edit Car Info -->
     <div class="modal-overlay" id="modal-edit-car">
@@ -814,7 +864,6 @@
         function renderDashboard() {
             let avail = 0, inuse = 0, maint = 0;
             const dashGrid = document.getElementById('dashboard-cards');
-            
             const dashDateStr = document.getElementById('dash-date').value;
             if(!dashDateStr) return;
 
@@ -838,7 +887,7 @@
                 else if(currentStatus === 'Maintenance') maint++;
 
                 let stCls = currentStatus === 'Available' ? 'status-avail' : (currentStatus === 'In Use' ? 'status-inuse' : 'status-maint');
-                let bdg = currentStatus === 'Available' ? 'green' : (currentStatus === 'In Use' ? 'red' : 'yellow');
+                let bdg = currentStatus === 'Available' ? 'green' : (currentStatus === 'In Use' ? 'purple' : 'yellow');
                 let stTxt = currentStatus === 'Available' ? 'ว่างพร้อมใช้' : (currentStatus === 'In Use' ? 'ถูกใช้งาน' : 'ส่งซ่อม');
                 
                 let btnHtml = '';
@@ -848,25 +897,38 @@
                     }
                 }
 
-                let displayUser = activeBooking ? activeBooking.UserName : '-';
-                let displayDest = activeBooking ? activeBooking.Destination : '-';
-                let displayEnd = activeBooking && activeBooking.EndDate ? activeBooking.EndDate : '-';
-
                 let carIcon = getCarIcon(c.Type);
+                
+                let bookingHtml = '';
+                if (currentStatus === 'In Use' && activeBooking) {
+                    bookingHtml = `
+                        <div style="margin-bottom: 15px; padding: 12px; background: rgba(139,92,246,0.05); border-radius: 12px; border: 1px solid rgba(139,92,246,0.2);">
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้</span><span class="info-val" style="color:var(--primary);">${activeBooking.UserName} <br><span style="font-size:12px; color:var(--text-muted); font-weight:normal;">${activeBooking.Tel || '-'}</span></span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${activeBooking.Destination}</span></div>
+                            <div class="info-row"><span class="info-label" style="color:var(--danger)"><svg width="16" height="16"><use href="#icon-time"/></svg> เริ่ม-คืน</span><span class="info-val">${activeBooking.StartDate.substring(0,5)} - ${activeBooking.EndDate.substring(0,5)}</span></div>
+                        </div>
+                    `;
+                } else if (currentStatus === 'Available') {
+                    bookingHtml = `
+                        <div style="margin-bottom: 15px; padding: 12px; background: rgba(16,185,129,0.05); border-radius: 12px; text-align:center; color: var(--success); font-weight: 700; border: 1px solid rgba(16,185,129,0.15);">
+                            <svg width="20" height="20" style="vertical-align:bottom"><use href="#icon-check"/></svg> รถว่างพร้อมจองใช้งาน
+                        </div>
+                    `;
+                } else {
+                    bookingHtml = `
+                        <div style="margin-bottom: 15px; padding: 12px; background: rgba(245,158,11,0.05); border-radius: 12px; text-align:center; color: var(--warning); font-weight: 700; border: 1px solid rgba(245,158,11,0.15);">
+                            <svg width="20" height="20" style="vertical-align:bottom"><use href="#icon-tool"/></svg> รถอยู่ระหว่างส่งซ่อม/เช็คระยะ
+                        </div>
+                    `;
+                }
 
                 dashGrid.innerHTML += `
-                    <div class="car-card ${stCls}" onclick="showCarDetailPopup('${c.Plate}')">
+                    <div class="car-card ${stCls}" onclick="showCarDetailPopup('${c.Plate}', 'dashboard')">
                         <div class="car-header">
                             <div class="car-plate"><span style="font-size:26px;">${carIcon}</span> ${c.Plate || '-'}</div>
                             <div class="badge ${bdg}">${stTxt}</div>
                         </div>
-                        <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-flag"/></svg> รุ่นรถ</span><span class="info-val">${c.Brand || '-'}</span></div>
-                        <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-mileage"/></svg> เลขไมล์</span><span class="info-val">${Number(c.Mileage||0).toLocaleString()} กม.</span></div>
-                        ${currentStatus === 'In Use' ? `<div style="margin-top:16px; border-top:1px dashed var(--border-color); padding-top:16px;">
-                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</span><span class="info-val" style="color:var(--primary);">${displayUser}</span></div>
-                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${displayDest}</span></div>
-                            <div class="info-row"><span class="info-label" style="color:var(--danger)"><svg width="16" height="16"><use href="#icon-time"/></svg> กำหนดคืน</span><span class="info-val">${displayEnd}</span></div>
-                        </div>` : ''}
+                        ${bookingHtml}
                         ${btnHtml}
                     </div>
                 `;
@@ -911,7 +973,7 @@
                     if (b.Status === 'Completed') totalKm += km;
                     
                     let bId = String(b.BookingID).substring(3,11); 
-                    let stBadge = b.Status === 'Active' ? `<span class="badge red">กำลังใช้</span>` : `<span class="badge green">คืนแล้ว</span>`;
+                    let stBadge = b.Status === 'Active' ? `<span class="badge purple">กำลังใช้</span>` : `<span class="badge green">คืนแล้ว</span>`;
                     let realRet = (b.RealReturnDate && b.RealReturnDate !== '') ? b.RealReturnDate : '-';
                     
                     let adminAction = isAdminLoggedIn ? `<td class="admin-only" style="text-align:center;"><button class="btn-secondary" style="color:var(--danger); border-color:var(--danger); padding:6px 12px; font-size:13px;" onclick="deleteBooking('${b.BookingID}')"><svg width="14" height="14"><use href="#icon-close"/></svg> ลบ</button></td>` : `<td class="admin-only" style="display:none;"></td>`;
@@ -979,8 +1041,9 @@
                 let expIns = c.InsExp || '-';
                 let insDisplay = `<span style="font-weight:600">${c.InsCompany || '-'}</span> <br><span style="font-size:12px; color:var(--text-muted);"><svg width="12" height="12" style="vertical-align:text-bottom"><use href="#icon-phone"/></svg> ${c.InsPhone || '-'}</span>`;
 
+                // 💡 สังเกตที่ onclick จะส่งคำว่า 'carmodule' ไปเพื่อบอกว่ามาจากหน้า ข้อมูลรถส่วนกลาง
                 carTable.innerHTML += `
-                    <tr class="${rwCls}" onclick="showCarDetailPopup('${c.Plate}')">
+                    <tr class="${rwCls}" onclick="showCarDetailPopup('${c.Plate}', 'carmodule')">
                         <td><span style="font-size:18px;">${getCarIcon(c.Type)}</span> <b style="font-size:16px;">${c.Plate || '-'}</b><br><span style="font-size:12px; color:var(--text-muted);">${c.Brand || '-'}</span></td>
                         <td style="font-weight:700;">${currentMile.toLocaleString()}</td>
                         <td style="color:var(--text-muted); font-weight:500;">${lastSrvMile.toLocaleString()}</td>
@@ -992,15 +1055,19 @@
             });
         }
 
-        function showCarDetailPopup(plate) {
+        // 💡 🔑 ฟังก์ชันแสดง Popup แยกข้อมูล 2 หน้าให้ไม่เหมือนกัน
+        function showCarDetailPopup(plate, source = 'dashboard') {
             const car = carsData.find(c => c.Plate === plate);
             if(!car) return;
 
-            let activeBooking = getActiveBookingForDate(car.Plate, new Date().toISOString().split('T')[0]);
+            let dashDateStr = document.getElementById('dash-date').value;
+            if(!dashDateStr) dashDateStr = new Date().toISOString().split('T')[0];
+
+            let activeBooking = getActiveBookingForDate(car.Plate, dashDateStr);
             let currentStatus = car.Status === 'Maintenance' ? 'Maintenance' : (activeBooking ? 'In Use' : 'Available');
             
             let stTxt = currentStatus === 'Available' ? 'ว่างพร้อมใช้' : (currentStatus === 'In Use' ? 'กำลังใช้งาน' : 'ส่งซ่อม');
-            let stCol = currentStatus === 'Available' ? 'var(--success)' : (currentStatus === 'In Use' ? 'var(--danger)' : 'var(--warning)');
+            let stCol = currentStatus === 'Available' ? 'var(--success)' : (currentStatus === 'In Use' ? 'var(--primary)' : 'var(--warning)');
 
             let currentMile = Number(car.Mileage||0);
             let lastSrvMile = Number(car.LastServiceMileage);
@@ -1010,40 +1077,77 @@
             let remainMile = nextSrvMile - currentMile;
             
             let html = `
-                <div style="text-align:center; margin-bottom:25px;">
+                <div style="text-align:center; margin-bottom:20px; padding: 20px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow);">
                     <div style="font-size:32px; font-weight:700; color:var(--primary-dark); letter-spacing:-0.5px;">${getCarIcon(car.Type)} ${car.Plate}</div>
                     <div style="color:var(--text-muted); font-size:18px; font-weight:500;">${car.Brand || '-'}</div>
-                    <div style="display:inline-flex; align-items:center; gap:8px; margin-top:15px; padding:8px 24px; border-radius:30px; background:var(--bg-color); border:1px solid ${stCol}; color:${stCol}; font-weight:700; font-size:15px; box-shadow:var(--shadow);">
+                    <div style="display:inline-flex; align-items:center; gap:8px; margin-top:10px; padding:6px 20px; border-radius:30px; background:var(--bg-color); border:1px solid ${stCol}; color:${stCol}; font-weight:700; font-size:14px;">
                         <svg width="18" height="18"><use href="#icon-check"/></svg> สถานะ: ${stTxt}
                     </div>
                 </div>
-                
-                <h3 style="margin-top:0; margin-bottom:15px; color:var(--primary); font-size:16px; display:flex; align-items:center; gap:10px;"><svg width="20" height="20"><use href="#icon-shield"/></svg> ข้อมูลรถ & ประกันภัย</h3>
-                <div class="detail-group">
-                    <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> หมดอายุ พ.ร.บ.</span><span class="detail-value">${car.ActExp || '-'}</span></div>
-                    <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-shield"/></svg> หมดอายุ ประกัน</span><span class="detail-value">${car.InsExp || '-'}</span></div>
-                    <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-building"/></svg> บริษัทประกัน</span><span class="detail-value">${car.InsCompany || '-'} <br><span style="font-size:13px; color:var(--text-muted); font-weight:500;"><svg width="12" height="12"><use href="#icon-phone"/></svg> โทร. ${car.InsPhone || '-'}</span></span></div>
-                </div>
-
-                <h3 style="margin-top:25px; margin-bottom:15px; color:var(--primary); font-size:16px; display:flex; align-items:center; gap:10px;"><svg width="20" height="20"><use href="#icon-tool"/></svg> บำรุงรักษา (Maintenance)</h3>
-                <div class="detail-group">
-                    <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-mileage"/></svg> ไมล์ปัจจุบัน</span><span class="detail-value">${currentMile.toLocaleString()} กม.</span></div>
-                    <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-flag"/></svg> ไมล์เข้าศูนย์ล่าสุด</span><span class="detail-value" style="color:var(--text-muted);">${lastSrvMile.toLocaleString()} กม.</span></div>
-                    <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เช็คระยะถัดไป</span><span class="detail-value" style="color:${remainMile <= 2000 ? 'var(--danger)' : 'var(--text-main)'};">${nextSrvMile.toLocaleString()} กม.</span></div>
-                    <div class="detail-row" style="background:${remainMile <= 0 ? 'rgba(239,68,68,0.1)' : 'transparent'};"><span class="detail-label"><svg width="16" height="16"><use href="#icon-warning"/></svg> สถานะระยะทาง</span><span class="detail-value" style="color:${remainMile <= 0 ? 'var(--danger)' : (remainMile <= 2000 ? 'var(--warning)' : 'var(--success)')};">${remainMile <= 0 ? `เกินระยะมาแล้ว ${Math.abs(remainMile).toLocaleString()}` : `วิ่งได้อีก ${remainMile.toLocaleString()}`} กม.</span></div>
-                </div>
             `;
 
-            if(currentStatus === 'In Use') {
+            // ก้อนข้อมูลประกัน
+            let insHtml = `
+                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> หมด พ.ร.บ.</span><span class="info-val">${car.ActExp || '-'}</span></div>
+                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-shield"/></svg> หมด ประกัน</span><span class="info-val">${car.InsExp || '-'}</span></div>
+                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-building"/></svg> บ.ประกัน</span><span class="info-val">${car.InsCompany || '-'} <br><span style="font-size:12px; color:var(--text-muted); font-weight:500;"><svg width="12" height="12"><use href="#icon-phone"/></svg> โทร. ${car.InsPhone || '-'}</span></span></div>
+            `;
+
+            // ก้อนข้อมูลเช็คระยะ
+            let maintHtml = `
+                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-mileage"/></svg> ไมล์ปัจจุบัน</span><span class="info-val">${currentMile.toLocaleString()} กม.</span></div>
+                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-flag"/></svg> ไมล์เข้าศูนย์ล่าสุด</span><span class="info-val" style="color:var(--text-muted);">${lastSrvMile.toLocaleString()} กม.</span></div>
+                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เช็คระยะถัดไป</span><span class="info-val" style="color:${remainMile <= 2000 ? 'var(--danger)' : 'var(--text-main)'};">${nextSrvMile.toLocaleString()} กม.</span></div>
+                <div class="info-row" style="background:${remainMile <= 0 ? 'rgba(239,68,68,0.1)' : 'transparent'}; padding:6px; border-radius:6px;"><span class="info-label"><svg width="16" height="16"><use href="#icon-warning"/></svg> สถานะระยะทาง</span><span class="info-val" style="color:${remainMile <= 0 ? 'var(--danger)' : (remainMile <= 2000 ? 'var(--warning)' : 'var(--success)')};">${remainMile <= 0 ? `เกินระยะมาแล้ว ${Math.abs(remainMile).toLocaleString()}` : `วิ่งได้อีก ${remainMile.toLocaleString()}`} กม.</span></div>
+            `;
+
+            if (source === 'dashboard') {
+                // 💡 หน้าภาพรวมระบบ: โชว์ข้อมูลการใช้งาน + ข้อมูลรถ/เช็คระยะ ซ่อนไว้ใน Accordion
+                if(currentStatus === 'In Use' && activeBooking) {
+                    html += `
+                        <div class="detail-group" style="border-color:var(--primary); box-shadow: 0 4px 15px var(--theme-glow);">
+                            <div style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); padding:12px 16px; color:white; font-weight:700; font-size:15px; display:flex; align-items:center; gap:10px;">
+                                <svg width="20" height="20"><use href="#icon-time"/></svg> ข้อมูลการจอง / การใช้งาน
+                            </div>
+                            <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</span><span class="detail-value" style="color:var(--primary);">${activeBooking.UserName}</span></div>
+                            <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก/หน่วยงาน</span><span class="detail-value">${activeBooking.Department}</span></div>
+                            <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-phone"/></svg> เบอร์ติดต่อ</span><span class="detail-value">${activeBooking.Tel || '-'}</span></div>
+                            <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="detail-value">${activeBooking.Destination || '-'}</span></div>
+                            <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> วันที่เริ่ม</span><span class="detail-value" style="color:var(--success);">${activeBooking.StartDate}</span></div>
+                            <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-warning"/></svg> กำหนดคืน</span><span class="detail-value" style="color:var(--danger);">${activeBooking.EndDate}</span></div>
+                        </div>
+                    `;
+                }
+
                 html += `
-                    <h3 style="margin-top:25px; margin-bottom:15px; color:var(--danger); font-size:16px; display:flex; align-items:center; gap:10px;"><svg width="20" height="20"><use href="#icon-time"/></svg> การใช้งานปัจจุบัน</h3>
-                    <div class="detail-group" style="border-color:var(--danger);">
-                        <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</span><span class="detail-value" style="color:var(--primary);">${activeBooking.UserName}</span></div>
-                        <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก/หน่วยงาน</span><span class="detail-value">${activeBooking.Department}</span></div>
-                        <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-phone"/></svg> เบอร์ติดต่อ</span><span class="detail-value">${activeBooking.Tel}</span></div>
-                        <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="detail-value">${activeBooking.Destination}</span></div>
-                        <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> วันที่เริ่ม</span><span class="detail-value" style="color:var(--success);">${activeBooking.StartDate}</span></div>
-                        <div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#icon-warning"/></svg> กำหนดคืน</span><span class="detail-value" style="color:var(--danger);">${activeBooking.EndDate}</span></div>
+                    <details class="car-details-accordion">
+                        <summary><span style="display:flex; align-items:center; gap:10px; color:var(--primary-dark);"><svg width="18" height="18"><use href="#icon-shield"/></svg> ข้อมูลรถ & ประกันภัย</span></summary>
+                        <div class="accordion-content">${insHtml}</div>
+                    </details>
+                    <details class="car-details-accordion">
+                        <summary><span style="display:flex; align-items:center; gap:10px; color:var(--warning);"><svg width="18" height="18"><use href="#icon-tool"/></svg> ข้อมูลเช็คระยะ (Maintenance)</span></summary>
+                        <div class="accordion-content">${maintHtml}</div>
+                    </details>
+                `;
+            } else {
+                // 💡 หน้าข้อมูลส่วนกลาง: โชว์ข้อมูลรถ + เช็คระยะ แบบเปิดกางออกเลย (ไม่ซ่อน, ไม่มีข้อมูลจอง)
+                html += `
+                    <div class="detail-group">
+                        <div style="background:rgba(0, 113, 227, 0.05); padding:14px 20px; font-weight:700; font-size:16px; color:var(--primary-dark); display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border-color);">
+                            <svg width="20" height="20"><use href="#icon-shield"/></svg> ข้อมูลรถ & ประกันภัย
+                        </div>
+                        <div style="padding:15px; display:flex; flex-direction:column; gap:12px;">
+                            ${insHtml}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <div style="background:rgba(245, 158, 11, 0.05); padding:14px 20px; font-weight:700; font-size:16px; color:var(--warning); display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border-color);">
+                            <svg width="20" height="20"><use href="#icon-tool"/></svg> ข้อมูลเช็คระยะ (Maintenance)
+                        </div>
+                        <div style="padding:15px; display:flex; flex-direction:column; gap:12px;">
+                            ${maintHtml}
+                        </div>
                     </div>
                 `;
             }
@@ -1062,7 +1166,7 @@
             document.getElementById('modal-car-detail').style.display = 'flex';
         }
 
-        // --- CALENDAR LOGIC ---
+        // --- 📅 CALENDAR LOGIC ---
         function changeMonth(step) {
             currentCalDate.setMonth(currentCalDate.getMonth() + step);
             renderCalendar();
@@ -1077,9 +1181,10 @@
             
             document.getElementById('cal-month-display').innerText = `${monthNames[currentMonth]} ${currentYear + 543}`;
 
+            // ย่อตัวหนังสือในวันบนมือถือ และให้แน่ใจว่าแสดงผล 7 คอลัมน์ 100%
             cal.innerHTML = `
-                <div class="day-header">จันทร์</div><div class="day-header">อังคาร</div><div class="day-header">พุธ</div>
-                <div class="day-header">พฤหัสฯ</div><div class="day-header">ศุกร์</div><div class="day-header" style="color:var(--danger)">เสาร์</div><div class="day-header" style="color:var(--danger)">อาทิตย์</div>
+                <div class="day-header">จ.</div><div class="day-header">อ.</div><div class="day-header">พ.</div>
+                <div class="day-header">พฤ.</div><div class="day-header">ศ.</div><div class="day-header" style="color:var(--danger)">ส.</div><div class="day-header" style="color:var(--danger)">อา.</div>
             `;
             
             let firstDay = new Date(currentYear, currentMonth, 1).getDay();
@@ -1107,33 +1212,50 @@
                 let iu = usedCarsSet.size; 
                 let av = totalCars - iu; if (av < 0) av = 0;
 
+                // 🎨 HEATMAP LOGIC สีม่วงเข้ม-อ่อน
                 let percent = totalCars === 0 ? 0 : (iu / totalCars) * 100;
-                let borderColor = 'var(--border-color)'; let bgColor = 'var(--card-bg)';
-                if(percent === 0 && totalCars > 0) { borderColor = 'var(--success)'; }
-                else if(percent >= 100) { borderColor = 'var(--danger)'; bgColor = 'rgba(239,68,68,0.06)'; }
-                else if(percent >= 50) { borderColor = 'var(--warning)'; bgColor = 'rgba(245,158,11,0.04)'; }
+                let borderColor = 'var(--border-color)'; 
+                let bgColor = 'var(--card-bg)';
+                let alertIcon = '';
 
-                let todayMark = isToday ? `<div style="position:absolute; top:-8px; right:-8px; background:var(--primary); color:white; font-size:11px; padding:4px 10px; border-radius:12px; font-weight:700; box-shadow:var(--shadow);">วันนี้</div>` : '';
+                if (percent > 0 && percent <= 50) {
+                    bgColor = 'rgba(139, 92, 246, 0.08)'; 
+                    borderColor = 'rgba(139, 92, 246, 0.3)';
+                } else if (percent > 50 && percent < 90) {
+                    bgColor = 'rgba(139, 92, 246, 0.2)'; 
+                    borderColor = 'rgba(139, 92, 246, 0.6)';
+                } else if (percent >= 90) {
+                    bgColor = 'rgba(139, 92, 246, 0.35)'; 
+                    borderColor = '#7c3aed';
+                    alertIcon = `<svg class="alert-svg" width="20" height="20" style="color:#b91c1c; position:absolute; top:6px; right:6px; animation: pulse 1s infinite; filter: drop-shadow(0 0 4px rgba(220,38,38,0.6));"><use href="#icon-warning"/></svg>`;
+                } else if (percent === 0 && totalCars > 0) {
+                    borderColor = 'rgba(16, 185, 129, 0.4)'; 
+                }
+
+                let todayMark = isToday ? `<div style="position:absolute; top:-6px; left:-6px; background:var(--primary); color:white; font-size:10px; padding:3px 8px; border-radius:10px; font-weight:700; box-shadow:var(--shadow);">วันนี้</div>` : '';
 
                 cal.innerHTML += `
                     <div class="cal-day ${isToday}" style="border-color:${borderColor}; background-color:${bgColor};" onclick="showCalendarDetails('${checkDateStr}')">
                         ${todayMark}
+                        ${alertIcon}
                         <div class="day-num" style="${isToday?'color:var(--primary)':''}">${d}</div>
-                        <div class="cal-stat-row" style="color:var(--danger); background:rgba(239,68,68,0.1);"><span>🔴 ใช้</span> <span style="font-size:14px;">${iu}</span></div>
-                        <div class="cal-stat-row" style="color:var(--success); background:rgba(16,185,129,0.1);"><span>🟢 ว่าง</span> <span style="font-size:14px;">${av}</span></div>
+                        <div class="cal-bar-container">
+                            <div class="cal-stat-bar used"><span class="cal-label">จองใช้</span><span>${iu}</span></div>
+                            <div class="cal-stat-bar avail"><span class="cal-label">ว่าง</span><span>${av}</span></div>
+                        </div>
                     </div>
                 `;
             }
         }
 
+        // 💡 Popup การใช้งานรถในวันนั้น (Card แนวตั้งล้วนๆ)
         function showCalendarDetails(dateStr) {
             const modal = document.getElementById('modal-summary');
             let parts = dateStr.split('-');
             
             document.getElementById('summary-title').innerHTML = `<svg width="24" height="24"><use href="#icon-cal"/></svg> ข้อมูลการจองรถ วันที่ ${parts[2]}/${parts[1]}/${Number(parts[0])+543}`;
-            const th = document.getElementById('summary-thead'); const tb = document.getElementById('summary-tbody');
-            tb.innerHTML = '';
-            th.innerHTML = `<tr><th>ทะเบียน</th><th>ผู้ใช้งาน (แผนก)</th><th>เบอร์ติดต่อ</th><th>ปลายทาง</th><th>วันที่ยืม - คืน</th><th>จำนวนวัน</th></tr>`;
+            const modalBody = document.getElementById('summary-modal-body');
+            modalBody.innerHTML = '';
             
             let found = false;
             
@@ -1146,31 +1268,36 @@
                     let days = (bStart && bEnd) ? Math.ceil((bEnd - bStart) / (1000 * 60 * 60 * 24)) + 1 : 1; 
                     if(days <= 0) days = 1;
                     
-                    tb.innerHTML += `<tr>
-                        <td style="font-weight:700; color:var(--text-main); font-size:15px;">${activeBooking.Plate}</td>
-                        <td><span style="font-weight:600; color:var(--primary);">${activeBooking.UserName || '-'}</span> <br><span style="font-size:12px; color:var(--text-muted);">${activeBooking.Department || '-'}</span></td>
-                        <td>${activeBooking.Tel || '-'}</td>
-                        <td>${activeBooking.Destination || '-'}</td>
-                        <td><span style="color:var(--success); font-weight:600;">${activeBooking.StartDate}</span> <br> <span style="color:var(--danger); font-weight:600;">${activeBooking.EndDate || '-'}</span></td>
-                        <td style="font-weight:700; text-align:center; color:var(--primary-dark);">${days} วัน</td>
-                    </tr>`;
+                    modalBody.innerHTML += `
+                        <div class="v-book-card">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px dashed var(--border-color); padding-bottom:12px;">
+                                <span style="font-weight:800; font-size:18px; color:var(--primary-dark);"><svg width="18" height="18"><use href="#icon-car"/></svg> ${activeBooking.Plate}</span>
+                                <span style="font-weight:700; color:white; background:var(--primary); padding:4px 10px; border-radius:20px; font-size:12px;">ใช้ ${days} วัน</span>
+                            </div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</span><span class="info-val">${activeBooking.UserName} <span style="color:var(--text-muted); font-size:12px; font-weight:normal;">(${activeBooking.Department})</span></span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-phone"/></svg> ติดต่อ</span><span class="info-val">${activeBooking.Tel || '-'}</span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${activeBooking.Destination || '-'}</span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เริ่ม-คืน</span><span class="info-val" style="color:var(--danger)">${activeBooking.StartDate} - ${activeBooking.EndDate}</span></div>
+                        </div>
+                    `;
                 }
             });
 
-            if(!found) tb.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:40px; font-size:16px;">ไม่มีข้อมูลการใช้งานรถในวันที่เลือก</td></tr>`;
+            if(!found) {
+                modalBody.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px; font-size:16px; border:2px dashed var(--border-color); border-radius:12px;">ไม่มีข้อมูลการใช้งานรถในวันที่เลือก (รถว่างทุกคัน)</div>`;
+            }
             modal.style.display = 'flex';
         }
 
-        // --- SUMMARY POPUPS ---
+        // --- SUMMARY POPUPS (Dashboard) ---
         function showSummaryPopup(type) {
             const dashDateStr = document.getElementById('dash-date').value;
             if(!dashDateStr) return;
 
             const modal = document.getElementById('modal-summary');
             document.getElementById('summary-title').innerHTML = `<svg width="24" height="24"><use href="#icon-dash"/></svg> สรุปข้อมูลรถ: ${type}`;
-            const th = document.getElementById('summary-thead');
-            const tb = document.getElementById('summary-tbody');
-            tb.innerHTML = '';
+            const modalBody = document.getElementById('summary-modal-body');
+            modalBody.innerHTML = '';
             
             let data = type === 'ทั้งหมด' ? carsData : carsData.filter(c => {
                 let activeBooking = getActiveBookingForDate(c.Plate, dashDateStr);
@@ -1181,34 +1308,47 @@
             });
 
             if (data.length === 0) {
-                th.innerHTML = `<tr><th>ข้อมูลรถ</th></tr>`;
-                tb.innerHTML = `<tr><td style="text-align:center; color:var(--text-muted); padding:40px;">ไม่มีข้อมูลรถในสถานะนี้</td></tr>`;
+                modalBody.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px; font-size:16px; border:2px dashed var(--border-color); border-radius:12px;">ไม่มีข้อมูลรถในสถานะนี้</div>`;
                 modal.style.display = 'flex';
                 return;
             }
 
-            if(type === 'ใช้งาน') {
-                th.innerHTML = `<tr><th>ทะเบียน</th><th>ผู้ใช้งาน / แผนก</th><th>ปลายทาง</th><th>เริ่ม - คืน</th></tr>`;
-                data.forEach(c => { 
-                    let activeBooking = getActiveBookingForDate(c.Plate, dashDateStr);
-                    if(activeBooking) {
-                        tb.innerHTML += `<tr><td style="font-weight:700;">${getCarIcon(c.Type)} ${c.Plate}</td><td><span style="font-weight:600; color:var(--primary);">${activeBooking.UserName}</span> <br><span style="font-size:12px; color:var(--text-muted);">${activeBooking.Department}</span></td><td>${activeBooking.Destination}</td><td><span style="color:var(--success); font-weight:600;">${activeBooking.StartDate}</span> <br> <span style="color:var(--danger); font-weight:600;">${activeBooking.EndDate}</span></td></tr>`; 
-                    }
-                });
-            } else {
-                th.innerHTML = `<tr><th>ทะเบียน / รุ่น</th><th>สถานะ</th><th>จุดจอดหลัก</th></tr>`;
-                data.forEach(c => { 
-                    let activeBooking = getActiveBookingForDate(c.Plate, dashDateStr);
-                    let currentStatus = c.Status === 'Maintenance' ? 'Maintenance' : (activeBooking ? 'In Use' : 'Available');
-                    let cText = currentStatus==='Available'?'ว่าง':(currentStatus==='In Use'?'ใช้งาน':'ซ่อม');
-                    let cCol = currentStatus==='Available'?'var(--success)':(currentStatus==='In Use'?'var(--danger)':'var(--warning)');
-                    tb.innerHTML += `<tr><td style="font-weight:700;">${getCarIcon(c.Type)} ${c.Plate}<br><span style="font-size:12px; color:var(--text-muted); font-weight:500;">${c.Brand}</span></td><td style="color:${cCol}; font-weight:700;">${cText}</td><td>Ari Hills</td></tr>`; 
-                });
-            }
+            data.forEach(c => { 
+                let activeBooking = getActiveBookingForDate(c.Plate, dashDateStr);
+                let currentStatus = c.Status === 'Maintenance' ? 'Maintenance' : (activeBooking ? 'In Use' : 'Available');
+                
+                let cText = currentStatus==='Available'?'ว่างพร้อมใช้':(currentStatus==='In Use'?'กำลังใช้งาน':'ซ่อมบำรุง');
+                let cCol = currentStatus==='Available'?'var(--success)':(currentStatus==='In Use'?'var(--danger)':'var(--warning)');
+
+                let innerHtml = `
+                    <div class="v-book-card" style="border-left-color:${cCol}; cursor:pointer;" onclick="showCarDetailPopup('${c.Plate}', 'dashboard')">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px dashed var(--border-color); padding-bottom:12px;">
+                            <span style="font-weight:800; font-size:18px; color:var(--text-main);"><svg width="18" height="18"><use href="#icon-car"/></svg> ${c.Plate} <span style="font-size:12px; color:var(--text-muted); font-weight:normal;">(${c.Brand})</span></span>
+                            <span style="font-weight:700; color:${cCol}; background:var(--bg-color); padding:4px 10px; border-radius:20px; font-size:13px; border:1px solid ${cCol};">${cText}</span>
+                        </div>
+                `;
+
+                if (currentStatus === 'In Use' && activeBooking) {
+                    innerHtml += `
+                        <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</span><span class="info-val">${activeBooking.UserName}</span></div>
+                        <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${activeBooking.Destination}</span></div>
+                        <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-time"/></svg> เริ่ม-คืน</span><span class="info-val">${activeBooking.StartDate} - ${activeBooking.EndDate}</span></div>
+                    `;
+                } else {
+                    innerHtml += `
+                        <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-mileage"/></svg> ไมล์ปัจจุบัน</span><span class="info-val">${Number(c.Mileage||0).toLocaleString()} กม.</span></div>
+                        <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> จุดจอด</span><span class="info-val">Ari Hills</span></div>
+                    `;
+                }
+
+                innerHtml += `</div>`;
+                modalBody.innerHTML += innerHtml;
+            });
+
             modal.style.display = 'flex';
         }
 
-        // --- POST API HANDLERS ---
+        // --- POST API HANDLERS (จองรถอัจฉริยะ) ---
         function openBookingModal() { 
             document.getElementById('modal-booking').style.display = 'flex'; 
             document.getElementById('book-start').value = "";
@@ -1279,6 +1419,7 @@
             document.getElementById('book-mileage').value = '';
         }
 
+        // 💡 เช็คระยะ Strict 100% บังคับ Alert
         function autoFillMileage() { 
             const s = document.getElementById('book-car').value; 
             if(s) {
@@ -1324,7 +1465,7 @@
             const startMileage = document.getElementById('book-mileage').value;
 
             const btn = document.getElementById('btn-save-book');
-            btn.disabled = true; btn.innerHTML = '<svg width="20" height="20" style="animation: spin 1s linear infinite;"><use href="#icon-time"/></svg> กำลังส่งข้อมูล...';
+            btn.disabled = true; btn.innerHTML = '<svg width="20" height="20" style="animation: pulse 1s infinite;"><use href="#icon-time"/></svg> กำลังส่งข้อมูล...';
 
             const payload = { plate, user, dept, tel, dest, startDate, endDate, startMileage };
 
