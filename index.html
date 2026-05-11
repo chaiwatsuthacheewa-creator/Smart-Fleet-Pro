@@ -54,15 +54,12 @@
 
         /* 🚀 Cyber IT Running Light Bar */
         .smart-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 100000; background: rgba(0,0,0,0.05); overflow: hidden; }
-        .smart-bar { 
-            position: absolute; top: 0; left: -300px; width: 300px; height: 100%; 
-            background: linear-gradient(90deg, transparent, var(--primary), #ffffff); 
-            box-shadow: 0 0 12px var(--primary), 0 0 20px var(--primary);
-            animation: cyber-scan 2s infinite cubic-bezier(0.4, 0, 0.2, 1); 
-        }
+        .smart-bar { position: absolute; top: 0; left: -300px; width: 300px; height: 100%; background: linear-gradient(90deg, transparent, var(--primary), #ffffff); box-shadow: 0 0 12px var(--primary), 0 0 20px var(--primary); animation: cyber-scan 2s infinite cubic-bezier(0.4, 0, 0.2, 1); }
         body.dark-mode .smart-bar-container { background: rgba(255,255,255,0.05); }
+        
         @keyframes cyber-scan { 0% { left: -300px; } 100% { left: 100%; } }
         @keyframes pulse-dot { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        @keyframes alert-pulse { 0% { filter: drop-shadow(0 0 4px rgba(220,38,38,0.5)); transform: scale(1); } 50% { filter: drop-shadow(0 0 12px rgba(220,38,38,1)); transform: scale(1.1); } 100% { filter: drop-shadow(0 0 4px rgba(220,38,38,0.5)); transform: scale(1); } }
 
         /* Sidebar Elements */
         .sidebar { width: var(--sidebar-width); background: var(--card-bg); display: flex; flex-direction: column; border-right: 1px solid var(--border-color); z-index: 200; transition: var(--transition); overflow-x: hidden; box-shadow: 4px 0 20px rgba(0,0,0,0.02); }
@@ -105,26 +102,17 @@
         .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; flex-wrap: wrap; gap: 20px;}
         .header-title { font-size: 28px; font-weight: 700; margin: 0; color: var(--text-main); display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px;}
         
-        /* 🚨 FULL BULLETPROOF BUTTON CSS 🚨 */
-        .btn-primary, .btn-secondary, .btn-success, .btn-warning, .btn-danger {
+        /* 🔥 Bulletproof Button CSS (Guarantee visibility & dynamic theme coloring) */
+        .btn-primary, .btn-secondary {
             padding: 12px 24px; border-radius: 12px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 15px; display: inline-flex; gap: 8px; align-items: center; justify-content: center; transition: var(--transition); border: none; outline: none; text-decoration: none;
         }
         .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #ffffff !important; box-shadow: var(--shadow); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--theme-glow); filter: brightness(1.1); }
         
-        .btn-success { background: linear-gradient(135deg, var(--success), #047857); color: #ffffff !important; box-shadow: var(--shadow); }
-        .btn-success:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); filter: brightness(1.1); }
-        
-        .btn-warning { background: linear-gradient(135deg, var(--warning), #b45309); color: #ffffff !important; box-shadow: var(--shadow); }
-        .btn-warning:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4); filter: brightness(1.1); }
-        
-        .btn-danger { background: linear-gradient(135deg, var(--danger), #b91c1c); color: #ffffff !important; box-shadow: var(--shadow); }
-        .btn-danger:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4); filter: brightness(1.1); }
-        
         .btn-secondary { background: var(--card-bg); color: var(--text-main) !important; border: 1px solid var(--border-color); box-shadow: var(--shadow); }
         .btn-secondary:hover { background: var(--bg-color); border-color: var(--primary); color: var(--primary) !important; transform: translateY(-2px); box-shadow: 0 5px 15px var(--theme-glow); }
 
-        .btn-primary:disabled, .btn-success:disabled, .btn-warning:disabled, .btn-danger:disabled, .btn-secondary:disabled {
+        .btn-primary:disabled, .btn-secondary:disabled {
             background: var(--border-color) !important; color: var(--text-muted) !important; box-shadow: none !important; cursor: not-allowed !important; transform: none !important; filter: none !important; background-image: none !important; border: none !important;
         }
 
@@ -140,25 +128,14 @@
         /* 🔥 Car Grid */
         .car-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
         .car-card { 
-            background: var(--card-bg); 
-            padding: 24px; 
-            border-radius: var(--border-radius); 
-            box-shadow: 0 4px 15px var(--theme-glow); 
-            border: 1px solid var(--border-color); 
-            transition: var(--transition); 
-            position: relative; 
-            border-top: 14px solid var(--border-color); 
-            cursor: pointer; 
-            display: flex; 
-            flex-direction: column;
+            background: var(--card-bg); padding: 24px; border-radius: var(--border-radius); 
+            box-shadow: 0 4px 15px var(--theme-glow); border: 1px solid var(--border-color); 
+            transition: var(--transition); position: relative; border-top: 14px solid var(--border-color); 
+            cursor: pointer; display: flex; flex-direction: column;
         }
         .car-card.archived { opacity: 0.6; filter: grayscale(1); border-top-color: var(--text-muted);}
         .car-card.replacement { border-top-color: var(--warning); background: linear-gradient(to bottom, rgba(245,158,11,0.03), var(--card-bg));}
-        .car-card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: 0 15px 35px var(--theme-glow), 0 0 15px var(--theme-glow);
-            opacity: 1; filter: grayscale(0);
-        }
+        .car-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px var(--theme-glow), 0 0 15px var(--theme-glow); opacity: 1; filter: grayscale(0);}
         .car-card.status-avail { border-top-color: var(--success); }
         .car-card.status-inuse { border-top-color: var(--primary); } 
         .car-card.status-maint { border-top-color: var(--warning); }
@@ -198,10 +175,11 @@
         .modal-content.large { max-width: 950px; } 
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
-        .modal-header { background: linear-gradient(90deg, var(--primary), var(--primary-dark)); color: white; padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h2 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -0.5px;}
-        .btn-close { background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
-        .btn-close:hover { background: var(--danger); transform: rotate(90deg); }
+        /* 🚨 Fix Header Modal in Light/Dark Mode */
+        .modal-header { background: transparent; padding: 20px 25px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-main); }
+        .btn-close { background: var(--bg-color); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 50%; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .btn-close:hover { background: var(--danger); color: white; border-color: var(--danger); transform: rotate(90deg); }
         
         .modal-body { padding: 25px; overflow-y: auto; flex: 1; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -213,7 +191,7 @@
         .form-control:disabled, .form-control[readonly] { background: var(--border-color); opacity: 0.8; cursor: not-allowed; border-color: var(--border-color) !important;}
         .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--theme-glow); background: var(--card-bg);}
 
-        /* Professional Detail Rows (Static) */
+        /* Professional Detail Rows */
         .detail-group { border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 20px; background: var(--card-bg); overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
         .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 20px; border-bottom: 1px solid var(--border-color); gap: 15px; transition: 0.2s;}
         .detail-row:hover { background: var(--bg-color); }
@@ -222,52 +200,25 @@
         .detail-value { font-weight: 600; font-size: 14px; text-align: right; color: var(--text-main); word-break: break-word; }
 
         /* Accordion for Dashboard Popup */
-        .car-details-accordion {
-            margin-top: 15px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: var(--transition);
-        }
-        .car-details-accordion summary {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            list-style: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            user-select: none;
-        }
+        .car-details-accordion { margin-top: 15px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; transition: var(--transition); }
+        .car-details-accordion summary { padding: 14px 16px; font-size: 15px; font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; user-select: none; }
         .car-details-accordion summary::-webkit-details-marker { display: none; }
         .car-details-accordion summary::after { content: '▼'; font-size: 12px; transition: transform 0.3s; opacity:0.6; }
         .car-details-accordion[open] summary::after { transform: rotate(-180deg); }
-        .accordion-content {
-            padding: 10px 0;
-            border-top: 1px dashed var(--border-color);
-            background: var(--card-bg);
-            display: flex;
-            flex-direction: column;
-        }
+        .accordion-content { padding: 10px 0; border-top: 1px dashed var(--border-color); background: var(--card-bg); display: flex; flex-direction: column; }
 
-        /* 🔥 CALENDAR PRO (Responsive Grid & Heatmap) */
+        /* 📅 CALENDAR PRO */
         .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: var(--card-bg); padding: 15px 25px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow); }
         .btn-cal-nav { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: var(--transition); font-family: 'Sarabun'; display: flex; align-items: center; gap: 8px;}
-        .btn-cal-nav:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px var(--theme-glow);}
+        .btn-cal-nav:hover { background: var(--primary); color: white !important; border-color: var(--primary); box-shadow: 0 4px 10px var(--theme-glow);}
         .cal-month-title { font-size: 20px; font-weight: 700; color: var(--primary-dark); display: flex; align-items: center; gap: 10px;}
         
         .calendar-wrap { background: var(--card-bg); border-radius: var(--border-radius); border: 1px solid var(--border-color); padding: 20px; box-shadow: var(--shadow); overflow-x: auto; }
-        
-        /* 🚨 ปรับปฏิทินให้เป็น 7 คอลัมน์ 100% ไม่ต้อง Scroll */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr) !important; gap: 8px; }
         .day-header { text-align: center; font-weight: 700; padding: 10px 0; color: var(--text-muted); font-size: 14px; background: var(--bg-color); border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
         .cal-day { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 6px; min-height: 110px; cursor: pointer; transition: var(--transition); position: relative; display: flex; flex-direction: column;}
         .cal-day:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 25px var(--theme-glow); z-index: 10; border-color: var(--primary) !important;}
         .day-num { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text-main); text-align: center; }
-        
-        /* แถบสีม่วง/เขียว ในปฏิทิน */
         .cal-bar-container { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
         .cal-stat-bar { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 6px 2px; border-radius: 8px; font-weight: 700; color: white; letter-spacing: 0.5px;}
         .cal-stat-bar.used { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); box-shadow: 0 2px 6px var(--theme-glow);}
@@ -275,14 +226,12 @@
         .cal-stat-bar span:last-child { font-size: 18px; line-height: 1; margin-top:4px;}
         .cal-label { font-size: 11px; opacity: 0.9; line-height: 1;}
 
-        /* Popup แบบแนวตั้ง (Card Style) */
+        /* Popup Ticket Style */
         .v-book-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 15px; box-shadow: var(--shadow); transition: var(--transition); border-left: 4px solid var(--primary);}
         .v-book-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--theme-glow); border-color: var(--primary-light);}
-
-        /* Ticket Style Class สำหรับการ์ดการจองใน Popup Dashboard */
         .ticket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-        /* Toast & Global Alerts */
+        /* Toast */
         #toast-container { position: fixed; top: 24px; right: 24px; z-index: 10000; display: flex; flex-direction: column; gap: 12px; max-width: calc(100vw - 48px); }
         .toast { background: var(--card-bg); border-left: 6px solid var(--success); color: var(--text-main); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 14px; font-weight: 600; font-family: 'Sarabun'; font-size: 15px; animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .toast.danger { border-left-color: var(--danger); }
@@ -291,7 +240,7 @@
 
         #mobile-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(17, 24, 39, 0.6); display: none; z-index: 150; backdrop-filter: blur(3px);}
 
-        /* 📱 Mobile Responsive (Mobile-First Adjustments) */
+        /* 📱 Mobile Responsive */
         @media (max-width: 1024px) {
             .summary-grid { grid-template-columns: repeat(2, 1fr); }
             .car-grid { grid-template-columns: repeat(2, 1fr); }
@@ -309,13 +258,11 @@
             .form-grid { grid-template-columns: 1fr; }
             .form-group.full { grid-column: span 1; }
             
-            /* ขยายปุ่มธีมสีให้กดง่ายขึ้น */
             .theme-picker { max-width: 100%; padding: 8px 12px; -webkit-overflow-scrolling: touch; }
             .color-dot { width: 28px; height: 28px; border-width: 3px; }
             
             .bg-watermark { display: none; }
 
-            /* 📅 ปฏิทินโหมดมือถือ บีบ 7 วันให้พอดีจอ ไม่ต้องเลื่อน */
             .calendar-wrap { padding: 10px; border-radius: 12px; }
             .calendar-nav { flex-direction: column; gap: 10px; padding: 12px; }
             .calendar-grid { grid-template-columns: repeat(7, 1fr) !important; gap: 5px; }
@@ -323,13 +270,11 @@
             .cal-day { padding: 8px 4px; min-height: 90px; border-radius: 8px;}
             .day-num { font-size: 18px; margin-bottom: 6px; text-align: center;}
             
-            /* แถบสีมือถือ แนวตั้ง ให้ตัวเลขใหญ่สะใจ */
             .cal-stat-bar { padding: 4px 2px; flex-direction: column; justify-content: center; border-radius: 6px;}
             .cal-label { font-size: 10px; margin-bottom: 2px; line-height:1;}
             .cal-stat-bar span:last-child { font-size: 18px; line-height:1;}
             .alert-svg { width: 14px !important; height: 14px !important; top: 4px !important; right: 4px !important; }
 
-            /* ปุ่มใน Modal Admin เรียงแนวตั้งบนมือถือ */
             #car-detail-admin-area { flex-direction: column; }
         }
         @media (max-width: 480px) {
@@ -371,6 +316,22 @@
     <div class="bg-watermark"></div>
     <div class="smart-bar-container"><div class="smart-bar"></div></div>
     <div id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
+
+    <div class="modal-overlay" id="modal-global-alert" style="z-index: 100001;">
+        <div class="modal-content" style="max-width: 500px; text-align: left; background: var(--bg-color);">
+            <div class="modal-header" style="background: transparent; border-bottom: 1px solid var(--border-color); padding: 20px 25px;">
+                <h2 style="color: var(--text-main); margin:0; display:flex; align-items:center; gap:8px;">
+                    <svg width="24" height="24" style="color: var(--danger); animation: alert-pulse 1s infinite;"><use href="#icon-warning"/></svg> พบรถที่ต้องดำเนินการด่วน!
+                </h2>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <div id="global-alert-modal-list"></div>
+                <button class="btn-primary" style="width: 100%; justify-content: center; margin-top:15px; font-size:16px; padding:14px;" onclick="closeModal('modal-global-alert')">
+                    <svg width="20" height="20"><use href="#icon-check"/></svg> รับทราบ และปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -426,7 +387,13 @@
         <div class="content-area">
             
             <div id="view-dashboard" class="view-section active">
-                <div id="global-alert-zone" style="display:none; margin-bottom: 25px;"></div>
+                
+                <div id="persistent-global-alert" style="display:none; margin-bottom: 25px; background: rgba(220,38,38,0.1); border: 2px solid #dc2626; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(220,38,38,0.2);">
+                    <h3 style="margin:0 0 10px 0; color:#dc2626; display:flex; align-items:center; gap:8px;">
+                        <svg width="24" height="24" style="animation: alert-pulse 1s infinite;"><use href="#icon-warning"/></svg> แจ้งเตือน (รถที่ต้องอัปเดตข้อมูลด่วน!)
+                    </h3>
+                    <ul id="persistent-alert-list" style="margin:0; padding-left:20px; color:var(--text-main); font-size:15px; line-height:1.6; font-weight:600;"></ul>
+                </div>
 
                 <div class="header-flex" style="margin-bottom: 20px;">
                     <div style="flex:1;">
@@ -548,7 +515,7 @@
                 
                 <div style="display:flex; gap:25px; flex-wrap:wrap; margin-bottom:30px;">
                     <div style="background:var(--card-bg); padding:30px; border-radius:var(--border-radius); border:1px solid var(--border-color); box-shadow:var(--shadow); flex:1; min-width:320px;">
-                        <h3 style="margin-top:0; font-size:20px; display:flex; align-items:center; gap:10px;"><svg width="24" height="24" style="color:var(--success)"><use href="#icon-export"/></svg> ดาวน์โหลดข้อมูลจากระบบ (Excel)</h3>
+                        <h3 style="margin:top:0; font-size:20px; display:flex; align-items:center; gap:10px;"><svg width="24" height="24" style="color:var(--primary)"><use href="#icon-export"/></svg> ดาวน์โหลดข้อมูลจากระบบ (Excel)</h3>
                         <p style="color:var(--text-muted); font-size:14px; margin-top:-10px; margin-bottom:20px;">ส่งออกข้อมูลประกอบด้วย: วันยืม-คืน, จำนวนวัน, แผนก, และระยะทางทั้งหมด</p>
                         <div class="form-grid">
                             <div class="form-group"><label><svg width="16" height="16"><use href="#icon-cal"/></svg> เลือกเดือน</label><input type="month" class="form-control" id="export-month"></div>
@@ -593,7 +560,7 @@
                             <h2 style="margin:0; color:var(--primary-dark); font-size:24px;" id="admin-welcome-msg">ยินดีต้อนรับ, Admin</h2>
                             <p style="margin:8px 0 0 0; font-size:15px; color:var(--text-muted); font-weight:500;">ระบบปลดล็อกให้คุณจัดการข้อมูลหลังบ้านได้ 100% แล้ว</p>
                         </div>
-                        <button class="btn-danger" style="padding:12px 24px;" onclick="logoutAdmin()"><svg width="20" height="20"><use href="#icon-close"/></svg> ออกจากระบบ</button>
+                        <button class="btn-secondary" style="color:var(--danger) !important; border-color:var(--danger); padding:12px 24px;" onclick="logoutAdmin()"><svg width="20" height="20"><use href="#icon-close"/></svg> ออกจากระบบ</button>
                     </div>
                     <h3 style="margin-top:0; font-size:20px; display:flex; align-items:center; gap:10px;"><svg width="24" height="24" style="color:var(--primary)"><use href="#icon-list"/></svg> Audit Log (ประวัติการทำงานของ Admin)</h3>
                     <div class="table-responsive">
@@ -634,7 +601,7 @@
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-phone"/></svg> เบอร์ติดต่อ</label><input type="text" class="form-control" id="book-tel" placeholder="08X-XXX-XXXX"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</label><input type="text" class="form-control" id="book-dest" placeholder="ระบุสถานที่"></div>
                 <div class="form-group full"><label><svg width="16" height="16"><use href="#icon-mileage"/></svg> เลขไมล์เริ่มต้น (ดึงข้อมูลล่าสุดอัตโนมัติ)</label><input type="number" class="form-control" id="book-mileage" readonly style="background:var(--border-color); font-weight:bold; color:var(--text-main);"></div>
-                <div class="form-group full"><button class="btn-primary" id="btn-save-book" style="width:100%; justify-content:center; margin-top:15px; padding:14px; font-size:16px;" onclick="saveBooking()">บันทึกข้อมูลเข้าสู่ระบบ</button></div>
+                <div class="form-group full"><button class="btn-primary" id="btn-save-book" style="width:100%; justify-content:center; margin-top:15px; padding:14px; font-size:16px;" onclick="saveBooking()"><svg width="20" height="20"><use href="#icon-check"/></svg> บันทึกข้อมูลเข้าสู่ระบบ</button></div>
             </div>
         </div>
     </div>
@@ -642,7 +609,7 @@
     <div class="modal-overlay" id="modal-return">
         <div class="modal-content" style="max-width: 450px;">
             <div class="modal-header" style="background: linear-gradient(135deg, var(--warning), #d97706); color: white;">
-                <h2 style="color: white;"><svg width="24" height="24"><use href="#icon-check"/></svg> ฟอร์มรับแจ้งคืนรถ</h2>
+                <h2 style="color: white; margin:0;"><svg width="24" height="24"><use href="#icon-check"/></svg> ฟอร์มรับแจ้งคืนรถ</h2>
                 <button class="btn-close" style="background: rgba(0,0,0,0.2);" onclick="closeModal('modal-return')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
             </div>
             <div class="modal-body">
@@ -689,7 +656,7 @@
                 <button class="btn-close" onclick="closeModal('modal-car-detail')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
             </div>
             <div class="modal-body" id="car-detail-body" style="padding-bottom:15px; background:var(--bg-color);"></div>
-            <div id="car-detail-admin-area" style="padding: 20px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: none; gap: 10px; flex-wrap: wrap;"></div>
+            <div id="car-detail-admin-area" style="padding: 20px 25px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: none; gap: 15px;"></div>
         </div>
     </div>
 
@@ -745,6 +712,7 @@
                 <div class="form-group full"><label><svg width="16" height="16"><use href="#icon-flag"/></svg> ยี่ห้อ / รุ่น</label><input type="text" class="form-control" id="edit-brand" placeholder="Toyota Revo"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-mileage"/></svg> เลขไมล์ปัจจุบัน</label><input type="number" class="form-control" id="edit-mile" placeholder="ตัวเลขเท่านั้น"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-flag"/></svg> ไมล์เข้าศูนย์ล่าสุด</label><input type="number" class="form-control" id="edit-last-srv-mile" placeholder="ระบุเลขไมล์" style="border-color:var(--warning);"></div>
+                
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-cal"/></svg> วันหมดอายุ พ.ร.บ.</label><input type="text" class="form-control" id="edit-act" placeholder="เช่น 15/12/2026"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-shield"/></svg> วันหมดอายุ ประกันภัย</label><input type="text" class="form-control" id="edit-ins" placeholder="เช่น 15/12/2026"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-building"/></svg> บริษัทประกัน</label><input type="text" class="form-control" id="edit-insco" placeholder="ชื่อบริษัท"></div>
@@ -815,57 +783,92 @@
             return diff > 0 ? diff : 1;
         }
 
+        // 💡 ฟังก์ชันสแกนหาปัญหาตอนโหลดระบบ (แสดงข้อมูลละเอียด)
         function checkGlobalAlerts() {
             let alertItems = [];
+            let persistentItems = []; 
             let today = new Date();
             today.setHours(0,0,0,0);
 
             carsData.forEach(c => {
                 if(c.Status === 'Archived') return;
 
+                let hasAlert = false;
+                let actMsg = `<li style="color: var(--text-muted);"><span style="color: var(--text-main); font-weight:600;">•</span> พ.ร.บ.: ปกติ</li>`;
+                let insMsg = `<li style="color: var(--text-muted);"><span style="color: var(--text-main); font-weight:600;">•</span> ประกันภัย: ปกติ</li>`;
+                let maintMsg = `<li style="color: var(--text-muted);"><span style="color: var(--text-main); font-weight:600;">•</span> เช็คระยะ: ปกติ</li>`;
+
+                // เช็คระยะศูนย์
                 let currentMile = Number(c.Mileage||0);
                 let lastSrvMile = Number(c.LastServiceMileage);
                 if (isNaN(lastSrvMile) || String(c.LastServiceMileage).trim() === '') lastSrvMile = 0;
                 let remainMile = (lastSrvMile + 10000) - currentMile;
                 
                 if (remainMile <= 500) {
-                    let msg = remainMile <= 0 ? `<span style="color:var(--danger)">เกินระยะ ${Math.abs(remainMile).toLocaleString()} กม.</span>` : `เหลือ ${remainMile.toLocaleString()} กม.`;
-                    alertItems.push(`<li><b style="color:var(--text-main)">${c.Plate}</b> : รอเข้าศูนย์ (${msg})</li>`);
+                    hasAlert = true;
+                    if (remainMile < 0) {
+                        maintMsg = `<li style="color: #dc2626; font-weight: 600;"><span style="color: #dc2626;">•</span> เช็คระยะ: เกินกำหนด ${Math.abs(remainMile).toLocaleString()} กม.</li>`;
+                    } else {
+                        maintMsg = `<li style="color: #d97706; font-weight: 600;"><span style="color: #d97706;">•</span> เช็คระยะ: เหลืออีก ${remainMile.toLocaleString()} กม.</li>`;
+                    }
                 }
 
+                // เช็ค พ.ร.บ.
                 let actD = parseDateString(c.ActExp);
                 if(actD) {
-                    let diffDays = Math.ceil((actD - today) / (1000 * 60 * 60 * 24));
-                    if(diffDays <= 30) {
-                        let msg = diffDays < 0 ? `<span style="color:var(--danger)">หมดอายุแล้ว!</span>` : `เหลือ ${diffDays} วัน`;
-                        alertItems.push(`<li><b style="color:var(--text-main)">${c.Plate}</b> : พ.ร.บ. ${msg}</li>`);
+                    let diffAct = Math.ceil((actD - today) / (1000 * 60 * 60 * 24));
+                    if(diffAct <= 30) {
+                        hasAlert = true;
+                        if (diffAct < 0) {
+                            actMsg = `<li style="color: #dc2626; font-weight: 600;"><span style="color: #dc2626;">•</span> พ.ร.บ.: หมดอายุแล้ว!</li>`;
+                        } else {
+                            actMsg = `<li style="color: #d97706; font-weight: 600;"><span style="color: #d97706;">•</span> พ.ร.บ.: เหลืออีก ${diffAct} วัน</li>`;
+                        }
                     }
                 }
 
+                // เช็คประกัน
                 let insD = parseDateString(c.InsExp);
                 if(insD) {
-                    let diffDays = Math.ceil((insD - today) / (1000 * 60 * 60 * 24));
-                    if(diffDays <= 30) {
-                        let msg = diffDays < 0 ? `<span style="color:var(--danger)">หมดอายุแล้ว!</span>` : `เหลือ ${diffDays} วัน`;
-                        alertItems.push(`<li><b style="color:var(--text-main)">${c.Plate}</b> : ประกันภัย ${msg}</li>`);
+                    let diffIns = Math.ceil((insD - today) / (1000 * 60 * 60 * 24));
+                    if(diffIns <= 30) {
+                        hasAlert = true;
+                        if (diffIns < 0) {
+                            insMsg = `<li style="color: #dc2626; font-weight: 600;"><span style="color: #dc2626;">•</span> ประกันภัย: หมดอายุแล้ว!</li>`;
+                        } else {
+                            insMsg = `<li style="color: #d97706; font-weight: 600;"><span style="color: #d97706;">•</span> ประกันภัย: เหลืออีก ${diffIns} วัน</li>`;
+                        }
                     }
+                }
+
+                if (hasAlert) {
+                    let carAlertHtml = `
+                    <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <div style="font-weight: 700; color: var(--primary-dark); font-size: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                            <svg width="18" height="18"><use href="#icon-car"/></svg> ${c.Plate}
+                        </div>
+                        <ul style="margin: 0; padding-left: 0; list-style: none; font-size: 14px; line-height: 1.8;">
+                            ${actMsg}
+                            ${insMsg}
+                            ${maintMsg}
+                        </ul>
+                    </div>`;
+                    alertItems.push(carAlertHtml);
+                    persistentItems.push(`<li><b style="color:#b91c1c;">${c.Plate}</b>: ตรวจสอบข้อมูลด่วน!</li>`);
                 }
             });
 
             if(alertItems.length > 0) {
-                let alertZone = document.getElementById('global-alert-zone');
+                // 💡 แสดงแถบแดงที่หน้า Dashboard
+                let alertZone = document.getElementById('persistent-global-alert');
                 alertZone.style.display = 'block';
-                alertZone.innerHTML = `
-                    <div style="background:rgba(239,68,68,0.1); border: 2px solid var(--danger); border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(239,68,68,0.2);">
-                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
-                            <h3 style="margin:0; color:var(--danger); display:flex; align-items:center; gap:8px;"><svg width="24" height="24"><use href="#icon-warning"/></svg> ระบบแจ้งเตือนอัตโนมัติ (พบปัญหา)</h3>
-                            <button onclick="document.getElementById('global-alert-zone').style.display='none'" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-weight:700;">รับทราบ</button>
-                        </div>
-                        <ul style="margin:0; padding-left:20px; color:var(--text-muted); font-size:15px; line-height:1.6;">
-                            ${alertItems.join('')}
-                        </ul>
-                    </div>
-                `;
+                document.getElementById('persistent-alert-list').innerHTML = persistentItems.join('');
+                
+                // 💡 เด้ง Popup แจ้งเตือนแรกเริ่ม
+                document.getElementById('global-alert-modal-list').innerHTML = alertItems.join('');
+                document.getElementById('modal-global-alert').style.display = 'flex';
+            } else {
+                document.getElementById('persistent-global-alert').style.display = 'none';
             }
         }
 
@@ -973,7 +976,7 @@
 
             dashGrid.innerHTML = ''; 
 
-            let displayCars = carsData.filter(c => c.Status !== 'Archived'); 
+            let displayCars = carsData.filter(c => c.Status !== 'Archived'); // 💡 ซ่อนรถที่ปลดระวาง
 
             if(displayCars.length === 0) {
                 dashGrid.innerHTML = `<div class="empty-state"><svg width="48" height="48" style="color:var(--border-color)"><use href="#icon-car"/></svg> ไม่มีข้อมูลรถ กรุณาเชื่อมต่อข้อมูลจาก Google Sheets</div>`;
@@ -1103,7 +1106,7 @@
                     let stBadge = b.Status === 'Active' ? `<span class="badge purple">กำลังใช้</span>` : `<span class="badge green">คืนแล้ว</span>`;
                     let realRet = (b.RealReturnDate && b.RealReturnDate !== '') ? b.RealReturnDate : '-';
                     
-                    let adminAction = isAdminLoggedIn ? `<td class="admin-only" style="text-align:center;"><button class="btn-primary" style="background:var(--danger); border-color:var(--danger); padding:6px 12px; font-size:13px;" onclick="deleteBooking('${b.BookingID}')"><svg width="14" height="14"><use href="#icon-close"/></svg> ลบ</button></td>` : `<td class="admin-only" style="display:none;"></td>`;
+                    let adminAction = isAdminLoggedIn ? `<td class="admin-only" style="text-align:center;"><button class="btn-secondary" style="color:var(--danger) !important; border-color:var(--danger) !important; padding:6px 12px; font-size:13px;" onclick="deleteBooking('${b.BookingID}')"><svg width="14" height="14"><use href="#icon-close"/></svg> ลบ</button></td>` : `<td class="admin-only" style="display:none;"></td>`;
 
                     tbody.innerHTML += `
                         <tr>
@@ -1229,6 +1232,7 @@
             `;
 
             if (source === 'dashboard') {
+                // 💡 หน้าภาพรวมระบบ: หัวการ์ดมีสถานะ + ดีไซน์ Ticket + Accordion
                 html = `
                     <div style="text-align:center; margin-bottom:20px; padding: 20px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow);">
                         <div style="font-size:32px; font-weight:700; color:var(--primary-dark); letter-spacing:-0.5px;">${getCarIcon(car.Type)} ${car.Plate}</div>
@@ -1287,7 +1291,7 @@
                     </details>
                 `;
             } else {
-                // 💡 หน้าข้อมูลรถส่วนกลาง
+                // 💡 หน้าข้อมูลรถส่วนกลาง: โชว์ข้อมูลรถ + เช็คระยะ แบบเปิดกางออกเลย (ไม่ซ่อน, ไม่มีข้อมูลจอง, ไม่ดึงสถานะ)
                 html = `
                     <div style="text-align:center; margin-bottom:25px; padding: 20px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow); border-bottom: 4px solid var(--primary);">
                         <div style="font-size:32px; font-weight:700; color:var(--text-main); letter-spacing:-0.5px;">${getCarIcon(car.Type)} ${car.Plate}</div>
@@ -1321,8 +1325,9 @@
             const adminArea = document.getElementById('car-detail-admin-area');
             if(isAdminLoggedIn) {
                 adminArea.style.display = 'flex';
+                // 💡 ปุ่มเหล่านี้จะดึงสีจากธีมมาแสดงอย่างชัดเจน 100%
                 adminArea.innerHTML = `
-                    <button class="btn-primary" style="flex:1;" onclick="openServiceModal('${car.Plate}', ${currentMile})"><svg width="18" height="18"><use href="#icon-tool"/></svg> บันทึกเข้าศูนย์</button>
+                    <button class="btn-primary" style="flex:1;" onclick="openServiceModal('${car.Plate}', ${currentMile})"><svg width="18" height="18"><use href="#icon-tool"/></svg> บันทึกศูนย์</button>
                     <button class="btn-primary" style="flex:1;" onclick="openReplacementModal('${car.Plate}')"><svg width="18" height="18"><use href="#icon-car"/></svg> ซ่อม/ทดแทน</button>
                     <button class="btn-secondary" style="flex:1;" onclick="openEditCarModal('${car.Plate}')"><svg width="18" height="18"><use href="#icon-edit"/></svg> แก้ไข</button>
                 `;
@@ -1367,7 +1372,7 @@
                     
                     <div style="background: rgba(239,68,68,0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(239,68,68,0.2);">
                         <p style="margin:0 0 10px 0; color:var(--danger); font-size:13px; font-weight:600;">⚠️ กรณีรถเกิดอุบัติเหตุหนัก หรือหมดสัญญาเช่า</p>
-                        <button class="btn-primary" style="background:linear-gradient(135deg, var(--danger), #b91c1c); width:100%; justify-content:center;" onclick="submitReplacementAction('${plate}', 'archive')"><svg width="20" height="20"><use href="#icon-close"/></svg> ปลดระวาง / เปลี่ยนคันถาวร</button>
+                        <button class="btn-secondary" style="color:var(--danger) !important; border-color:var(--danger); width:100%; justify-content:center;" onclick="submitReplacementAction('${plate}', 'archive')"><svg width="20" height="20"><use href="#icon-close"/></svg> ปลดระวาง / เปลี่ยนคันถาวร</button>
                     </div>
                 `;
             }
@@ -1742,7 +1747,7 @@
         function handleReturnClick(plate, bookingId) {
             if(!isAdminLoggedIn) { showToast("เข้าสู่ระบบ Admin เพื่อคืนรถ", "danger"); return; }
             
-            // 💡 1. ดึงไมล์จาก "ประวัติการคืนรถล่าสุด (Completed)" 
+            // 💡 1. ดึงไมล์จาก "ประวัติการคืนรถล่าสุด (Completed)" ของรถคันนี้
             let sortedBookings = [...bookingsData].sort((a,b) => {
                 let d1 = parseDateString(b.StartDate); let d2 = parseDateString(a.StartDate);
                 return (d2 ? d2.getTime() : 0) - (d1 ? d1.getTime() : 0);
@@ -1754,7 +1759,7 @@
             if (lastCompletedBooking && lastCompletedBooking.ReturnMileage && String(lastCompletedBooking.ReturnMileage).trim() !== '') {
                 startMile = Number(lastCompletedBooking.ReturnMileage); 
             } else {
-                // 💡 แผนสำรอง: ถ้าไม่เคยมีการคืนรถเลย ให้ดึงจากไมล์สะสมรถ
+                // แผนสำรอง: ถ้าไม่เคยมีการคืนรถเลย ให้ดึงจากไมล์สะสมล่าสุด
                 let car = carsData.find(c => String(c.Plate).trim() === String(plate).trim());
                 startMile = car ? Number(car.Mileage || 0) : 0;
             }
