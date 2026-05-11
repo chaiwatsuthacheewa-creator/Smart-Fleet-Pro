@@ -209,11 +209,9 @@
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr) !important; gap: 8px; }
         .day-header { text-align: center; font-weight: 700; padding: 10px 0; color: var(--text-muted); font-size: 14px; background: var(--bg-color); border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
         
-        /* 🚨 ปรับปรุงเฉดสีปฏิทินให้ชัดเจน */
         .cal-day { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 6px; min-height: 110px; cursor: pointer; transition: var(--transition); position: relative; display: flex; flex-direction: column;}
         .cal-day:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 25px var(--theme-glow); z-index: 10; border-color: var(--primary) !important;}
         
-        /* 🎨 Custom Shading Classes */
         .cal-day.usage-low { background: linear-gradient(135deg, var(--card-bg), var(--primary-light)); border: 2px solid var(--primary); box-shadow: inset 0 0 10px rgba(0,0,0,0.03); }
         .cal-day.usage-med { background: linear-gradient(135deg, var(--primary-light), var(--primary)); border: 2px solid var(--primary-dark); box-shadow: 0 4px 10px var(--theme-glow); }
         .cal-day.usage-high { background: linear-gradient(135deg, #ef4444, #b91c1c); border: 2px solid #991b1b; box-shadow: 0 4px 15px rgba(239,68,68,0.4); }
@@ -314,7 +312,6 @@
         <symbol id="icon-building" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5L5 6.27V14l7 3.5 7-3.5V6.27L12 9.5zm0 10.5l-7-3.5V11l7 3.5 7-3.5v5.5l-7 3.5z"/></symbol>
         <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.15 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></symbol>
         <symbol id="icon-flag" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></symbol>
-        <symbol id="icon-mileage" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></symbol>
         <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></symbol>
     </svg>
 
@@ -322,7 +319,6 @@
     <div class="smart-bar-container"><div class="smart-bar"></div></div>
     <div id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
 
-    <!-- 🚨 แจ้งเตือนระยะเข้าศูนย์เกินแบบ Pop-Up และสั่น -->
     <div class="modal-overlay" id="modal-maint-alert" style="z-index: 100002;">
         <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid #ef4444; background: var(--card-bg);">
             <div style="color: #ef4444; margin-bottom: 15px;">
@@ -334,7 +330,6 @@
         </div>
     </div>
 
-    <!-- 🚨 Global Alert (หน้าแรก) -->
     <div class="modal-overlay" id="modal-global-alert" style="z-index: 100001;">
         <div class="modal-content" style="max-width: 500px; text-align: left; background: var(--bg-color);">
             <div class="modal-header" style="background: transparent; border-bottom: 1px solid var(--border-color); padding: 20px 25px;">
@@ -382,7 +377,6 @@
             
             <div class="theme-controls">
                 <div style="font-weight: 700; color: var(--primary); display:flex; align-items:center; gap:10px;">
-                    <!-- ย้ายปุ่มสร้างการจองมาไว้ข้างบนเพื่อให้กดได้ทุกหน้า -->
                     <button class="btn-primary" onclick="openBookingModal()" id="btn-create-book" disabled style="padding: 6px 14px; font-size: 14px; box-shadow: none;">
                         <svg width="18" height="18"><use href="#icon-edit"/></svg> สร้างการจอง
                     </button>
@@ -493,7 +487,6 @@
                                 <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-cal"/></svg> วันที่ยืม</th>
                                 <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-time"/></svg> กำหนดคืน</th>
                                 <th style="color:#10b981;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-check"/></svg> รับรถคืน (จริง)</th>
-                                <!-- 💡 เพิ่มคอลัมน์ ไมล์ เริ่ม-คืน -->
                                 <th style="text-align:center;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-mileage"/></svg> ไมล์ เริ่ม-คืน</th>
                                 <th style="text-align:center;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-loc"/></svg> ระยะทาง</th>
                                 <th>สถานะ</th>
@@ -628,10 +621,9 @@
         </div>
     </div>
 
-    <!-- Modals (Booking, Return, Detail, Service, Replacement) -->
+    <!-- Modals -->
     <div id="toast-container"></div>
 
-    <!-- จองรถ -->
     <div class="modal-overlay" id="modal-booking">
         <div class="modal-content">
             <div class="modal-header">
@@ -659,7 +651,6 @@
         </div>
     </div>
 
-    <!-- คืนรถ -->
     <div class="modal-overlay" id="modal-return">
         <div class="modal-content" style="max-width: 450px;">
             <div class="modal-header" style="background: linear-gradient(135deg, #f59e0b, #d97706); border-bottom:none;">
@@ -692,7 +683,6 @@
         </div>
     </div>
 
-    <!-- Summary (Popup) -->
     <div class="modal-overlay" id="modal-summary">
         <div class="modal-content">
             <div class="modal-header">
@@ -704,7 +694,6 @@
         </div>
     </div>
 
-    <!-- Car Detail -->
     <div class="modal-overlay" id="modal-car-detail">
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-header">
@@ -716,7 +705,6 @@
         </div>
     </div>
 
-    <!-- Service -->
     <div class="modal-overlay" id="modal-service">
         <div class="modal-content" style="max-width: 450px;">
             <div class="modal-header" style="background: linear-gradient(135deg, #10b981, #047857); border-bottom:none;">
@@ -737,7 +725,6 @@
         </div>
     </div>
 
-    <!-- Replacement -->
     <div class="modal-overlay" id="modal-replacement">
         <div class="modal-content" style="max-width: 450px;">
             <div class="modal-header" style="background: linear-gradient(135deg, #f59e0b, #d97706); border-bottom:none;">
@@ -753,7 +740,6 @@
         </div>
     </div>
 
-    <!-- Edit Car -->
     <div class="modal-overlay" id="modal-edit-car">
         <div class="modal-content">
             <div class="modal-header">
@@ -782,7 +768,6 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
         // ==========================================
         // 🚀 API URL (อัปเดตตรงนี้ให้ตรงกับของคุณ)
@@ -862,7 +847,6 @@
             let actD = parseDateString(car.ActExp);
             let insD = parseDateString(car.InsExp);
             
-            // 💡 แก้ไขการเปรียบเทียบให้ปลอดภัยขึ้น หากไม่มีวันที่ จะไม่ถูกมองว่าหมดอายุ
             let actExpired = actD ? (actD < today) : false;
             let insExpired = insD ? (insD < today) : false;
             
@@ -874,11 +858,13 @@
         }
 
         function populateCarDropdowns() {
-            const exportSelect = document.getElementById('export-select-car');
-            exportSelect.innerHTML = '<option value="ทั้งหมด">ทั้งหมด (ทุกคัน)</option>';
-            carsData.filter(c => c.Status !== 'Archived').forEach(c => {
-                exportSelect.innerHTML += `<option value="${c.Plate}">${c.Plate} (${c.Brand})</option>`;
-            });
+            try {
+                const exportSelect = document.getElementById('export-select-car');
+                exportSelect.innerHTML = '<option value="ทั้งหมด">ทั้งหมด (ทุกคัน)</option>';
+                carsData.filter(c => c.Status !== 'Archived').forEach(c => {
+                    exportSelect.innerHTML += `<option value="${c.Plate}">${c.Plate} (${c.Brand})</option>`;
+                });
+            } catch(e) {}
         }
 
         function checkGlobalAlerts() {
@@ -998,7 +984,6 @@
                     
                     document.getElementById('btn-create-book').disabled = false;
                     
-                    // 💡 ใช้ Try/Catch หุ้มเพื่อป้องกัน UI Render พังแล้วทำให้สเตตัส Error
                     try { renderAll(); } catch(e) { console.error("Render All Error:", e); }
                     
                     if(!isSilent) {
@@ -1952,7 +1937,7 @@
             document.getElementById('book-end').value = dateStr;
             
             document.getElementById('book-user').value = "";
-            document.getElementById('book-dept').value = "";
+            document.getElementById('book-dept').value = "Central Service 1"; 
             document.getElementById('book-tel').value = "";
             document.getElementById('book-dest').value = "";
             document.getElementById('book-mileage').value = "";
@@ -2094,6 +2079,7 @@
 
                 if (!isOverlap) {
                     let baseMile = Number(c.Mileage || 0);
+
                     let optVal = `${c.Plate}|${baseMile}`;
                     let showPlate = c.Status === 'Replacement' ? `(แทน) ${c.ReplacementPlate}` : c.Plate;
                     availableOptions += `<option value="${optVal}">${showPlate} - ${c.Brand}</option>`;
@@ -2149,11 +2135,9 @@
             
             let startDate = document.getElementById('book-start').value;
             if(!startDate) { showToast('กรุณาเลือกวันที่เริ่ม', 'warning'); return; }
-            let p1 = startDate.split('-'); startDate = `${p1[2]}/${p1[1]}/${p1[0]}`;
             
             let endDate = document.getElementById('book-end').value;
             if(!endDate) { showToast('กรุณาเลือกวันที่คืน', 'warning'); return; }
-            let p2 = endDate.split('-'); endDate = `${p2[2]}/${p2[1]}/${p2[0]}`;
 
             const startMileage = document.getElementById('book-mileage').value;
 
@@ -2240,13 +2224,10 @@
             if(!endMile) { showToast('กรุณากรอกเลขไมล์ตอนคืน', 'warning'); return; }
             if(Number(endMile) < Number(startMile)) { showToast('เลขไมล์คืน ต้องมากกว่าตอนนำรถไป', 'danger'); return;}
 
-            let p = realDateStr.split('-');
-            let formattedDate = `${p[2]}/${p[1]}/${p[0]}`;
-
             const btn = document.getElementById('btn-save-return');
             btn.disabled = true; btn.innerHTML = '<svg width="20" height="20" style="animation: pulse 1s infinite;"><use href="#icon-time"/></svg> กำลังบันทึก...';
 
-            const payload = { plate: plate, bookingId: bookingId, returnMileage: endMile, returnDate: formattedDate, adminName: currentAdminName };
+            const payload = { plate: plate, bookingId: bookingId, returnMileage: endMile, returnDate: realDateStr, adminName: currentAdminName };
 
             try {
                 await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'returnCar', payload: payload }) });
@@ -2330,6 +2311,224 @@
             finally { btn.disabled = false; btn.innerText = 'บันทึกข้อมูลรถเข้าสู่ระบบ'; }
         }
 
+        // --- 📊 EXPORT / ANALYTICS (สถิติ และ Plot กราฟแยกคัน) ---
+        function renderAnalytics() {
+            const monthVal = document.getElementById('export-month').value;
+            const selectedPlate = document.getElementById('export-select-car').value;
+            if(!monthVal) return;
+            
+            let [y, m] = monthVal.split('-');
+            let daysInMonth = new Date(y, m, 0).getDate();
+            
+            // กรองข้อมูลรายการจองที่ตรงกับเดือนที่เลือก และเป็นสถานะ "Completed" เท่านั้น
+            let monthBookings = bookingsData.filter(b => {
+                if(b.Status !== 'Completed') return false;
+                
+                let dStart = parseDateString(b.StartDate);
+                let dEnd = parseDateString(b.RealReturnDate && b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
+                if(!dStart) return false;
+                
+                let monthStart = new Date(y, m-1, 1);
+                let monthEnd = new Date(y, m-1, daysInMonth, 23, 59, 59);
+                
+                if (!dEnd) dEnd = dStart;
+                
+                return (dStart <= monthEnd && dEnd >= monthStart);
+            });
+            
+            // กรองตามรถที่เลือก
+            let plotBookings = monthBookings;
+            if(selectedPlate !== 'ทั้งหมด') {
+                plotBookings = monthBookings.filter(b => String(b.Plate).trim() === selectedPlate);
+            }
+            
+            // คำนวณสรุปยอด
+            let totalTrips = plotBookings.length;
+            let totalKm = 0;
+            let carUsageMap = {}; 
+            let dailyKmMap = {}; 
+            for(let i=1; i<=daysInMonth; i++) dailyKmMap[i] = 0;
+
+            plotBookings.forEach(b => {
+                let km = Number(b.TotalDistance) || 0;
+                totalKm += km;
+                
+                let p = String(b.Plate).trim();
+                carUsageMap[p] = (carUsageMap[p] || 0) + km;
+                
+                if(selectedPlate !== 'ทั้งหมด') {
+                    // กระจายกิโลเมตรเฉลี่ยลงในแต่ละวัน
+                    let dStart = parseDateString(b.StartDate);
+                    let dEnd = parseDateString(b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
+                    if(!dEnd) dEnd = dStart;
+                    
+                    let tripDays = getDiffDays(b.StartDate, b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
+                    let kmPerDay = tripDays > 0 ? (km / tripDays) : km;
+                    
+                    for(let d=new Date(dStart); d<=dEnd; d.setDate(d.getDate()+1)) {
+                        if(d.getFullYear() == y && (d.getMonth()+1) == m) {
+                            dailyKmMap[d.getDate()] += kmPerDay;
+                        }
+                    }
+                }
+            });
+
+            // อัปเดต Summary Cards
+            document.getElementById('export-sum-trips').innerText = totalTrips.toLocaleString() + " ครั้ง";
+            document.getElementById('export-sum-km').innerText = totalKm.toLocaleString() + " กม.";
+
+            // สร้างกราฟ Plot แยกคัน หรือ ทั้งหมด
+            const ctx = document.getElementById('exportChart').getContext('2d');
+            if(exportChartInstance) exportChartInstance.destroy();
+            
+            let chartLabels = [];
+            let chartData = [];
+            let chartLabelText = '';
+            
+            let computedStyle = getComputedStyle(document.body);
+            let primaryColor = computedStyle.getPropertyValue('--primary').trim() || '#0071e3';
+            let textColor = computedStyle.getPropertyValue('--text-main').trim() || '#111827';
+            let gridColor = computedStyle.getPropertyValue('--border-color').trim() || '#e5e7eb';
+            
+            try {
+                Chart.defaults.color = textColor;
+                
+                if(selectedPlate === 'ทั้งหมด') {
+                    chartLabelText = 'ระยะทางวิ่งรวมตลอดเดือน (กม.)';
+                    for(let plate in carUsageMap) {
+                        chartLabels.push(plate);
+                        chartData.push(carUsageMap[plate]);
+                    }
+                } else {
+                    chartLabelText = `การใช้งานรายวันของ ${selectedPlate} (กม.)`;
+                    for(let i=1; i<=daysInMonth; i++) {
+                        chartLabels.push(i);
+                        chartData.push(Math.round(dailyKmMap[i]));
+                    }
+                }
+
+                exportChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: chartLabels,
+                        datasets: [{
+                            label: chartLabelText,
+                            data: chartData,
+                            backgroundColor: primaryColor,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: {
+                            x: { grid: { color: gridColor }, ticks: { color: textColor } },
+                            y: { grid: { color: gridColor }, ticks: { color: textColor }, beginAtZero: true }
+                        }
+                    }
+                });
+            } catch(e) { console.warn("Chart rendering skipped"); }
+
+            // สร้างตารางจัดอันดับ (เฉพาะที่คืนรถแล้วในเดือน)
+            const tbody = document.getElementById('analytics-table-body');
+            tbody.innerHTML = '';
+            
+            if(selectedPlate === 'ทั้งหมด') {
+                let rankedCars = Object.keys(carUsageMap).map(p => ({plate: p, km: carUsageMap[p]})).sort((a,b) => b.km - a.km);
+                
+                if(rankedCars.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted)">ไม่มีการคืนรถในเดือนที่เลือก</td></tr>`;
+                } else {
+                    rankedCars.forEach((c, index) => {
+                        let carInfo = carsData.find(x => x.Plate === c.plate) || {};
+                        let badgeRank = index < 3 ? `<span style="font-size:24px;">🏆</span>` : `<span style="font-size:16px; font-weight:700;">#${index+1}</span>`;
+                        let rankStyle = index < 3 ? 'font-weight:700; color:var(--primary);' : 'color:var(--text-muted);';
+                        
+                        tbody.innerHTML += `
+                            <tr onclick="showCarMonthlyStats('${c.plate}')" style="cursor:pointer;">
+                                <td style="${rankStyle}">${badgeRank}</td>
+                                <td style="font-weight:700; font-size:15px;">${c.plate}</td>
+                                <td>${carInfo.Brand || '-'}</td>
+                                <td style="font-weight:700; color:var(--primary-dark);">${c.km.toLocaleString()} กม.</td>
+                                <td style="color:var(--primary); font-weight:600;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-list"/></svg> ดูประวัติ</td>
+                            </tr>
+                        `;
+                    });
+                }
+            } else {
+                 tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted)">กำลังดูกราฟแยกคันด้านบน กรุณาเลือก "ทั้งหมด" เพื่อดูตารางจัดอันดับใหม่</td></tr>`;
+            }
+        }
+
+        // --- AUDIT LOG (แก้ปัญหาการอ่านวัน-เดือน สลับกัน) ---
+        function renderAuditLog() {
+            const tbody = document.getElementById('audit-log-body'); 
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            if(!auditData || auditData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:30px; color:var(--text-muted);">ไม่มีประวัติการทำงานในระบบ</td></tr>`;
+                return;
+            }
+            
+            auditData.slice().reverse().slice(0, 30).forEach(log => {
+                let dateStr = log.Timestamp || '-';
+                
+                try {
+                    // จัดการกรณีเป็น String วันที่ที่มีรูปแบบมี Slash
+                    if (typeof log.Timestamp === 'string' && log.Timestamp.includes('/')) {
+                        let dtParts = log.Timestamp.split(' ');
+                        let dParts = dtParts[0].split('/');
+                        let timePart = dtParts[1] ? dtParts[1].substring(0, 5) : '';
+                        
+                        if (dParts.length === 3) {
+                            let p0 = parseInt(dParts[0]);
+                            let p1 = parseInt(dParts[1]);
+                            let year = parseInt(dParts[2]);
+                            
+                            let day = p0;
+                            let month = p1;
+                            
+                            // ถ้าเดือน > 12 แสดงว่าสลับเป็น MM/DD/YYYY
+                            if (p0 > 12) {
+                                day = p1; 
+                                month = p0;
+                            } else if (p1 > 12) {
+                                day = p0; 
+                                month = p1;
+                            }
+                            
+                            let thYear = year < 2500 ? year + 543 : year;
+                            const months = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+                            let thMonth = months[month - 1] || String(month).padStart(2, '0');
+                            
+                            dateStr = `${String(day).padStart(2, '0')} ${thMonth} ${thYear} ${timePart ? timePart + ' น.' : ''}`;
+                        }
+                    } else {
+                        // หากเป็น Object Date หรือรูปแบบอื่นที่ JS อ่านได้ปกติ
+                        let d = new Date(log.Timestamp);
+                        if (!isNaN(d.getTime())) {
+                            const months = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+                            let day = String(d.getDate()).padStart(2, '0');
+                            let thMonth = months[d.getMonth()];
+                            let thYear = d.getFullYear() < 2500 ? d.getFullYear() + 543 : d.getFullYear();
+                            let hours = String(d.getHours()).padStart(2, '0');
+                            let mins = String(d.getMinutes()).padStart(2, '0');
+                            
+                            dateStr = `${day} ${thMonth} ${thYear} ${hours}:${mins} น.`;
+                        }
+                    }
+                } catch(e) {}
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="font-size:13px; color:var(--text-muted); white-space:nowrap;"><svg width="14" height="14" style="vertical-align:text-bottom; margin-right:4px;"><use href="#icon-time"/></svg>${dateStr}</td>
+                        <td style="font-weight:700; color:var(--primary); white-space:nowrap;"><svg width="14" height="14" style="vertical-align:text-bottom; margin-right:4px;"><use href="#icon-shield"/></svg>${log.AdminName || 'Admin'}</td>
+                        <td style="font-weight:500;">${log.Details || '-'}</td>
+                    </tr>
+                `;
+            });
+        }
+
         function loginAdmin() {
             const userIn = document.getElementById('admin-user-input').value; const passIn = document.getElementById('admin-pass-input').value;
             if(adminsData.length === 0) { showToast('ไม่มีข้อมูลใน Sheets', 'danger'); return; }
@@ -2343,6 +2542,7 @@
                 renderAll(); showToast(`เข้าสู่ระบบสำเร็จ: ${currentAdminName}`, 'success');
             } else { showToast('รหัสผ่านไม่ถูกต้อง', 'danger'); }
         }
+
         function logoutAdmin() {
             isAdminLoggedIn = false; currentAdminName = "";
             document.getElementById('admin-login-view').style.display = 'block'; document.getElementById('admin-dashboard-view').style.display = 'none';
