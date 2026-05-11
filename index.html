@@ -376,7 +376,7 @@
             <div class="nav-left">
                 <button class="btn-mobile-menu" onclick="toggleMobileSidebar()"><svg width="24" height="24"><use href="#icon-menu"/></svg></button>
                 <div style="font-weight: 700; color: var(--text-muted); display:flex; align-items:center; gap:8px;">
-                    <svg width="20" height="20" style="color:var(--primary)"><use href="#icon-loc"/></svg> <span class="hide-on-mobile">NTL OPS-BSCS_Central Service 2</span>
+                    <svg width="20" height="20" style="color:var(--primary)"><use href="#icon-loc"/></svg> <span class="hide-on-mobile">NTL OPS-BSCS_Central Service 1</span>
                 </div>
                 <div class="sync-status" id="sync-status" style="border-color: var(--warning); color: var(--warning);">
                     <div class="sync-dot" style="background: currentColor;"></div> กำลังดึงข้อมูล...
@@ -610,7 +610,7 @@
                 </div>
 
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</label><input type="text" class="form-control" id="book-user" placeholder="ชื่อ-นามสกุล"></div>
-                <div class="form-group"><label><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก/หน่วยงาน</label><input type="text" class="form-control" id="book-dept" placeholder="เช่น Central Service 2"></div>
+                <div class="form-group"><label><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก/หน่วยงาน</label><input type="text" class="form-control" id="book-dept" placeholder="เช่น Central Service 1"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-phone"/></svg> เบอร์ติดต่อ</label><input type="text" class="form-control" id="book-tel" placeholder="08X-XXX-XXXX"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</label><input type="text" class="form-control" id="book-dest" placeholder="ระบุสถานที่"></div>
                 <div class="form-group full"><label><svg width="16" height="16"><use href="#icon-mileage"/></svg> เลขไมล์เริ่มต้น (ดึงข้อมูลล่าสุดอัตโนมัติ)</label><input type="number" class="form-control" id="book-mileage" readonly style="background:var(--border-color); font-weight:bold; color:var(--text-main);"></div>
@@ -1501,7 +1501,7 @@
             
             const plate = carVal.split('|')[0];
             const user = document.getElementById('book-user').value || 'ไม่ระบุชื่อ';
-            const dept = document.getElementById('book-dept').value || 'Central Service 2';
+            const dept = document.getElementById('book-dept').value || 'Central Service 1';
             const tel = document.getElementById('book-tel').value || '-';
             const dest = document.getElementById('book-dest').value || '-';
             
