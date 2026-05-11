@@ -6,6 +6,7 @@
     <title>Smart Fleet Pro - NTL OPS-BSCS</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --bg-color: #f8f9fa; --card-bg: #ffffff; --text-main: #111827; --text-muted: #6b7280;
@@ -20,7 +21,7 @@
             --shadow-lg: 0 10px 30px rgba(0,0,0,0.6);
         }
 
-        /* 🎨 10 Themes Colors + Glowing Shadows */
+        /* 🎨 Themes Colors */
         body.theme-red { --primary: #e11d48; --primary-light: #ffe4e6; --primary-dark: #be123c; --theme-glow: rgba(225, 29, 72, 0.25); }
         body.theme-orange { --primary: #ea580c; --primary-light: #fff7ed; --primary-dark: #c2410c; --theme-glow: rgba(234, 88, 12, 0.25); }
         body.theme-pink { --primary: #db2777; --primary-light: #fce7f3; --primary-dark: #be185d; --theme-glow: rgba(219, 39, 119, 0.25); }
@@ -48,20 +49,16 @@
         body { font-family: 'Sarabun', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; transition: background-color 0.3s, color 0.3s; }
         svg { fill: currentColor; }
 
-        /* 🏎️ Blueprint Car Background */
         .bg-watermark { position: fixed; bottom: -10vh; right: -5vw; width: 70vh; height: 70vh; opacity: 0.03; pointer-events: none; z-index: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' fill='none' stroke='%23000' stroke-width='0.5' stroke-dasharray='2 2'%3E%3Cpath d='M10 45 L15 25 L40 25 L55 45 Z'/%3E%3Ccircle cx='20' cy='45' r='5'/%3E%3Ccircle cx='45' cy='45' r='5'/%3E%3Cpath d='M5 45 L65 45'/%3E%3Cpath d='M25 25 L25 45 M35 25 L35 45'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-size: contain; background-position: bottom right; transition: var(--transition); }
         body.dark-mode .bg-watermark { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' fill='none' stroke='%23fff' stroke-width='0.5' stroke-dasharray='2 2'%3E%3Cpath d='M10 45 L15 25 L40 25 L55 45 Z'/%3E%3Ccircle cx='20' cy='45' r='5'/%3E%3Ccircle cx='45' cy='45' r='5'/%3E%3Cpath d='M5 45 L65 45'/%3E%3Cpath d='M25 25 L25 45 M35 25 L35 45'/%3E%3C/svg%3E"); opacity: 0.05; }
 
-        /* 🚀 Cyber IT Running Light Bar */
         .smart-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 100000; background: rgba(0,0,0,0.05); overflow: hidden; }
         .smart-bar { position: absolute; top: 0; left: -300px; width: 300px; height: 100%; background: linear-gradient(90deg, transparent, var(--primary), #ffffff); box-shadow: 0 0 12px var(--primary), 0 0 20px var(--primary); animation: cyber-scan 2s infinite cubic-bezier(0.4, 0, 0.2, 1); }
         body.dark-mode .smart-bar-container { background: rgba(255,255,255,0.05); }
         
         @keyframes cyber-scan { 0% { left: -300px; } 100% { left: 100%; } }
-        @keyframes pulse-dot { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
         @keyframes alert-pulse { 0% { filter: drop-shadow(0 0 4px rgba(220,38,38,0.5)); transform: scale(1); } 50% { filter: drop-shadow(0 0 12px rgba(220,38,38,1)); transform: scale(1.1); } 100% { filter: drop-shadow(0 0 4px rgba(220,38,38,0.5)); transform: scale(1); } }
 
-        /* Sidebar Elements */
         .sidebar { width: var(--sidebar-width); background: var(--card-bg); display: flex; flex-direction: column; border-right: 1px solid var(--border-color); z-index: 200; transition: var(--transition); overflow-x: hidden; box-shadow: 4px 0 20px rgba(0,0,0,0.02); }
         .sidebar.collapsed { width: 85px; }
         .sidebar.collapsed .menu-text, .sidebar.collapsed .logo-text { display: none; opacity: 0; }
@@ -76,7 +73,6 @@
         .menu-item.active { background-color: var(--primary-light); color: var(--primary); }
         .menu-icon { width: 22px; height: 22px; flex-shrink: 0; }
 
-        /* Main Wrapper */
         .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 1; }
         .top-nav { height: 80px; background: var(--card-bg); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; z-index: 10; border-bottom: 1px solid var(--border-color); }
         .nav-left { display: flex; align-items: center; gap: 20px; }
@@ -85,7 +81,6 @@
         .sync-status { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; background: var(--bg-color); padding: 8px 16px; border-radius: 30px; border: 1px solid var(--border-color); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         .sync-dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 6px currentColor; }
         
-        /* 10 Theme Colors Wrapper */
         .theme-controls { display: flex; gap: 15px; align-items: center; }
         .theme-picker { display: flex; gap: 8px; align-items: center; background: var(--bg-color); padding: 6px 12px; border-radius: 30px; border: 1px solid var(--border-color); overflow-x: auto; scroll-behavior: smooth;}
         .color-dot { width: 18px; height: 18px; border-radius: 50%; cursor: pointer; border: 2px solid var(--card-bg); box-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: var(--transition); flex-shrink: 0;}
@@ -93,7 +88,6 @@
         .btn-mode { background: var(--bg-color); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 30px; cursor: pointer; color: var(--text-main); font-family: 'Sarabun'; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: var(--transition); box-shadow: var(--shadow);}
         .btn-mode:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); transform: translateY(-2px);}
         
-        /* Content UI */
         .content-area { flex: 1; padding: 30px; overflow-y: auto; position: relative; z-index: 2;}
         .view-section { display: none; animation: fadeIn 0.4s ease forwards; }
         .view-section.active { display: block; }
@@ -102,21 +96,19 @@
         .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; flex-wrap: wrap; gap: 20px;}
         .header-title { font-size: 28px; font-weight: 700; margin: 0; color: var(--text-main); display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px;}
         
-        /* 🔥 Bulletproof Button CSS (Guarantee visibility & dynamic theme coloring) */
         .btn-primary, .btn-secondary {
             padding: 12px 24px; border-radius: 12px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 15px; display: inline-flex; gap: 8px; align-items: center; justify-content: center; transition: var(--transition); border: none; outline: none; text-decoration: none;
         }
         .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #ffffff !important; box-shadow: var(--shadow); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--theme-glow); filter: brightness(1.1); }
         
-        .btn-secondary { background: var(--card-bg); color: var(--text-main) !important; border: 1px solid var(--border-color); box-shadow: var(--shadow); }
-        .btn-secondary:hover { background: var(--bg-color); border-color: var(--primary); color: var(--primary) !important; transform: translateY(-2px); box-shadow: 0 5px 15px var(--theme-glow); }
+        .btn-secondary { background: var(--card-bg); color: var(--primary) !important; border: 1px solid var(--primary) !important; box-shadow: var(--shadow); }
+        .btn-secondary:hover { background: var(--primary-light); color: var(--primary-dark) !important; transform: translateY(-2px); box-shadow: 0 5px 15px var(--theme-glow); }
 
         .btn-primary:disabled, .btn-secondary:disabled {
             background: var(--border-color) !important; color: var(--text-muted) !important; box-shadow: none !important; cursor: not-allowed !important; transform: none !important; filter: none !important; background-image: none !important; border: none !important;
         }
 
-        /* Dashboard Cards */
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .stat-card { background: var(--card-bg); padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--border-color); box-shadow: var(--shadow); cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;}
         .stat-card::after { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--primary); transition: 0.3s; }
@@ -134,27 +126,28 @@
             cursor: pointer; display: flex; flex-direction: column;
         }
         .car-card.archived { opacity: 0.6; filter: grayscale(1); border-top-color: var(--text-muted);}
-        .car-card.replacement { border-top-color: var(--warning); background: linear-gradient(to bottom, rgba(245,158,11,0.03), var(--card-bg));}
+        .car-card.replacement { border-top-color: #f59e0b; background: linear-gradient(to bottom, rgba(245,158,11,0.03), var(--card-bg));}
+        .car-card.status-expired { border-top-color: #ef4444; background: linear-gradient(to bottom, rgba(239,68,68,0.03), var(--card-bg)); } 
         .car-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px var(--theme-glow), 0 0 15px var(--theme-glow); opacity: 1; filter: grayscale(0);}
-        .car-card.status-avail { border-top-color: var(--success); }
+        .car-card.status-avail { border-top-color: #10b981; }
         .car-card.status-inuse { border-top-color: var(--primary); } 
-        .car-card.status-maint { border-top-color: var(--warning); }
+        .car-card.status-maint { border-top-color: #f59e0b; }
         
         .car-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px dashed var(--border-color); }
         .car-plate { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--primary-dark);}
         
         .badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; white-space: nowrap; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px;}
-        .badge.green { background: rgba(16,185,129,0.15); color: var(--success); }
+        .badge.green { background: rgba(16,185,129,0.15); color: #10b981; }
         .badge.purple { background: var(--theme-glow); color: var(--primary); border: 1px solid var(--primary-light); }
-        .badge.yellow { background: rgba(245,158,11,0.15); color: var(--warning); }
+        .badge.yellow { background: rgba(245,158,11,0.15); color: #f59e0b; }
         .badge.gray { background: rgba(107,114,128,0.15); color: var(--text-muted); }
+        .badge.danger { background: rgba(239,68,68,0.15); color: #ef4444; } 
         
+        .expired-highlight { background: rgba(239,68,68,0.15); color: #ef4444 !important; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(239,68,68,0.3); font-weight: 700; display: inline-block;} 
+
         .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; align-items: flex-start;}
         .info-label { color: var(--text-muted); display: flex; align-items: center; gap: 8px; flex-shrink: 0; font-weight: 500;}
         .info-val { font-weight: 600; text-align: right; color: var(--text-main); word-break: break-word; }
-        
-        .btn-return { width: 100%; margin-top: 20px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px; border-radius: 10px; cursor: pointer; font-family: 'Sarabun'; font-weight: 600; transition: var(--transition); display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-return:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px var(--theme-glow); }
         
         .empty-state { grid-column: 1 / -1; padding: 60px 20px; text-align: center; color: var(--text-muted); background: var(--card-bg); border-radius: var(--border-radius); border: 2px dashed var(--border-color); font-size: 16px; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 15px;}
 
@@ -166,42 +159,41 @@
         .data-table tbody tr { cursor: pointer; transition: var(--transition); }
         .data-table tbody tr:hover { background: var(--primary-light); transform: scale(1.002); box-shadow: inset 3px 0 0 var(--primary);}
         
-        .row-warning { background-color: rgba(245,158,11,0.04) !important; border-left: 5px solid var(--warning); }
-        .row-danger { background-color: rgba(239,68,68,0.06) !important; border-left: 5px solid var(--danger); font-weight: 600;}
+        .row-warning { background-color: rgba(245,158,11,0.04) !important; border-left: 5px solid #f59e0b; }
+        .row-danger { background-color: rgba(239,68,68,0.06) !important; border-left: 5px solid #ef4444; font-weight: 600;}
 
-        /* Modals & Forms */
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(17, 24, 39, 0.7); display: none; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); padding: 20px; }
-        .modal-content { background: var(--card-bg); width: 100%; max-width: 600px; max-height: 90vh; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; position: relative; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid rgba(255,255,255,0.1);}
+        .modal-content { background: var(--card-bg); width: 100%; max-width: 600px; max-height: 90vh; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; position: relative; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid var(--primary);}
         .modal-content.large { max-width: 950px; } 
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
-        /* 🚨 Fix Header Modal in Light/Dark Mode */
-        .modal-header { background: transparent; padding: 20px 25px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h2 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-main); }
-        .btn-close { background: var(--bg-color); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 50%; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
-        .btn-close:hover { background: var(--danger); color: white; border-color: var(--danger); transform: rotate(90deg); }
+        .modal-header { background: var(--bg-color); padding: 20px 25px; border-bottom: 2px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -0.5px; color: var(--primary) !important; }
         
-        .modal-body { padding: 25px; overflow-y: auto; flex: 1; }
+        .btn-close { background: var(--bg-color); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 50%; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .btn-close:hover { background: #ef4444; color: white; border-color: #ef4444; transform: rotate(90deg); }
+        
+        .modal-body { padding: 25px; overflow-y: auto; flex: 1; background: var(--card-bg); }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-group { display: flex; flex-direction: column; gap: 8px; grid-column: span 1; }
         .form-group.full { grid-column: span 2; }
-        .form-group label { font-size: 14px; color: var(--text-muted); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        
+        .modal-body .form-group label { font-size: 14px; color: var(--primary-dark) !important; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         
         .form-control { padding: 14px 16px; border: 2px solid var(--border-color); border-radius: 12px; font-family: 'Sarabun'; background: var(--bg-color); color: var(--text-main); font-size: 15px; font-weight: 500; transition: var(--transition); width: 100%;}
         .form-control:disabled, .form-control[readonly] { background: var(--border-color); opacity: 0.8; cursor: not-allowed; border-color: var(--border-color) !important;}
         .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--theme-glow); background: var(--card-bg);}
 
-        /* Professional Detail Rows */
         .detail-group { border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 20px; background: var(--card-bg); overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
         .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 20px; border-bottom: 1px solid var(--border-color); gap: 15px; transition: 0.2s;}
         .detail-row:hover { background: var(--bg-color); }
         .detail-row:last-child { border-bottom: none; }
-        .detail-label { color: var(--text-muted); font-size: 14px; flex-shrink: 0; font-weight: 500; display: flex; align-items: center; gap: 8px;}
+        .detail-label { color: var(--primary-dark) !important; font-size: 14px; flex-shrink: 0; font-weight: 600; display: flex; align-items: center; gap: 8px;}
         .detail-value { font-weight: 600; font-size: 14px; text-align: right; color: var(--text-main); word-break: break-word; }
 
-        /* Accordion for Dashboard Popup */
         .car-details-accordion { margin-top: 15px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; transition: var(--transition); }
-        .car-details-accordion summary { padding: 14px 16px; font-size: 15px; font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+        .car-details-accordion summary { padding: 14px 16px; font-size: 15px; font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; user-select: none; color: var(--primary-dark) !important;}
         .car-details-accordion summary::-webkit-details-marker { display: none; }
         .car-details-accordion summary::after { content: '▼'; font-size: 12px; transition: transform 0.3s; opacity:0.6; }
         .car-details-accordion[open] summary::after { transform: rotate(-180deg); }
@@ -216,26 +208,38 @@
         .calendar-wrap { background: var(--card-bg); border-radius: var(--border-radius); border: 1px solid var(--border-color); padding: 20px; box-shadow: var(--shadow); overflow-x: auto; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr) !important; gap: 8px; }
         .day-header { text-align: center; font-weight: 700; padding: 10px 0; color: var(--text-muted); font-size: 14px; background: var(--bg-color); border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+        
+        /* 🚨 ปรับปรุงเฉดสีปฏิทินให้ชัดเจน */
         .cal-day { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 6px; min-height: 110px; cursor: pointer; transition: var(--transition); position: relative; display: flex; flex-direction: column;}
         .cal-day:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 25px var(--theme-glow); z-index: 10; border-color: var(--primary) !important;}
-        .day-num { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text-main); text-align: center; }
-        .cal-bar-container { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
+        
+        /* 🎨 Custom Shading Classes */
+        .cal-day.usage-low { background: linear-gradient(135deg, var(--card-bg), var(--primary-light)); border: 2px solid var(--primary); box-shadow: inset 0 0 10px rgba(0,0,0,0.03); }
+        .cal-day.usage-med { background: linear-gradient(135deg, var(--primary-light), var(--primary)); border: 2px solid var(--primary-dark); box-shadow: 0 4px 10px var(--theme-glow); }
+        .cal-day.usage-high { background: linear-gradient(135deg, #ef4444, #b91c1c); border: 2px solid #991b1b; box-shadow: 0 4px 15px rgba(239,68,68,0.4); }
+        
+        .day-num { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text-main); text-align: center; z-index: 2; position:relative;}
+        
+        .cal-day.usage-med .day-num, .cal-day.usage-high .day-num { color: #ffffff !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        
+        .cal-bar-container { display: flex; flex-direction: column; gap: 6px; margin-top: auto; z-index: 2; position:relative;}
         .cal-stat-bar { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 6px 2px; border-radius: 8px; font-weight: 700; color: white; letter-spacing: 0.5px;}
         .cal-stat-bar.used { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); box-shadow: 0 2px 6px var(--theme-glow);}
         .cal-stat-bar.avail { background: linear-gradient(135deg, #10b981, #047857); box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);}
+        
+        .cal-day.usage-med .cal-stat-bar, .cal-day.usage-high .cal-stat-bar { border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;}
+
         .cal-stat-bar span:last-child { font-size: 18px; line-height: 1; margin-top:4px;}
         .cal-label { font-size: 11px; opacity: 0.9; line-height: 1;}
 
-        /* Popup Ticket Style */
-        .v-book-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 15px; box-shadow: var(--shadow); transition: var(--transition); border-left: 4px solid var(--primary);}
+        .v-book-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 15px; box-shadow: var(--shadow); transition: var(--transition); border-left: 4px solid var(--primary) !important;}
         .v-book-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--theme-glow); border-color: var(--primary-light);}
         .ticket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-        /* Toast */
         #toast-container { position: fixed; top: 24px; right: 24px; z-index: 10000; display: flex; flex-direction: column; gap: 12px; max-width: calc(100vw - 48px); }
-        .toast { background: var(--card-bg); border-left: 6px solid var(--success); color: var(--text-main); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 14px; font-weight: 600; font-family: 'Sarabun'; font-size: 15px; animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .toast.danger { border-left-color: var(--danger); }
-        .toast.warning { border-left-color: var(--warning); }
+        .toast { background: var(--card-bg); border-left: 6px solid #10b981; color: var(--text-main); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 14px; font-weight: 600; font-family: 'Sarabun'; font-size: 15px; animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .toast.danger { border-left-color: #ef4444; }
+        .toast.warning { border-left-color: #f59e0b; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         #mobile-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(17, 24, 39, 0.6); display: none; z-index: 150; backdrop-filter: blur(3px);}
@@ -291,6 +295,7 @@
 
     <svg style="display:none;">
         <symbol id="icon-dash" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></symbol>
+        <symbol id="icon-chart" viewBox="0 0 24 24"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM7 10h2v7H7v-7zm4-3h2v10h-2V7zm4 4h2v6h-2v-6z"/></symbol>
         <symbol id="icon-cal" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></symbol>
         <symbol id="icon-car" viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></symbol>
         <symbol id="icon-export" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></symbol>
@@ -317,11 +322,24 @@
     <div class="smart-bar-container"><div class="smart-bar"></div></div>
     <div id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
 
+    <!-- 🚨 แจ้งเตือนระยะเข้าศูนย์เกินแบบ Pop-Up และสั่น -->
+    <div class="modal-overlay" id="modal-maint-alert" style="z-index: 100002;">
+        <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid #ef4444; background: var(--card-bg);">
+            <div style="color: #ef4444; margin-bottom: 15px;">
+                <svg width="60" height="60" style="animation: alert-pulse 1s infinite;"><use href="#icon-warning"/></svg>
+            </div>
+            <h2 style="color: #ef4444 !important; margin: 0 0 10px 0; font-size: 24px;">แจ้งเตือนเข้าศูนย์!</h2>
+            <p style="font-size: 16px; font-weight: 600; color: var(--text-main); margin-bottom: 25px;">รถคันที่คุณเลือก <span style="color:#ef4444;">วิ่งเกินระยะเช็คศูนย์ที่กำหนดแล้ว</span><br>โปรดนำรถเข้าศูนย์บริการทันทีเพื่อความปลอดภัย</p>
+            <button class="btn-primary" style="width: 100%; justify-content: center; background: #ef4444; border:none; box-shadow:none;" onclick="closeModal('modal-maint-alert')">รับทราบและปิดหน้าต่าง</button>
+        </div>
+    </div>
+
+    <!-- 🚨 Global Alert (หน้าแรก) -->
     <div class="modal-overlay" id="modal-global-alert" style="z-index: 100001;">
         <div class="modal-content" style="max-width: 500px; text-align: left; background: var(--bg-color);">
             <div class="modal-header" style="background: transparent; border-bottom: 1px solid var(--border-color); padding: 20px 25px;">
-                <h2 style="color: var(--text-main); margin:0; display:flex; align-items:center; gap:8px;">
-                    <svg width="24" height="24" style="color: var(--danger); animation: alert-pulse 1s infinite;"><use href="#icon-warning"/></svg> พบรถที่ต้องดำเนินการด่วน!
+                <h2 style="color: var(--primary) !important; margin:0; display:flex; align-items:center; gap:8px;">
+                    <svg width="24" height="24" style="color: #ef4444; animation: alert-pulse 1s infinite;"><use href="#icon-warning"/></svg> พบรถที่ต้องดำเนินการด่วน!
                 </h2>
             </div>
             <div class="modal-body" style="padding: 20px;">
@@ -355,16 +373,23 @@
             <div class="nav-left">
                 <button class="btn-mobile-menu" onclick="toggleMobileSidebar()"><svg width="24" height="24"><use href="#icon-menu"/></svg></button>
                 <div style="font-weight: 700; color: var(--text-muted); display:flex; align-items:center; gap:8px;">
-                    <svg width="20" height="20" style="color:var(--primary)"><use href="#icon-loc"/></svg> <span class="hide-on-mobile">NTL OPS-BSCS_Central Service 2</span>
+                    <svg width="20" height="20" style="color:var(--primary)"><use href="#icon-loc"/></svg> <span class="hide-on-mobile">NTL OPS-BSCS_Central Service 1</span>
                 </div>
-                <div class="sync-status" id="sync-status" style="border-color: var(--warning); color: var(--warning);">
+                <div class="sync-status" id="sync-status" style="border-color: #f59e0b; color: #f59e0b;">
                     <div class="sync-dot" style="background: currentColor;"></div> กำลังดึงข้อมูล...
                 </div>
             </div>
             
             <div class="theme-controls">
-                <div style="font-weight: 700; color: var(--primary); display:flex; align-items:center; gap:8px; background: var(--primary-light); padding: 8px 16px; border-radius: 30px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);" id="live-time">
-                    <svg width="18" height="18"><use href="#icon-time"/></svg> 00:00 น.
+                <div style="font-weight: 700; color: var(--primary); display:flex; align-items:center; gap:10px;">
+                    <!-- ย้ายปุ่มสร้างการจองมาไว้ข้างบนเพื่อให้กดได้ทุกหน้า -->
+                    <button class="btn-primary" onclick="openBookingModal()" id="btn-create-book" disabled style="padding: 6px 14px; font-size: 14px; box-shadow: none;">
+                        <svg width="18" height="18"><use href="#icon-edit"/></svg> สร้างการจอง
+                    </button>
+                    
+                    <div style="display:flex; align-items:center; gap:8px; background: var(--primary-light); padding: 6px 12px; border-radius: 30px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);" id="live-time">
+                        <svg width="16" height="16"><use href="#icon-time"/></svg> 00:00 น.
+                    </div>
                 </div>
                 
                 <div class="theme-picker hide-on-mobile">
@@ -386,8 +411,8 @@
 
         <div class="content-area">
             
+            <!-- VIEW: Dashboard (ภาพรวมระบบ) -->
             <div id="view-dashboard" class="view-section active">
-                
                 <div id="persistent-global-alert" style="display:none; margin-bottom: 25px; background: rgba(220,38,38,0.1); border: 2px solid #dc2626; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(220,38,38,0.2);">
                     <h3 style="margin:0 0 10px 0; color:#dc2626; display:flex; align-items:center; gap:8px;">
                         <svg width="24" height="24" style="animation: alert-pulse 1s infinite;"><use href="#icon-warning"/></svg> แจ้งเตือน (รถที่ต้องอัปเดตข้อมูลด่วน!)
@@ -400,8 +425,8 @@
                         <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
                             <h1 class="header-title"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-dash"/></svg> ภาพรวมระบบยานพาหนะ</h1>
                             
-                            <div style="background: linear-gradient(90deg, rgba(16,185,129, 0.1), transparent); border-left: 4px solid var(--success); padding: 8px 16px; border-radius: 0 12px 12px 0; display: inline-flex; align-items: center; gap: 12px; box-shadow: var(--shadow);">
-                                <div style="width: 10px; height: 10px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); animation: pulse-dot 1.5s infinite;"></div>
+                            <div style="background: linear-gradient(90deg, rgba(16,185,129, 0.1), transparent); border-left: 4px solid #10b981; padding: 8px 16px; border-radius: 0 12px 12px 0; display: inline-flex; align-items: center; gap: 12px; box-shadow: var(--shadow);">
+                                <div style="width: 10px; height: 10px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse-dot 1.5s infinite;"></div>
                                 <div style="font-weight: 700; color: var(--text-main); font-size: 13px; letter-spacing: 0.5px;">LIVE SYSTEM MONITORING</div>
                             </div>
                         </div>
@@ -411,14 +436,13 @@
                             <input type="date" id="dash-date" class="form-control" style="width:auto; padding: 6px 12px; font-weight:700; border-color:transparent; background:var(--bg-color); box-shadow:none;" onchange="renderDashboard()">
                         </div>
                     </div>
-                    <button class="btn-primary" onclick="openBookingModal()" id="btn-create-book" disabled><svg width="22" height="22"><use href="#icon-edit"/></svg> สร้างการจองรถใหม่</button>
                 </div>
 
                 <div class="summary-grid">
                     <div class="stat-card" onclick="showSummaryPopup('ทั้งหมด')"><div class="stat-title">รถในระบบทั้งหมด <svg width="20" height="20"><use href="#icon-car"/></svg></div><div class="stat-value" id="st-total">0</div></div>
-                    <div class="stat-card" onclick="showSummaryPopup('ว่าง')"><div class="stat-title">ว่างในวันที่เลือก <span style="color:var(--success)"><svg width="20" height="20"><use href="#icon-check"/></svg></span></div><div class="stat-value" style="color: var(--success);" id="st-avail">0</div></div>
+                    <div class="stat-card" onclick="showSummaryPopup('ว่าง')"><div class="stat-title">ว่างในวันที่เลือก <span style="color:#10b981"><svg width="20" height="20"><use href="#icon-check"/></svg></span></div><div class="stat-value" style="color: #10b981;" id="st-avail">0</div></div>
                     <div class="stat-card" onclick="showSummaryPopup('ใช้งาน')"><div class="stat-title">ใช้งานในวันที่เลือก <span style="color:var(--primary)"><svg width="20" height="20"><use href="#icon-time"/></svg></span></div><div class="stat-value" style="color: var(--primary);" id="st-inuse">0</div></div>
-                    <div class="stat-card" onclick="showSummaryPopup('ซ่อม')"><div class="stat-title">ส่งซ่อม/ทดแทน <span style="color:var(--warning)"><svg width="20" height="20"><use href="#icon-tool"/></svg></span></div><div class="stat-value" style="color: var(--warning);" id="st-maint">0</div></div>
+                    <div class="stat-card" onclick="showSummaryPopup('ซ่อม')"><div class="stat-title">ส่งซ่อม/งดให้บริการ <span style="color:#f59e0b"><svg width="20" height="20"><use href="#icon-tool"/></svg></span></div><div class="stat-value" style="color: #f59e0b;" id="st-maint">0</div></div>
                 </div>
 
                 <div class="car-grid" id="dashboard-cards">
@@ -429,6 +453,7 @@
                 </div>
             </div>
 
+            <!-- VIEW: Calendar -->
             <div id="view-calendar" class="view-section">
                 <div class="header-title" style="margin-bottom: 25px;"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-cal"/></svg> ปฏิทินการใช้งานระบบ</div>
                 
@@ -443,6 +468,7 @@
                 </div>
             </div>
 
+            <!-- VIEW: Booking List -->
             <div id="view-bookinglist" class="view-section">
                 <div class="header-flex">
                     <div>
@@ -466,26 +492,29 @@
                                 <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-user"/></svg> ผู้ใช้งาน / แผนก</th>
                                 <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-cal"/></svg> วันที่ยืม</th>
                                 <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-time"/></svg> กำหนดคืน</th>
-                                <th style="color:var(--success);"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-check"/></svg> รับรถคืน (จริง)</th>
-                                <th style="text-align:center;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-mileage"/></svg> ระยะทาง</th>
+                                <th style="color:#10b981;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-check"/></svg> รับรถคืน (จริง)</th>
+                                <!-- 💡 เพิ่มคอลัมน์ ไมล์ เริ่ม-คืน -->
+                                <th style="text-align:center;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-mileage"/></svg> ไมล์ เริ่ม-คืน</th>
+                                <th style="text-align:center;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-loc"/></svg> ระยะทาง</th>
                                 <th>สถานะ</th>
                                 <th class="admin-only" style="display:none; text-align:center;">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="booking-list-body">
-                            <tr><td colspan="9" style="text-align:center; padding: 40px;">กำลังเชื่อมต่อข้อมูล...</td></tr>
+                            <tr><td colspan="10" style="text-align:center; padding: 40px;">กำลังเชื่อมต่อข้อมูล...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- VIEW: Car Module -->
             <div id="view-carmodule" class="view-section">
                 <div class="header-flex">
                     <div>
                         <h1 class="header-title"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-car"/></svg> ข้อมูลรถและการเช็คระยะ</h1>
                         <div style="margin-top: 8px; font-size: 14px; color: var(--text-muted); display:flex; gap:20px; align-items:center; flex-wrap: wrap;">
-                            <span style="display:flex; align-items:center; gap:8px;"><div style="width:14px; height:14px; background:rgba(245,158,11,0.2); border:2px solid var(--warning); border-radius:4px;"></div> ใกล้เช็คระยะ (เหลือ &lt; 2,000 กม.)</span>
-                            <span style="display:flex; align-items:center; gap:8px;"><div style="width:14px; height:14px; background:rgba(239,68,68,0.15); border:2px solid var(--danger); border-radius:4px;"></div> วิกฤต: ต้องเข้าศูนย์ (เกินระยะ)</span>
+                            <span style="display:flex; align-items:center; gap:8px;"><div style="width:14px; height:14px; background:rgba(245,158,11,0.2); border:2px solid #f59e0b; border-radius:4px;"></div> ใกล้เช็คระยะ (เหลือ &lt; 2,000 กม.)</span>
+                            <span style="display:flex; align-items:center; gap:8px;"><div style="width:14px; height:14px; background:rgba(239,68,68,0.15); border:2px solid #ef4444; border-radius:4px;"></div> วิกฤต/งดให้บริการ (สีแดง)</span>
                         </div>
                     </div>
                     <div id="admin-add-car-btn" style="display: none;">
@@ -510,28 +539,49 @@
                 </div>
             </div>
 
+            <!-- VIEW: Export/Analytics -->
             <div id="view-export" class="view-section">
-                <div class="header-title" style="margin-bottom: 25px;"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-export"/></svg> สถิติรายงานการใช้งานรถ (Analytics)</div>
-                
-                <div style="display:flex; gap:25px; flex-wrap:wrap; margin-bottom:30px;">
-                    <div style="background:var(--card-bg); padding:30px; border-radius:var(--border-radius); border:1px solid var(--border-color); box-shadow:var(--shadow); flex:1; min-width:320px;">
-                        <h3 style="margin:top:0; font-size:20px; display:flex; align-items:center; gap:10px;"><svg width="24" height="24" style="color:var(--primary)"><use href="#icon-export"/></svg> ดาวน์โหลดข้อมูลจากระบบ (Excel)</h3>
-                        <p style="color:var(--text-muted); font-size:14px; margin-top:-10px; margin-bottom:20px;">ส่งออกข้อมูลประกอบด้วย: วันยืม-คืน, จำนวนวัน, แผนก, และระยะทางทั้งหมด</p>
-                        <div class="form-grid">
-                            <div class="form-group"><label><svg width="16" height="16"><use href="#icon-cal"/></svg> เลือกเดือน</label><input type="month" class="form-control" id="export-month"></div>
-                            <div class="form-group"><label><svg width="16" height="16"><use href="#icon-car"/></svg> เลือกทะเบียนรถ</label><select class="form-control" id="export-select-car"><option value="ทั้งหมด">ทั้งหมด (ทุกคัน)</option></select></div>
-                        </div>
-                        <button class="btn-primary" style="margin-top: 25px; width:100%; justify-content:center; font-size:16px;" onclick="downloadExcel()"><svg width="22" height="22"><use href="#icon-export"/></svg> Export Data to Excel (.xlsx)</button>
+                <div class="header-flex">
+                    <div>
+                        <h1 class="header-title"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-export"/></svg> สถิติรายงานการใช้งานรถ (Analytics)</h1>
+                        <div style="font-size:14px; color:var(--text-muted); margin-top:8px;">สรุปยอดการใช้งาน และ Plot กราฟแยกคันรายเดือน</div>
+                    </div>
+                    <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
+                        <div class="form-group" style="margin:0;"><label style="font-size:12px; color:var(--text-muted); margin-bottom:4px; display:block;">เลือกเดือน</label><input type="month" id="export-month" class="form-control" style="font-weight:700;" onchange="renderAnalytics()"></div>
+                        <div class="form-group" style="margin:0;"><label style="font-size:12px; color:var(--text-muted); margin-bottom:4px; display:block;">เลือกทะเบียนรถ</label><select class="form-control" id="export-select-car" style="font-weight:700;" onchange="renderAnalytics()"><option value="ทั้งหมด">ทั้งหมด (ทุกคัน)</option></select></div>
+                    </div>
+                </div>
+
+                <div class="summary-grid" style="margin-bottom: 20px;">
+                    <div class="stat-card" style="background:var(--primary-light); border-color:var(--primary);">
+                        <div class="stat-title" style="color:var(--primary-dark);">ยอดใช้งานรถทั้งหมด (ครั้ง) <svg width="20" height="20"><use href="#icon-car"/></svg></div>
+                        <div class="stat-value" style="color:var(--primary);" id="export-sum-trips">0</div>
+                    </div>
+                    <div class="stat-card" style="background:rgba(16,185,129,0.1); border-color:#10b981;">
+                        <div class="stat-title" style="color:#047857;">ระยะทางวิ่งรวม (กม.) <svg width="20" height="20"><use href="#icon-mileage"/></svg></div>
+                        <div class="stat-value" style="color:#10b981;" id="export-sum-km">0</div>
+                    </div>
+                    <div class="stat-card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; cursor:pointer;" onclick="downloadExcel()">
+                        <button class="btn-primary" style="width:100%; height:100%; font-size:18px; border-radius:12px; background:linear-gradient(135deg, var(--primary), var(--primary-dark));">
+                            <svg width="24" height="24"><use href="#icon-export"/></svg> ดาวน์โหลด Excel
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background:var(--card-bg); padding:20px; border-radius:var(--border-radius); border:1px solid var(--border-color); box-shadow:var(--shadow); margin-bottom:30px;">
+                    <h3 style="margin-top:0; font-size:18px; color:var(--text-main); display:flex; align-items:center; gap:8px;"><svg width="18" height="18" style="color:var(--primary);"><use href="#icon-chart"/></svg> กราฟแสดงสถิติ (Plot)</h3>
+                    <div style="position: relative; height: 320px; width: 100%;">
+                        <canvas id="exportChart"></canvas>
                     </div>
                 </div>
 
                 <div style="background:var(--card-bg); border-radius:var(--border-radius); border:1px solid var(--border-color); box-shadow:var(--shadow); overflow:hidden;">
-                    <div style="padding:25px; border-bottom:1px dashed var(--border-color); background:var(--primary-light);">
-                        <h3 style="margin:0; color:var(--primary-dark); display:flex; align-items:center; gap:12px; font-size:20px;">🏆 ตารางจัดอันดับการใช้งานรถทั้งหมด</h3>
+                    <div style="padding:20px 25px; border-bottom:1px dashed var(--border-color); background:var(--bg-color);">
+                        <h3 style="margin:0; color:var(--text-main); display:flex; align-items:center; gap:12px; font-size:18px;">🏆 ตารางจัดอันดับการใช้งาน (เฉพาะเดือนที่เลือก)</h3>
                     </div>
                     <div class="table-responsive" style="max-height:500px; box-shadow:none; border:none; border-radius:0;">
                         <table class="data-table" style="box-shadow:none; border-radius:0;">
-                            <thead><tr><th>อันดับ</th><th>ทะเบียนรถ</th><th>รุ่น/ยี่ห้อ</th><th>สถานะปัจจุบัน</th><th>กิโลเมตรสะสมรวม</th></tr></thead>
+                            <thead><tr><th>อันดับ</th><th>ทะเบียนรถ</th><th>รุ่น/ยี่ห้อ</th><th>ระยะทางในเดือนนี้</th><th>เพิ่มเติม</th></tr></thead>
                             <tbody id="analytics-table-body">
                                 <tr><td colspan="5" style="text-align:center; padding:40px;">กำลังเชื่อมต่อข้อมูล...</td></tr>
                             </tbody>
@@ -540,6 +590,7 @@
                 </div>
             </div>
 
+            <!-- VIEW: Admin -->
             <div id="view-admin" class="view-section">
                 <div class="header-title" style="margin-bottom: 25px;"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-shield"/></svg> การจัดการระบบผู้ดูแล</div>
                 
@@ -560,7 +611,7 @@
                             <h2 style="margin:0; color:var(--primary-dark); font-size:24px;" id="admin-welcome-msg">ยินดีต้อนรับ, Admin</h2>
                             <p style="margin:8px 0 0 0; font-size:15px; color:var(--text-muted); font-weight:500;">ระบบปลดล็อกให้คุณจัดการข้อมูลหลังบ้านได้ 100% แล้ว</p>
                         </div>
-                        <button class="btn-secondary" style="color:var(--danger) !important; border-color:var(--danger); padding:12px 24px;" onclick="logoutAdmin()"><svg width="20" height="20"><use href="#icon-close"/></svg> ออกจากระบบ</button>
+                        <button class="btn-secondary" style="color:#ef4444 !important; border-color:#ef4444 !important; padding:12px 24px;" onclick="logoutAdmin()"><svg width="20" height="20"><use href="#icon-close"/></svg> ออกจากระบบ</button>
                     </div>
                     <h3 style="margin-top:0; font-size:20px; display:flex; align-items:center; gap:10px;"><svg width="24" height="24" style="color:var(--primary)"><use href="#icon-list"/></svg> Audit Log (ประวัติการทำงานของ Admin)</h3>
                     <div class="table-responsive">
@@ -577,8 +628,10 @@
         </div>
     </div>
 
+    <!-- Modals (Booking, Return, Detail, Service, Replacement) -->
     <div id="toast-container"></div>
 
+    <!-- จองรถ -->
     <div class="modal-overlay" id="modal-booking">
         <div class="modal-content">
             <div class="modal-header">
@@ -590,14 +643,14 @@
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-time"/></svg> วันที่คาดว่าจะคืน</label><input type="date" class="form-control" id="book-end" onchange="checkAvailableCars()"></div>
                 
                 <div class="form-group full" style="background:var(--primary-light); padding:15px; border-radius:12px; border:1px dashed var(--primary);">
-                    <label style="color:var(--primary-dark);"><svg width="18" height="18"><use href="#icon-car"/></svg> เลือกรถที่ว่าง (บังคับเลือกวันด้านบนก่อน)</label>
+                    <label style="color:var(--primary-dark) !important;"><svg width="18" height="18"><use href="#icon-car"/></svg> เลือกรถที่ว่าง (บังคับเลือกวันด้านบนก่อน)</label>
                     <select class="form-control" id="book-car" onchange="autoFillMileage()" style="border-color:var(--primary);" disabled>
                         <option value="">-- กรุณาเลือกวันที่เริ่มยืม และวันคืนก่อน --</option>
                     </select>
                 </div>
 
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</label><input type="text" class="form-control" id="book-user" placeholder="ชื่อ-นามสกุล"></div>
-                <div class="form-group"><label><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก/หน่วยงาน</label><input type="text" class="form-control" id="book-dept" placeholder="เช่น Central Service 2"></div>
+                <div class="form-group"><label><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก/หน่วยงาน</label><input type="text" class="form-control" id="book-dept" placeholder="เช่น Central Service 1"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-phone"/></svg> เบอร์ติดต่อ</label><input type="text" class="form-control" id="book-tel" placeholder="08X-XXX-XXXX"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</label><input type="text" class="form-control" id="book-dest" placeholder="ระบุสถานที่"></div>
                 <div class="form-group full"><label><svg width="16" height="16"><use href="#icon-mileage"/></svg> เลขไมล์เริ่มต้น (ดึงข้อมูลล่าสุดอัตโนมัติ)</label><input type="number" class="form-control" id="book-mileage" readonly style="background:var(--border-color); font-weight:bold; color:var(--text-main);"></div>
@@ -606,11 +659,12 @@
         </div>
     </div>
 
+    <!-- คืนรถ -->
     <div class="modal-overlay" id="modal-return">
         <div class="modal-content" style="max-width: 450px;">
-            <div class="modal-header" style="background: linear-gradient(135deg, var(--warning), #d97706); color: white;">
-                <h2 style="color: white; margin:0;"><svg width="24" height="24"><use href="#icon-check"/></svg> ฟอร์มรับแจ้งคืนรถ</h2>
-                <button class="btn-close" style="background: rgba(0,0,0,0.2);" onclick="closeModal('modal-return')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
+            <div class="modal-header" style="background: linear-gradient(135deg, #f59e0b, #d97706); border-bottom:none;">
+                <h2 style="color: white !important; margin:0;"><svg width="24" height="24"><use href="#icon-check"/></svg> ฟอร์มรับแจ้งคืนรถ</h2>
+                <button class="btn-close" style="background: rgba(0,0,0,0.2); border-color:transparent;" onclick="closeModal('modal-return')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
             </div>
             <div class="modal-body">
                 <div style="background:var(--bg-color); padding:15px; border-radius:12px; margin-bottom:20px; text-align:center; border:1px solid var(--border-color);">
@@ -628,16 +682,17 @@
                 
                 <div class="form-group" style="margin-bottom: 25px;">
                     <label><svg width="16" height="16"><use href="#icon-mileage"/></svg> กรอกเลขไมล์ตอนคืนรถ</label>
-                    <input type="number" class="form-control" id="ret-end-mile" placeholder="ระบุเลขไมล์ปัจจุบันของรถ" style="border-color:var(--warning);" oninput="calculateReturnPreview()">
+                    <input type="number" class="form-control" id="ret-end-mile" placeholder="ระบุเลขไมล์ปัจจุบันของรถ" style="border-color:#f59e0b;" oninput="calculateReturnPreview()">
                 </div>
                 
                 <div id="ret-preview-box" style="margin-bottom: 25px; padding: 14px; border-radius: 12px; font-weight: 700; text-align: center; display: none; font-size: 15px; transition: var(--transition);"></div>
 
-                <button class="btn-primary" id="btn-save-return" style="width:100%; justify-content:center; padding:14px; font-size:16px;" onclick="confirmReturn()" disabled>ยืนยันการรับคืนรถ</button>
+                <button class="btn-primary" id="btn-save-return" style="width:100%; justify-content:center; padding:14px; font-size:16px; background:linear-gradient(135deg, #f59e0b, #d97706);" onclick="confirmReturn()" disabled>ยืนยันการรับคืนรถ</button>
             </div>
         </div>
     </div>
 
+    <!-- Summary (Popup) -->
     <div class="modal-overlay" id="modal-summary">
         <div class="modal-content">
             <div class="modal-header">
@@ -649,6 +704,7 @@
         </div>
     </div>
 
+    <!-- Car Detail -->
     <div class="modal-overlay" id="modal-car-detail">
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-header">
@@ -660,31 +716,33 @@
         </div>
     </div>
 
+    <!-- Service -->
     <div class="modal-overlay" id="modal-service">
         <div class="modal-content" style="max-width: 450px;">
-            <div class="modal-header" style="background: linear-gradient(135deg, var(--success), #047857); color: white;">
-                <h2 style="color: white; margin:0;"><svg width="24" height="24"><use href="#icon-tool"/></svg> บันทึกระยะการเข้าศูนย์</h2>
-                <button class="btn-close" onclick="closeModal('modal-service')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
+            <div class="modal-header" style="background: linear-gradient(135deg, #10b981, #047857); border-bottom:none;">
+                <h2 style="color: white !important; margin:0;"><svg width="24" height="24"><use href="#icon-tool"/></svg> บันทึกระยะการเข้าศูนย์</h2>
+                <button class="btn-close" style="background: rgba(0,0,0,0.2); border-color:transparent;" onclick="closeModal('modal-service')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
             </div>
             <div class="modal-body">
                 <div style="background:var(--bg-color); padding:15px; border-radius:12px; margin-bottom:15px; text-align:center; border:1px solid var(--border-color);">
                     <p style="margin:0; font-weight:700; font-size:22px; color:var(--text-main);" id="srv-plate-text">ทะเบียน: ...</p>
                 </div>
-                <div style="font-size:14px; color:var(--success); font-weight:600; margin-bottom:20px; background:rgba(16,185,129,0.1); padding:12px; border-radius:8px; display:flex; gap:10px; align-items:flex-start;">
+                <div style="font-size:14px; color:#10b981; font-weight:600; margin-bottom:20px; background:rgba(16,185,129,0.1); padding:12px; border-radius:8px; display:flex; gap:10px; align-items:flex-start;">
                     <svg width="20" height="20" style="flex-shrink:0;"><use href="#icon-check"/></svg>
                     <span>เมื่อบันทึกค่าใหม่ ระบบจะรีเซ็ตแถบแดงแจ้งเตือน และเริ่มนับรอบเช็คระยะ 10,000 กม. ถัดไปโดยอัตโนมัติ</span>
                 </div>
-                <div class="form-group" style="margin-bottom: 25px;"><label><svg width="16" height="16"><use href="#icon-mileage"/></svg> เลขไมล์ปัจจุบันที่นำเข้าศูนย์</label><input type="number" class="form-control" id="srv-mile" placeholder="ระบุเลขไมล์" style="border-color:var(--success); font-weight:bold; font-size:16px;"></div>
-                <button class="btn-primary" id="btn-save-service" style="width:100%; justify-content:center; padding:14px; font-size:16px;" onclick="confirmService()">ยืนยันบันทึกระยะเข้าศูนย์</button>
+                <div class="form-group" style="margin-bottom: 25px;"><label><svg width="16" height="16"><use href="#icon-mileage"/></svg> เลขไมล์ปัจจุบันที่นำเข้าศูนย์</label><input type="number" class="form-control" id="srv-mile" placeholder="ระบุเลขไมล์" style="border-color:#10b981; font-weight:bold; font-size:16px;"></div>
+                <button class="btn-primary" id="btn-save-service" style="width:100%; justify-content:center; padding:14px; font-size:16px; background:linear-gradient(135deg, #10b981, #047857);" onclick="confirmService()">ยืนยันบันทึกระยะเข้าศูนย์</button>
             </div>
         </div>
     </div>
 
+    <!-- Replacement -->
     <div class="modal-overlay" id="modal-replacement">
         <div class="modal-content" style="max-width: 450px;">
-            <div class="modal-header" style="background: linear-gradient(135deg, var(--warning), #d97706); color: white;">
-                <h2 style="color: white; margin:0;"><svg width="24" height="24"><use href="#icon-tool"/></svg> จัดการรถทดแทน / ปลดระวาง</h2>
-                <button class="btn-close" style="background: rgba(0,0,0,0.2);" onclick="closeModal('modal-replacement')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
+            <div class="modal-header" style="background: linear-gradient(135deg, #f59e0b, #d97706); border-bottom:none;">
+                <h2 style="color: white !important; margin:0;"><svg width="24" height="24"><use href="#icon-tool"/></svg> จัดการรถทดแทน / ปลดระวาง</h2>
+                <button class="btn-close" style="background: rgba(0,0,0,0.2); border-color:transparent;" onclick="closeModal('modal-replacement')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
             </div>
             <div class="modal-body">
                 <div style="background:var(--bg-color); padding:15px; border-radius:12px; margin-bottom:20px; text-align:center; border:1px solid var(--border-color);">
@@ -695,14 +753,15 @@
         </div>
     </div>
 
+    <!-- Edit Car -->
     <div class="modal-overlay" id="modal-edit-car">
         <div class="modal-content">
-            <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-dark), #111827);">
+            <div class="modal-header">
                 <h2><svg width="24" height="24"><use href="#icon-edit"/></svg> <span id="edit-car-title">ฟอร์มจัดการข้อมูลรถส่วนกลาง</span></h2>
                 <button class="btn-close" onclick="closeModal('modal-edit-car')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
             </div>
             <div class="modal-body form-grid">
-                <div style="grid-column: span 2; font-size:13px; color:var(--danger); margin-top:-10px; margin-bottom:10px; font-weight:600; background:rgba(239,68,68,0.1); padding:10px; border-radius:8px;">* การบันทึกข้อมูลจะเขียนทับลงในฐานข้อมูล Google Sheets ทันที</div>
+                <div style="grid-column: span 2; font-size:13px; color:#ef4444; margin-top:-10px; margin-bottom:10px; font-weight:600; background:rgba(239,68,68,0.1); padding:10px; border-radius:8px;">* การบันทึกข้อมูลจะเขียนทับลงในฐานข้อมูล Google Sheets ทันที</div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-car"/></svg> ทะเบียนรถ</label><input type="text" class="form-control" id="edit-plate" placeholder="เช่น กข 1234"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-tool"/></svg> ประเภทรถ</label>
                     <select class="form-control" id="edit-type">
@@ -711,7 +770,7 @@
                 </div>
                 <div class="form-group full"><label><svg width="16" height="16"><use href="#icon-flag"/></svg> ยี่ห้อ / รุ่น</label><input type="text" class="form-control" id="edit-brand" placeholder="Toyota Revo"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-mileage"/></svg> เลขไมล์ปัจจุบัน</label><input type="number" class="form-control" id="edit-mile" placeholder="ตัวเลขเท่านั้น"></div>
-                <div class="form-group"><label><svg width="16" height="16"><use href="#icon-flag"/></svg> ไมล์เข้าศูนย์ล่าสุด</label><input type="number" class="form-control" id="edit-last-srv-mile" placeholder="ระบุเลขไมล์" style="border-color:var(--warning);"></div>
+                <div class="form-group"><label><svg width="16" height="16"><use href="#icon-flag"/></svg> ไมล์เข้าศูนย์ล่าสุด</label><input type="number" class="form-control" id="edit-last-srv-mile" placeholder="ระบุเลขไมล์" style="border-color:#f59e0b;"></div>
                 
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-cal"/></svg> วันหมดอายุ พ.ร.บ.</label><input type="text" class="form-control" id="edit-act" placeholder="เช่น 15/12/2026"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-shield"/></svg> วันหมดอายุ ประกันภัย</label><input type="text" class="form-control" id="edit-ins" placeholder="เช่น 15/12/2026"></div>
@@ -723,6 +782,7 @@
         </div>
     </div>
 
+    <!-- Scripts -->
     <script>
         // ==========================================
         // 🚀 API URL (อัปเดตตรงนี้ให้ตรงกับของคุณ)
@@ -733,16 +793,29 @@
         let currentAdminName = "";
         let carsData = [], auditData = [], adminsData = [], bookingsData = []; 
         let currentCalDate = new Date();
+        
+        let exportChartInstance = null;
 
-        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
-        function setTheme(t) { document.body.className = document.body.className.replace(/\btheme-\S+/g, ''); document.body.classList.add(t); }
+        function toggleDarkMode() { 
+            document.body.classList.toggle('dark-mode'); 
+            setTimeout(() => { 
+                if(document.getElementById('view-export').classList.contains('active')) renderAnalytics();
+            }, 50);
+        }
+        function setTheme(t) { 
+            document.body.className = document.body.className.replace(/\btheme-\S+/g, ''); 
+            document.body.classList.add(t); 
+            setTimeout(() => { 
+                if(document.getElementById('view-export').classList.contains('active')) renderAnalytics();
+            }, 50);
+        }
         
         function updateTime() {
             const now = new Date();
             let hrs = String(now.getHours()).padStart(2, '0');
             let mins = String(now.getMinutes()).padStart(2, '0');
             const clk = document.getElementById('live-time');
-            if(clk) clk.innerHTML = `<svg width="18" height="18"><use href="#icon-time"/></svg> ${hrs}:${mins} น.`;
+            if(clk) clk.innerHTML = `<svg width="16" height="16"><use href="#icon-time"/></svg> ${hrs}:${mins} น.`;
         }
 
         function getCarIcon(type) {
@@ -783,7 +856,31 @@
             return diff > 0 ? diff : 1;
         }
 
-        // 💡 ฟังก์ชันสแกนหาปัญหาตอนโหลดระบบ (แสดงข้อมูลละเอียด)
+        function isCarExpired(car) {
+            let today = new Date();
+            today.setHours(0,0,0,0);
+            let actD = parseDateString(car.ActExp);
+            let insD = parseDateString(car.InsExp);
+            
+            // 💡 แก้ไขการเปรียบเทียบให้ปลอดภัยขึ้น หากไม่มีวันที่ จะไม่ถูกมองว่าหมดอายุ
+            let actExpired = actD ? (actD < today) : false;
+            let insExpired = insD ? (insD < today) : false;
+            
+            return {
+                expired: actExpired || insExpired,
+                actExpired: actExpired,
+                insExpired: insExpired
+            };
+        }
+
+        function populateCarDropdowns() {
+            const exportSelect = document.getElementById('export-select-car');
+            exportSelect.innerHTML = '<option value="ทั้งหมด">ทั้งหมด (ทุกคัน)</option>';
+            carsData.filter(c => c.Status !== 'Archived').forEach(c => {
+                exportSelect.innerHTML += `<option value="${c.Plate}">${c.Plate} (${c.Brand})</option>`;
+            });
+        }
+
         function checkGlobalAlerts() {
             let alertItems = [];
             let persistentItems = []; 
@@ -798,7 +895,6 @@
                 let insMsg = `<li style="color: var(--text-muted);"><span style="color: var(--text-main); font-weight:600;">•</span> ประกันภัย: ปกติ</li>`;
                 let maintMsg = `<li style="color: var(--text-muted);"><span style="color: var(--text-main); font-weight:600;">•</span> เช็คระยะ: ปกติ</li>`;
 
-                // เช็คระยะศูนย์
                 let currentMile = Number(c.Mileage||0);
                 let lastSrvMile = Number(c.LastServiceMileage);
                 if (isNaN(lastSrvMile) || String(c.LastServiceMileage).trim() === '') lastSrvMile = 0;
@@ -813,28 +909,26 @@
                     }
                 }
 
-                // เช็ค พ.ร.บ.
                 let actD = parseDateString(c.ActExp);
                 if(actD) {
                     let diffAct = Math.ceil((actD - today) / (1000 * 60 * 60 * 24));
                     if(diffAct <= 30) {
                         hasAlert = true;
                         if (diffAct < 0) {
-                            actMsg = `<li style="color: #dc2626; font-weight: 600;"><span style="color: #dc2626;">•</span> พ.ร.บ.: หมดอายุแล้ว!</li>`;
+                            actMsg = `<li style="color: #dc2626; font-weight: 700;"><span style="color: #dc2626;">•</span> พ.ร.บ. หมดอายุแล้ว: <span style="text-decoration:underline;">งดให้บริการรถคันนี้</span></li>`;
                         } else {
                             actMsg = `<li style="color: #d97706; font-weight: 600;"><span style="color: #d97706;">•</span> พ.ร.บ.: เหลืออีก ${diffAct} วัน</li>`;
                         }
                     }
                 }
 
-                // เช็คประกัน
                 let insD = parseDateString(c.InsExp);
                 if(insD) {
                     let diffIns = Math.ceil((insD - today) / (1000 * 60 * 60 * 24));
                     if(diffIns <= 30) {
                         hasAlert = true;
                         if (diffIns < 0) {
-                            insMsg = `<li style="color: #dc2626; font-weight: 600;"><span style="color: #dc2626;">•</span> ประกันภัย: หมดอายุแล้ว!</li>`;
+                            insMsg = `<li style="color: #dc2626; font-weight: 700;"><span style="color: #dc2626;">•</span> ประกันภัย หมดอายุแล้ว: <span style="text-decoration:underline;">งดให้บริการรถคันนี้</span></li>`;
                         } else {
                             insMsg = `<li style="color: #d97706; font-weight: 600;"><span style="color: #d97706;">•</span> ประกันภัย: เหลืออีก ${diffIns} วัน</li>`;
                         }
@@ -854,17 +948,21 @@
                         </ul>
                     </div>`;
                     alertItems.push(carAlertHtml);
-                    persistentItems.push(`<li><b style="color:#b91c1c;">${c.Plate}</b>: ตรวจสอบข้อมูลด่วน!</li>`);
+                    
+                    let expCheck = isCarExpired(c);
+                    if(expCheck.expired) {
+                        persistentItems.push(`<li><b style="color:#b91c1c;">${c.Plate}</b>: ประกันหมด งดให้บริการ!</li>`);
+                    } else {
+                        persistentItems.push(`<li><b style="color:#b91c1c;">${c.Plate}</b>: ตรวจสอบข้อมูลด่วน!</li>`);
+                    }
                 }
             });
 
             if(alertItems.length > 0) {
-                // 💡 แสดงแถบแดงที่หน้า Dashboard
                 let alertZone = document.getElementById('persistent-global-alert');
                 alertZone.style.display = 'block';
                 document.getElementById('persistent-alert-list').innerHTML = persistentItems.join('');
                 
-                // 💡 เด้ง Popup แจ้งเตือนแรกเริ่ม
                 document.getElementById('global-alert-modal-list').innerHTML = alertItems.join('');
                 document.getElementById('modal-global-alert').style.display = 'flex';
             } else {
@@ -876,8 +974,8 @@
             try {
                 const syncEl = document.getElementById('sync-status');
                 if(!isSilent) {
-                    syncEl.style.borderColor = 'var(--warning)';
-                    syncEl.style.color = 'var(--warning)';
+                    syncEl.style.borderColor = '#f59e0b';
+                    syncEl.style.color = '#f59e0b';
                     syncEl.innerHTML = `<div class="sync-dot" style="background: currentColor;"></div> กำลังเชื่อมต่อฐานข้อมูล...`;
                 }
                 
@@ -885,7 +983,12 @@
                 const text = await res.text();
                 
                 let json;
-                try { json = JSON.parse(text); } catch(e) { throw new Error("Parse Error"); }
+                try { 
+                    json = JSON.parse(text); 
+                } catch(e) { 
+                    console.error("Parse Error. API Response:", text);
+                    throw new Error("Parse Error"); 
+                }
                 
                 if(json.status === 'success') {
                     carsData = json.cars || [];
@@ -894,42 +997,51 @@
                     bookingsData = json.bookings || []; 
                     
                     document.getElementById('btn-create-book').disabled = false;
-                    renderAll();
                     
-                    if(!isSilent) checkGlobalAlerts();
+                    // 💡 ใช้ Try/Catch หุ้มเพื่อป้องกัน UI Render พังแล้วทำให้สเตตัส Error
+                    try { renderAll(); } catch(e) { console.error("Render All Error:", e); }
+                    
+                    if(!isSilent) {
+                        try { checkGlobalAlerts(); } catch(e) { console.error("Alert Error:", e); }
+                    }
 
-                    syncEl.style.borderColor = 'var(--success)';
-                    syncEl.style.color = 'var(--success)';
+                    syncEl.style.borderColor = '#10b981';
+                    syncEl.style.color = '#10b981';
                     syncEl.innerHTML = `<div class="sync-dot" style="background: currentColor;"></div> ระบบออนไลน์ 100%`;
+                } else {
+                    throw new Error("API returned status: " + json.status);
                 }
             } catch (err) {
+                console.error("Connection Error:", err);
                 const syncEl = document.getElementById('sync-status');
-                syncEl.style.borderColor = 'var(--danger)';
-                syncEl.style.color = 'var(--danger)';
+                syncEl.style.borderColor = '#ef4444';
+                syncEl.style.color = '#ef4444';
                 syncEl.innerHTML = `<div class="sync-dot" style="background: currentColor;"></div> ออฟไลน์ (เชื่อมต่อล้มเหลว)`;
             }
         }
 
         function renderAll() {
-            const adminBtn = document.getElementById('admin-add-car-btn');
-            if (adminBtn) adminBtn.style.display = isAdminLoggedIn ? 'block' : 'none';
-
-            document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdminLoggedIn ? 'table-cell' : 'none');
-
-            renderDashboard();
-            renderCalendar();
-            renderBookingList();
-            renderCarTable();
-            renderAnalytics();
-            renderAuditLog();
+            try {
+                const adminBtn = document.getElementById('admin-add-car-btn');
+                if (adminBtn) adminBtn.style.display = isAdminLoggedIn ? 'block' : 'none';
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdminLoggedIn ? 'table-cell' : 'none');
+            } catch(e) {}
+            
+            try { populateCarDropdowns(); } catch(e) { console.error('Error populateCarDropdowns', e); }
+            try { renderDashboard(); } catch(e) { console.error('Error renderDashboard', e); }
+            try { renderCalendar(); } catch(e) { console.error('Error renderCalendar', e); }
+            try { renderBookingList(); } catch(e) { console.error('Error renderBookingList', e); }
+            try { renderCarTable(); } catch(e) { console.error('Error renderCarTable', e); }
+            try { renderAnalytics(); } catch(e) { console.error('Error renderAnalytics', e); }
+            try { renderAuditLog(); } catch(e) { console.error('Error renderAuditLog', e); }
         }
 
         function showToast(msg, type="success") {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            let icon = type === 'success' ? `<svg width="24" height="24" style="color:var(--success)"><use href="#icon-check"/></svg>` : `<svg width="24" height="24" style="color:var(--danger)"><use href="#icon-close"/></svg>`;
-            if(type === 'warning') icon = `<svg width="24" height="24" style="color:var(--warning)"><use href="#icon-warning"/></svg>`;
+            let icon = type === 'success' ? `<svg width="24" height="24" style="color:#10b981"><use href="#icon-check"/></svg>` : `<svg width="24" height="24" style="color:#ef4444"><use href="#icon-close"/></svg>`;
+            if(type === 'warning') icon = `<svg width="24" height="24" style="color:#f59e0b"><use href="#icon-warning"/></svg>`;
             toast.innerHTML = `${icon} <span>${msg}</span>`;
             container.appendChild(toast);
             setTimeout(() => { toast.style.animation = 'fadeOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
@@ -976,7 +1088,7 @@
 
             dashGrid.innerHTML = ''; 
 
-            let displayCars = carsData.filter(c => c.Status !== 'Archived'); // 💡 ซ่อนรถที่ปลดระวาง
+            let displayCars = carsData.filter(c => c.Status !== 'Archived');
 
             if(displayCars.length === 0) {
                 dashGrid.innerHTML = `<div class="empty-state"><svg width="48" height="48" style="color:var(--border-color)"><use href="#icon-car"/></svg> ไม่มีข้อมูลรถ กรุณาเชื่อมต่อข้อมูลจาก Google Sheets</div>`;
@@ -989,19 +1101,22 @@
 
             displayCars.forEach(c => {
                 let activeBooking = getActiveBookingForDate(c.Plate, dashDateStr);
-                let currentStatus = (c.Status === 'Maintenance' || c.Status === 'Replacement') ? c.Status : (activeBooking ? 'In Use' : 'Available');
+                
+                let exp = isCarExpired(c);
+                let currentStatus = exp.expired ? 'Expired' : ((c.Status === 'Maintenance' || c.Status === 'Replacement') ? c.Status : (activeBooking ? 'In Use' : 'Available'));
                 
                 if(currentStatus === 'Available') avail++; 
                 else if(currentStatus === 'In Use') inuse++; 
                 else maint++;
 
-                let stCls = currentStatus === 'Available' ? 'status-avail' : (currentStatus === 'In Use' ? 'status-inuse' : 'status-maint');
-                let bdg = currentStatus === 'Available' ? 'green' : (currentStatus === 'In Use' ? 'purple' : 'yellow');
+                let stCls = currentStatus === 'Available' ? 'status-avail' : (currentStatus === 'In Use' ? 'status-inuse' : (currentStatus === 'Expired' ? 'status-expired' : 'status-maint'));
+                let bdg = currentStatus === 'Available' ? 'green' : (currentStatus === 'In Use' ? 'purple' : (currentStatus === 'Expired' ? 'danger' : 'yellow'));
                 
                 let stTxt = 'ว่างพร้อมใช้';
                 if (currentStatus === 'In Use') stTxt = 'ถูกใช้งาน';
                 if (currentStatus === 'Maintenance') stTxt = 'ส่งซ่อม';
                 if (currentStatus === 'Replacement') stTxt = `รถทดแทน: ${c.ReplacementPlate || '-'}`;
+                if (currentStatus === 'Expired') stTxt = 'ห้ามใช้ (พรบ./ประกันหมด)';
 
                 let btnHtml = '';
                 if(currentStatus === 'In Use' && activeBooking && activeBooking.Status === 'Active') {
@@ -1010,8 +1125,36 @@
 
                 let carIcon = getCarIcon(c.Type);
                 let bookingHtml = '';
-                
-                if (currentStatus === 'In Use' && activeBooking) {
+
+                if (currentStatus === 'Available') {
+                    let lastCompleted = [...bookingsData].sort((a,b) => {
+                        let d1 = parseDateString(b.EndDate); let d2 = parseDateString(a.EndDate);
+                        return (d2 ? d2.getTime() : 0) - (d1 ? d1.getTime() : 0);
+                    }).find(b => String(b.Plate).trim() === String(c.Plate).trim() && b.Status === 'Completed');
+
+                    let lastReturnInfo = '';
+                    if (lastCompleted) {
+                        let retDate = lastCompleted.RealReturnDate || lastCompleted.EndDate;
+                        let retMile = lastCompleted.ReturnMileage ? Number(lastCompleted.ReturnMileage).toLocaleString() : '-';
+                        lastReturnInfo = `
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(16,185,129,0.3); font-size:13px; color:var(--text-main); text-align:left;">
+                                <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="color:var(--text-muted);">คืนรถล่าสุด:</span> <b>${retDate}</b></div>
+                                <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="color:var(--text-muted);">ผู้คืนรถ:</span> <b>${lastCompleted.UserName || '-'}</b></div>
+                                <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted);">เลขไมล์ตอนคืน:</span> <b>${retMile} กม.</b></div>
+                            </div>
+                        `;
+                    }
+
+                    bookingHtml = `
+                        <div style="margin-bottom: 15px; padding: 12px; background: rgba(16,185,129,0.05); border-radius: 12px; border: 1px solid rgba(16,185,129,0.15);">
+                            <div style="text-align:center; color: #10b981; font-weight: 700;">
+                                <svg width="20" height="20" style="vertical-align:bottom"><use href="#icon-check"/></svg> รถว่างพร้อมจองใช้งาน
+                            </div>
+                            ${lastReturnInfo}
+                        </div>
+                    `;
+                } 
+                else if (currentStatus === 'In Use' && activeBooking) {
                     let days = getDiffDays(activeBooking.StartDate, activeBooking.EndDate);
                     let fullStart = formatFullThaiDate(activeBooking.StartDate);
                     let fullEnd = formatFullThaiDate(activeBooking.EndDate);
@@ -1022,10 +1165,10 @@
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${activeBooking.Destination}</span></div>
                             
                             <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(139,92,246,0.3);">
-                                <div class="info-row" style="margin-bottom:4px;"><span class="info-label" style="color:var(--danger)"><svg width="16" height="16"><use href="#icon-time"/></svg> เริ่ม-คืน</span>
+                                <div class="info-row" style="margin-bottom:4px;"><span class="info-label" style="color:#ef4444"><svg width="16" height="16"><use href="#icon-time"/></svg> เริ่ม-คืน</span>
                                     <span class="info-val" style="text-align:right; font-size:13px;">
-                                        <span style="color:var(--success)">${fullStart}</span><br>
-                                        <span style="color:var(--danger)">${fullEnd}</span>
+                                        <span style="color:#10b981">${fullStart}</span><br>
+                                        <span style="color:#ef4444">${fullEnd}</span>
                                     </span>
                                 </div>
                                 <div style="text-align:right; margin-top:6px;">
@@ -1034,16 +1177,16 @@
                             </div>
                         </div>
                     `;
-                } else if (currentStatus === 'Available') {
+                } else if (currentStatus === 'Expired') {
                     bookingHtml = `
-                        <div style="margin-bottom: 15px; padding: 12px; background: rgba(16,185,129,0.05); border-radius: 12px; text-align:center; color: var(--success); font-weight: 700; border: 1px solid rgba(16,185,129,0.15);">
-                            <svg width="20" height="20" style="vertical-align:bottom"><use href="#icon-check"/></svg> รถว่างพร้อมจองใช้งาน
+                        <div style="margin-bottom: 15px; padding: 12px; background: rgba(239,68,68,0.05); border-radius: 12px; text-align:center; color: #ef4444; font-weight: 700; border: 1px solid rgba(239,68,68,0.15);">
+                            <svg width="20" height="20" style="vertical-align:bottom"><use href="#icon-warning"/></svg> งดให้บริการ (พรบ./ประกันหมด)
                         </div>
                     `;
                 } else {
                     let wIcon = currentStatus === 'Replacement' ? '#icon-car' : '#icon-tool';
                     bookingHtml = `
-                        <div style="margin-bottom: 15px; padding: 12px; background: rgba(245,158,11,0.05); border-radius: 12px; text-align:center; color: var(--warning); font-weight: 700; border: 1px solid rgba(245,158,11,0.15);">
+                        <div style="margin-bottom: 15px; padding: 12px; background: rgba(245,158,11,0.05); border-radius: 12px; text-align:center; color: #f59e0b; font-weight: 700; border: 1px solid rgba(245,158,11,0.15);">
                             <svg width="20" height="20" style="vertical-align:bottom"><use href="${wIcon}"/></svg> ${stTxt}
                         </div>
                     `;
@@ -1070,6 +1213,257 @@
             document.getElementById('st-maint').innerText = maint;
         }
 
+        // --- 📊 EXPORT / ANALYTICS (สถิติ และ Plot กราฟแยกคัน) ---
+        function renderAnalytics() {
+            const monthVal = document.getElementById('export-month').value;
+            const selectedPlate = document.getElementById('export-select-car').value;
+            if(!monthVal) return;
+            
+            let [y, m] = monthVal.split('-');
+            let daysInMonth = new Date(y, m, 0).getDate();
+            
+            // กรองข้อมูลรายการจองที่ตรงกับเดือนที่เลือก และเป็นสถานะ "Completed" เท่านั้น
+            let monthBookings = bookingsData.filter(b => {
+                if(b.Status !== 'Completed') return false;
+                
+                let dStart = parseDateString(b.StartDate);
+                let dEnd = parseDateString(b.RealReturnDate && b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
+                if(!dStart) return false;
+                
+                let monthStart = new Date(y, m-1, 1);
+                let monthEnd = new Date(y, m-1, daysInMonth, 23, 59, 59);
+                
+                if (!dEnd) dEnd = dStart;
+                
+                return (dStart <= monthEnd && dEnd >= monthStart);
+            });
+            
+            // กรองตามรถที่เลือก
+            let plotBookings = monthBookings;
+            if(selectedPlate !== 'ทั้งหมด') {
+                plotBookings = monthBookings.filter(b => String(b.Plate).trim() === selectedPlate);
+            }
+            
+            // คำนวณสรุปยอด
+            let totalTrips = plotBookings.length;
+            let totalKm = 0;
+            let carUsageMap = {}; 
+            let dailyKmMap = {}; 
+            for(let i=1; i<=daysInMonth; i++) dailyKmMap[i] = 0;
+
+            plotBookings.forEach(b => {
+                let km = Number(b.TotalDistance) || 0;
+                totalKm += km;
+                
+                let p = String(b.Plate).trim();
+                carUsageMap[p] = (carUsageMap[p] || 0) + km;
+                
+                if(selectedPlate !== 'ทั้งหมด') {
+                    // กระจายกิโลเมตรเฉลี่ยลงในแต่ละวัน
+                    let dStart = parseDateString(b.StartDate);
+                    let dEnd = parseDateString(b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
+                    if(!dEnd) dEnd = dStart;
+                    
+                    let tripDays = getDiffDays(b.StartDate, b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
+                    let kmPerDay = tripDays > 0 ? (km / tripDays) : km;
+                    
+                    for(let d=new Date(dStart); d<=dEnd; d.setDate(d.getDate()+1)) {
+                        if(d.getFullYear() == y && (d.getMonth()+1) == m) {
+                            dailyKmMap[d.getDate()] += kmPerDay;
+                        }
+                    }
+                }
+            });
+
+            // อัปเดต Summary Cards
+            document.getElementById('export-sum-trips').innerText = totalTrips.toLocaleString() + " ครั้ง";
+            document.getElementById('export-sum-km').innerText = totalKm.toLocaleString() + " กม.";
+
+            // สร้างกราฟ Plot แยกคัน หรือ ทั้งหมด
+            const ctx = document.getElementById('exportChart').getContext('2d');
+            if(exportChartInstance) exportChartInstance.destroy();
+            
+            let chartLabels = [];
+            let chartData = [];
+            let chartLabelText = '';
+            
+            let computedStyle = getComputedStyle(document.body);
+            let primaryColor = computedStyle.getPropertyValue('--primary').trim() || '#0071e3';
+            let textColor = computedStyle.getPropertyValue('--text-main').trim() || '#111827';
+            let gridColor = computedStyle.getPropertyValue('--border-color').trim() || '#e5e7eb';
+            
+            try {
+                Chart.defaults.color = textColor;
+                
+                if(selectedPlate === 'ทั้งหมด') {
+                    chartLabelText = 'ระยะทางวิ่งรวมตลอดเดือน (กม.)';
+                    for(let plate in carUsageMap) {
+                        chartLabels.push(plate);
+                        chartData.push(carUsageMap[plate]);
+                    }
+                } else {
+                    chartLabelText = `การใช้งานรายวันของ ${selectedPlate} (กม.)`;
+                    for(let i=1; i<=daysInMonth; i++) {
+                        chartLabels.push(i);
+                        chartData.push(Math.round(dailyKmMap[i]));
+                    }
+                }
+
+                exportChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: chartLabels,
+                        datasets: [{
+                            label: chartLabelText,
+                            data: chartData,
+                            backgroundColor: primaryColor,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: {
+                            x: { grid: { color: gridColor }, ticks: { color: textColor } },
+                            y: { grid: { color: gridColor }, ticks: { color: textColor }, beginAtZero: true }
+                        }
+                    }
+                });
+            } catch(e) { console.warn("Chart rendering skipped"); }
+
+            // สร้างตารางจัดอันดับ (เฉพาะที่คืนรถแล้วในเดือน)
+            const tbody = document.getElementById('analytics-table-body');
+            tbody.innerHTML = '';
+            
+            if(selectedPlate === 'ทั้งหมด') {
+                let rankedCars = Object.keys(carUsageMap).map(p => ({plate: p, km: carUsageMap[p]})).sort((a,b) => b.km - a.km);
+                
+                if(rankedCars.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted)">ไม่มีการคืนรถในเดือนที่เลือก</td></tr>`;
+                } else {
+                    rankedCars.forEach((c, index) => {
+                        let carInfo = carsData.find(x => x.Plate === c.plate) || {};
+                        let badgeRank = index < 3 ? `<span style="font-size:24px;">🏆</span>` : `<span style="font-size:16px; font-weight:700;">#${index+1}</span>`;
+                        let rankStyle = index < 3 ? 'font-weight:700; color:var(--primary);' : 'color:var(--text-muted);';
+                        
+                        tbody.innerHTML += `
+                            <tr onclick="showCarMonthlyStats('${c.plate}')" style="cursor:pointer;">
+                                <td style="${rankStyle}">${badgeRank}</td>
+                                <td style="font-weight:700; font-size:15px;">${c.plate}</td>
+                                <td>${carInfo.Brand || '-'}</td>
+                                <td style="font-weight:700; color:var(--primary-dark);">${c.km.toLocaleString()} กม.</td>
+                                <td style="color:var(--primary); font-weight:600;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-list"/></svg> ดูประวัติ</td>
+                            </tr>
+                        `;
+                    });
+                }
+            } else {
+                 tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted)">กำลังดูกราฟแยกคันด้านบน กรุณาเลือก "ทั้งหมด" เพื่อดูตารางจัดอันดับใหม่</td></tr>`;
+            }
+        }
+
+        function downloadExcel() {
+            const selectedMonth = document.getElementById('export-month').value; 
+            const selectedPlate = document.getElementById('export-select-car').value;
+            if(!selectedMonth) { showToast('กรุณาเลือกเดือน', 'warning'); return; }
+            if(bookingsData.length === 0) { showToast('ไม่พบประวัติ', 'warning'); return; }
+
+            let [y, m] = selectedMonth.split('-'); let checkStr = `${m}/${y}`;
+
+            let filtered = bookingsData.filter(b => {
+                if (b.Status !== 'Completed') return false; 
+                
+                if(selectedPlate !== 'ทั้งหมด' && b.Plate !== selectedPlate) return false;
+                if(!b.StartDate) return false;
+                return String(b.StartDate).includes(checkStr) || String(b.StartDate).includes(selectedMonth); 
+            });
+
+            if(filtered.length === 0) { showToast(`ไม่มีประวัติการคืนรถในเดือนนี้`, 'warning'); return; }
+
+            const excelData = filtered.map(b => {
+                return {
+                    "รหัสการจอง": b.BookingID, 
+                    "ทะเบียนรถ": b.Plate, 
+                    "ผู้ใช้งาน": b.UserName, 
+                    "หน่วยงาน": b.Department,
+                    "เบอร์ติดต่อ": b.Tel, 
+                    "ปลายทาง": b.Destination, 
+                    "วันที่เริ่มยืม": b.StartDate || '', 
+                    "กำหนดคืน": b.EndDate || '-', 
+                    "วันที่คืนจริง": b.RealReturnDate || '-',
+                    "เลขไมล์ตั้งต้น (ตอนยืม)": b.StartMileage || 0, 
+                    "เลขไมล์ตอนคืน (อัปเดตจากหน้าคืนรถ)": b.ReturnMileage || 0, 
+                    "ระยะทางที่ใช้ (กม.)": b.TotalDistance || 0,
+                    "สถานะ": "คืนรถเรียบร้อย"
+                };
+            });
+
+            const ws = XLSX.utils.json_to_sheet(excelData); const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Report");
+            XLSX.writeFile(wb, `Fleet_Report_${selectedPlate === 'ทั้งหมด' ? 'AllCars' : selectedPlate}_${selectedMonth}.xlsx`);
+            showToast('ดาวน์โหลด Excel สำเร็จ!', 'success');
+        }
+
+        function showCarMonthlyStats(plate) {
+            const monthVal = document.getElementById('export-month').value;
+            if(!monthVal) { showToast('กรุณาเลือกเดือนในหน้าสถิติก่อน', 'warning'); return; }
+
+            const modal = document.getElementById('modal-summary');
+            const modalBody = document.getElementById('summary-modal-body');
+            modalBody.innerHTML = '';
+            
+            let [y, m] = monthVal.split('-');
+            document.getElementById('summary-title').innerHTML = `<svg width="24" height="24"><use href="#icon-list"/></svg> ประวัติการใช้งาน ${plate} <span style="font-size:14px; font-weight:normal; margin-left:10px;">(เดือน ${m}/${y})</span>`;
+            
+            let totalKm = 0;
+            let found = false;
+            
+            let sortedBookings = [...bookingsData].sort((a,b) => {
+                let d1 = parseDateString(b.StartDate); let d2 = parseDateString(a.StartDate);
+                return (d2 ? d2.getTime() : 0) - (d1 ? d1.getTime() : 0);
+            });
+
+            sortedBookings.forEach(b => {
+                if(String(b.Plate).trim() !== String(plate).trim()) return;
+                
+                let d = parseDateString(b.StartDate);
+                if(d && d.getFullYear() === Number(y) && (d.getMonth() + 1) === Number(m)) {
+                    found = true;
+                    let km = Number(b.TotalDistance) || 0;
+                    if(b.Status === 'Completed') totalKm += km;
+                    
+                    let stBadge = b.Status === 'Active' ? `<span style="color:white; background:var(--primary); padding:4px 10px; border-radius:20px; font-weight:700; font-size:12px;">กำลังใช้งาน</span>` : `<span style="color:#10b981; border:1px solid #10b981; padding:4px 10px; border-radius:20px; font-weight:700; font-size:12px;">คืนแล้ว</span>`;
+                    let realRet = b.RealReturnDate && b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate;
+                    let fullStart = formatFullThaiDate(b.StartDate);
+                    let fullEnd = formatFullThaiDate(realRet);
+
+                    modalBody.innerHTML += `
+                        <div class="v-book-card" style="border-left-color: ${b.Status === 'Active' ? 'var(--primary)' : '#10b981'} !important;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px dashed var(--border-color); padding-bottom:12px;">
+                                <span style="font-weight:800; font-size:18px; color:var(--text-main);"><svg width="18" height="18"><use href="#icon-user"/></svg> ${b.UserName}</span>
+                                ${stBadge}
+                            </div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก</span><span class="info-val">${b.Department || '-'}</span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เริ่ม-คืน</span><span class="info-val">${fullStart} - ${fullEnd}</span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-mileage"/></svg> ระยะทางที่ใช้</span><span class="info-val" style="color:var(--primary-dark); font-size:16px;">${km > 0 ? km.toLocaleString() : '-'} กม.</span></div>
+                        </div>
+                    `;
+                }
+            });
+
+            if(!found) {
+                modalBody.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px; font-size:16px; border:2px dashed var(--border-color); border-radius:12px;">ไม่มีประวัติการใช้งานในเดือนที่เลือก</div>`;
+            } else {
+                modalBody.innerHTML += `
+                    <div style="background:var(--primary-light); padding:16px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid var(--primary); margin-top:10px;">
+                        <span style="font-weight:700; color:var(--primary-dark);"><svg width="20" height="20" style="vertical-align:bottom"><use href="#icon-car"/></svg> ระยะทางวิ่งรวม (เฉพาะเดือนนี้)</span>
+                        <span style="font-weight:800; font-size:22px; color:var(--primary-dark);">${totalKm.toLocaleString()} กม.</span>
+                    </div>
+                `;
+            }
+            
+            modal.style.display = 'flex';
+        }
+
         // --- BOOKING LIST ---
         function renderBookingList() {
             const tbody = document.getElementById('booking-list-body');
@@ -1079,7 +1473,7 @@
             tbody.innerHTML = '';
             
             if(bookingsData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${isAdminLoggedIn ? 9 : 8}" style="text-align:center; padding:40px; color:var(--text-muted);">ไม่มีข้อมูลการจองในระบบ</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${isAdminLoggedIn ? 10 : 9}" style="text-align:center; padding:40px; color:var(--text-muted);">ไม่มีข้อมูลการจองในระบบ</td></tr>`;
                 kmDisplay.innerHTML = `<svg width="20" height="20"><use href="#icon-mileage"/></svg> รวม 0 กม.`; return;
             }
 
@@ -1106,7 +1500,10 @@
                     let stBadge = b.Status === 'Active' ? `<span class="badge purple">กำลังใช้</span>` : `<span class="badge green">คืนแล้ว</span>`;
                     let realRet = (b.RealReturnDate && b.RealReturnDate !== '') ? b.RealReturnDate : '-';
                     
-                    let adminAction = isAdminLoggedIn ? `<td class="admin-only" style="text-align:center;"><button class="btn-secondary" style="color:var(--danger) !important; border-color:var(--danger) !important; padding:6px 12px; font-size:13px;" onclick="deleteBooking('${b.BookingID}')"><svg width="14" height="14"><use href="#icon-close"/></svg> ลบ</button></td>` : `<td class="admin-only" style="display:none;"></td>`;
+                    let startM = b.StartMileage ? Number(b.StartMileage).toLocaleString() : '-';
+                    let retM = b.ReturnMileage ? Number(b.ReturnMileage).toLocaleString() : '-';
+
+                    let adminAction = isAdminLoggedIn ? `<td class="admin-only" style="text-align:center;"><button class="btn-secondary" style="color:#ef4444 !important; border-color:#ef4444 !important; padding:6px 12px; font-size:13px;" onclick="deleteBooking('${b.BookingID}')"><svg width="14" height="14"><use href="#icon-close"/></svg> ลบ</button></td>` : `<td class="admin-only" style="display:none;"></td>`;
 
                     tbody.innerHTML += `
                         <tr>
@@ -1114,8 +1511,12 @@
                             <td style="font-weight:700; color:var(--text-main);">${b.Plate}</td>
                             <td><span style="font-weight:600; color:var(--primary);">${b.UserName || '-'}</span> <br><span style="font-size:12px; color:var(--text-muted);">${b.Department || '-'}</span></td>
                             <td style="font-weight:600;">${b.StartDate || '-'}</td>
-                            <td style="color:var(--warning); font-weight:600;">${b.EndDate || '-'}</td>
-                            <td style="color:var(--success); font-weight:700;">${realRet}</td>
+                            <td style="color:#f59e0b; font-weight:600;">${b.EndDate || '-'}</td>
+                            <td style="color:#10b981; font-weight:700;">${realRet}</td>
+                            <td style="text-align:center; font-weight:600; font-size:13px; color:var(--text-muted);">
+                                <span style="color:var(--text-main);" title="ไมล์เริ่ม">${startM}</span> <br> 
+                                <span style="color:#10b981;" title="ไมล์คืน">${retM}</span>
+                            </td>
                             <td style="text-align:center; font-weight:700;">${km > 0 ? km.toLocaleString() : '-'}</td>
                             <td>${stBadge}</td>
                             ${adminAction}
@@ -1124,7 +1525,7 @@
                 }
             });
             
-            if(!found) tbody.innerHTML = `<tr><td colspan="${isAdminLoggedIn ? 9 : 8}" style="text-align:center; padding:40px; color:var(--text-muted);">ไม่มีประวัติการใช้งานในเดือนที่เลือก</td></tr>`;
+            if(!found) tbody.innerHTML = `<tr><td colspan="${isAdminLoggedIn ? 10 : 9}" style="text-align:center; padding:40px; color:var(--text-muted);">ไม่มีประวัติการใช้งานในเดือนที่เลือก</td></tr>`;
             kmDisplay.innerHTML = `<svg width="20" height="20"><use href="#icon-mileage"/></svg> รวมระยะทาง: ${totalKm.toLocaleString()} กม.`;
         }
 
@@ -1154,21 +1555,26 @@
                 let nextSrvMile = lastSrvMile + 10000;
                 let remainMile = nextSrvMile - currentMile;
                 
+                let exp = isCarExpired(c);
                 let rwCls = ""; let maintMsg = `วิ่งได้อีก ${remainMile.toLocaleString()} กม.`;
-                let textColor = 'var(--success)';
+                let textColor = '#10b981';
 
                 if (remainMile <= 0) { 
                     rwCls = "row-danger"; 
                     maintMsg = `เกินกำหนด! (${Math.abs(remainMile).toLocaleString()} กม.)`; 
-                    textColor = 'var(--danger)';
+                    textColor = '#ef4444';
                 } 
                 else if (remainMile <= 2000) { 
                     rwCls = "row-warning"; 
                     maintMsg = `ใกล้ถึงกำหนด (เหลือ ${remainMile.toLocaleString()} กม.)`; 
-                    textColor = 'var(--warning)';
+                    textColor = '#f59e0b';
                 }
 
-                if(c.Status === 'Archived') {
+                if (exp.expired) {
+                    rwCls = "row-danger";
+                    textColor = '#ef4444';
+                    maintMsg = 'ห้ามใช้ (พรบ./ประกันหมด)';
+                } else if(c.Status === 'Archived') {
                     rwCls = "row-warning"; 
                     textColor = 'var(--text-muted)';
                     maintMsg = 'รถปลดระวางถาวร';
@@ -1190,7 +1596,6 @@
             });
         }
 
-        // 💡 🔑 ฟังก์ชันแสดง Popup (แยกการทำงาน 2 หน้า)
         function showCarDetailPopup(plate, source = 'dashboard') {
             const car = carsData.find(c => c.Plate === plate);
             if(!car) return;
@@ -1199,15 +1604,17 @@
             if(!dashDateStr) dashDateStr = new Date().toISOString().split('T')[0];
 
             let activeBooking = getActiveBookingForDate(car.Plate, dashDateStr);
-            let currentStatus = (car.Status === 'Maintenance' || car.Status === 'Replacement' || car.Status === 'Archived') ? car.Status : (activeBooking ? 'In Use' : 'Available');
+            let exp = isCarExpired(car);
+            let currentStatus = exp.expired ? 'Expired' : ((car.Status === 'Maintenance' || car.Status === 'Replacement' || car.Status === 'Archived') ? car.Status : (activeBooking ? 'In Use' : 'Available'));
             
             let stTxt = 'ว่างพร้อมใช้';
-            let stCol = 'var(--success)';
+            let stCol = '#10b981';
 
             if(currentStatus === 'In Use') { stTxt = 'กำลังใช้งาน'; stCol = 'var(--primary)'; }
-            if(currentStatus === 'Maintenance') { stTxt = 'ส่งซ่อม'; stCol = 'var(--warning)'; }
-            if(currentStatus === 'Replacement') { stTxt = `รถทดแทน: ${car.ReplacementPlate || '-'}`; stCol = 'var(--warning)'; }
+            if(currentStatus === 'Maintenance') { stTxt = 'ส่งซ่อม'; stCol = '#f59e0b'; }
+            if(currentStatus === 'Replacement') { stTxt = `รถทดแทน: ${car.ReplacementPlate || '-'}`; stCol = '#f59e0b'; }
             if(currentStatus === 'Archived') { stTxt = 'ปลดระวาง/เปลี่ยนถาวร'; stCol = 'var(--text-muted)'; }
+            if(currentStatus === 'Expired') { stTxt = 'ห้ามใช้ (งดให้บริการ)'; stCol = '#ef4444'; }
 
             let currentMile = Number(car.Mileage||0);
             let lastSrvMile = Number(car.LastServiceMileage);
@@ -1218,21 +1625,23 @@
             
             let html = '';
 
+            let actDisplay = exp.actExpired ? `<span class="expired-highlight">${car.ActExp || '-'} (หมดอายุ)</span>` : (car.ActExp || '-');
+            let insDisplay = exp.insExpired ? `<span class="expired-highlight">${car.InsExp || '-'} (หมดอายุ)</span>` : (car.InsExp || '-');
+
             let insHtml = `
-                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> หมด พ.ร.บ.</span><span class="info-val">${car.ActExp || '-'}</span></div>
-                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-shield"/></svg> หมด ประกัน</span><span class="info-val">${car.InsExp || '-'}</span></div>
+                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> หมด พ.ร.บ.</span><span class="info-val">${actDisplay}</span></div>
+                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-shield"/></svg> หมด ประกัน</span><span class="info-val">${insDisplay}</span></div>
                 <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-building"/></svg> บ.ประกัน</span><span class="info-val">${car.InsCompany || '-'} <br><span style="font-size:12px; color:var(--text-muted); font-weight:500;"><svg width="12" height="12"><use href="#icon-phone"/></svg> โทร. ${car.InsPhone || '-'}</span></span></div>
             `;
 
             let maintHtml = `
                 <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-mileage"/></svg> ไมล์ปัจจุบัน</span><span class="info-val">${currentMile.toLocaleString()} กม.</span></div>
                 <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-flag"/></svg> ไมล์เข้าศูนย์ล่าสุด</span><span class="info-val" style="color:var(--text-muted);">${lastSrvMile.toLocaleString()} กม.</span></div>
-                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เช็คระยะถัดไป</span><span class="info-val" style="color:${remainMile <= 2000 ? 'var(--danger)' : 'var(--text-main)'};">${nextSrvMile.toLocaleString()} กม.</span></div>
-                <div class="info-row" style="background:${remainMile <= 0 ? 'rgba(239,68,68,0.1)' : 'transparent'}; padding:6px; border-radius:6px;"><span class="info-label"><svg width="16" height="16"><use href="#icon-warning"/></svg> สถานะระยะทาง</span><span class="info-val" style="color:${remainMile <= 0 ? 'var(--danger)' : (remainMile <= 2000 ? 'var(--warning)' : 'var(--success)')};">${remainMile <= 0 ? `เกินระยะมาแล้ว ${Math.abs(remainMile).toLocaleString()}` : `วิ่งได้อีก ${remainMile.toLocaleString()}`} กม.</span></div>
+                <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เช็คระยะถัดไป</span><span class="info-val" style="color:${remainMile <= 2000 ? '#ef4444' : 'var(--text-main)'};">${nextSrvMile.toLocaleString()} กม.</span></div>
+                <div class="info-row" style="background:${remainMile <= 0 ? 'rgba(239,68,68,0.1)' : 'transparent'}; padding:6px; border-radius:6px;"><span class="info-label"><svg width="16" height="16"><use href="#icon-warning"/></svg> สถานะระยะทาง</span><span class="info-val" style="color:${remainMile <= 0 ? '#ef4444' : (remainMile <= 2000 ? '#f59e0b' : '#10b981')};">${remainMile <= 0 ? `เกินระยะมาแล้ว ${Math.abs(remainMile).toLocaleString()}` : `วิ่งได้อีก ${remainMile.toLocaleString()}`} กม.</span></div>
             `;
 
             if (source === 'dashboard') {
-                // 💡 หน้าภาพรวมระบบ: หัวการ์ดมีสถานะ + ดีไซน์ Ticket + Accordion
                 html = `
                     <div style="text-align:center; margin-bottom:20px; padding: 20px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow);">
                         <div style="font-size:32px; font-weight:700; color:var(--primary-dark); letter-spacing:-0.5px;">${getCarIcon(car.Type)} ${car.Plate}</div>
@@ -1267,31 +1676,30 @@
                                     <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; text-transform: uppercase;">ปลายทาง</div>
                                     <div style="font-size: 15px; font-weight: 600; color: var(--text-main);">${activeBooking.Destination || '-'}</div>
                                 </div>
-                                <div style="background: rgba(16,185,129,0.1); padding: 10px; border-radius: 8px; border-left: 3px solid var(--success);">
-                                    <div style="font-size: 12px; color: var(--success); font-weight: 700; margin-bottom: 2px;">วันที่เริ่มยืม</div>
+                                <div style="background: rgba(16,185,129,0.1); padding: 10px; border-radius: 8px; border-left: 3px solid #10b981;">
+                                    <div style="font-size: 12px; color: #10b981; font-weight: 700; margin-bottom: 2px;">วันที่เริ่มยืม</div>
                                     <div style="font-size: 14px; font-weight: 700; color: var(--text-main);">${fullStart}</div>
                                 </div>
-                                <div style="background: rgba(239,68,68,0.1); padding: 10px; border-radius: 8px; border-left: 3px solid var(--danger);">
-                                    <div style="font-size: 12px; color: var(--danger); font-weight: 700; margin-bottom: 2px;">กำหนดคืน</div>
+                                <div style="background: rgba(239,68,68,0.1); padding: 10px; border-radius: 8px; border-left: 3px solid #ef4444;">
+                                    <div style="font-size: 12px; color: #ef4444; font-weight: 700; margin-bottom: 2px;">กำหนดคืน</div>
                                     <div style="font-size: 14px; font-weight: 700; color: var(--text-main);">${fullEnd}</div>
                                 </div>
                             </div>
                         </div>
                     `;
+                } else {
+                    html += `
+                        <details class="car-details-accordion" onclick="event.stopPropagation()">
+                            <summary><span style="display:flex; align-items:center; gap:10px; color:var(--primary-dark);"><svg width="18" height="18"><use href="#icon-shield"/></svg> ข้อมูลรถ & ประกันภัย</span></summary>
+                            <div class="accordion-content">${insHtml}</div>
+                        </details>
+                        <details class="car-details-accordion" onclick="event.stopPropagation()">
+                            <summary><span style="display:flex; align-items:center; gap:10px; color:var(--primary-dark);"><svg width="18" height="18"><use href="#icon-tool"/></svg> ข้อมูลเช็คระยะ (Maintenance)</span></summary>
+                            <div class="accordion-content">${maintHtml}</div>
+                        </details>
+                    `;
                 }
-
-                html += `
-                    <details class="car-details-accordion" onclick="event.stopPropagation()">
-                        <summary><span style="display:flex; align-items:center; gap:10px; color:var(--primary-dark);"><svg width="18" height="18"><use href="#icon-shield"/></svg> ข้อมูลรถ & ประกันภัย</span></summary>
-                        <div class="accordion-content">${insHtml}</div>
-                    </details>
-                    <details class="car-details-accordion" onclick="event.stopPropagation()">
-                        <summary><span style="display:flex; align-items:center; gap:10px; color:var(--warning);"><svg width="18" height="18"><use href="#icon-tool"/></svg> ข้อมูลเช็คระยะ (Maintenance)</span></summary>
-                        <div class="accordion-content">${maintHtml}</div>
-                    </details>
-                `;
             } else {
-                // 💡 หน้าข้อมูลรถส่วนกลาง: โชว์ข้อมูลรถ + เช็คระยะ แบบเปิดกางออกเลย (ไม่ซ่อน, ไม่มีข้อมูลจอง, ไม่ดึงสถานะ)
                 html = `
                     <div style="text-align:center; margin-bottom:25px; padding: 20px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow); border-bottom: 4px solid var(--primary);">
                         <div style="font-size:32px; font-weight:700; color:var(--text-main); letter-spacing:-0.5px;">${getCarIcon(car.Type)} ${car.Plate}</div>
@@ -1301,7 +1709,7 @@
 
                 html += `
                     <div class="detail-group">
-                        <div style="background:rgba(0, 113, 227, 0.05); padding:14px 20px; font-weight:700; font-size:15px; color:var(--primary-dark); display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border-color);">
+                        <div style="background:var(--primary-light); padding:14px 20px; font-weight:700; font-size:15px; color:var(--primary-dark); display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border-color);">
                             <svg width="18" height="18"><use href="#icon-shield"/></svg> ข้อมูลรถ & ประกันภัย
                         </div>
                         <div style="padding:15px; display:flex; flex-direction:column; gap:12px;">
@@ -1310,7 +1718,7 @@
                     </div>
                     
                     <div class="detail-group">
-                        <div style="background:rgba(245, 158, 11, 0.05); padding:14px 20px; font-weight:700; font-size:15px; color:var(--warning); display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border-color);">
+                        <div style="background:var(--primary-light); padding:14px 20px; font-weight:700; font-size:15px; color:var(--primary-dark); display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border-color);">
                             <svg width="18" height="18"><use href="#icon-tool"/></svg> ข้อมูลเช็คระยะ (Maintenance)
                         </div>
                         <div style="padding:15px; display:flex; flex-direction:column; gap:12px;">
@@ -1325,7 +1733,6 @@
             const adminArea = document.getElementById('car-detail-admin-area');
             if(isAdminLoggedIn) {
                 adminArea.style.display = 'flex';
-                // 💡 ปุ่มเหล่านี้จะดึงสีจากธีมมาแสดงอย่างชัดเจน 100%
                 adminArea.innerHTML = `
                     <button class="btn-primary" style="flex:1;" onclick="openServiceModal('${car.Plate}', ${currentMile})"><svg width="18" height="18"><use href="#icon-tool"/></svg> บันทึกศูนย์</button>
                     <button class="btn-primary" style="flex:1;" onclick="openReplacementModal('${car.Plate}')"><svg width="18" height="18"><use href="#icon-car"/></svg> ซ่อม/ทดแทน</button>
@@ -1336,7 +1743,7 @@
             document.getElementById('modal-car-detail').style.display = 'flex';
         }
 
-        // --- 🚗 ฟังก์ชันจัดการรถทดแทน / ปลดระวาง (REPLACEMENT) ---
+        // --- 🚗 REPLACEMENT ---
         function openReplacementModal(plate) {
             closeModal('modal-car-detail');
             const car = carsData.find(c => c.Plate === plate);
@@ -1347,32 +1754,32 @@
             let html = '';
             if (car.Status === 'Replacement') {
                 html = `
-                    <div style="text-align:center; padding: 20px; border: 2px dashed var(--warning); border-radius: 12px; margin-bottom: 20px; background: rgba(245,158,11,0.05);">
+                    <div style="text-align:center; padding: 20px; border: 2px dashed #f59e0b; border-radius: 12px; margin-bottom: 20px; background: rgba(245,158,11,0.05);">
                         <p style="margin:0 0 10px 0; color:var(--text-muted);">กำลังใช้รถทดแทนทะเบียน</p>
-                        <h3 style="margin:0; color:var(--warning); font-size:24px;">${car.ReplacementPlate}</h3>
+                        <h3 style="margin:0; color:#f59e0b; font-size:24px;">${car.ReplacementPlate}</h3>
                         <p style="margin:10px 0 0 0; color:var(--text-muted); font-size:13px;">กำหนดคืน: ${car.RepReturnDate}</p>
                     </div>
-                    <button class="btn-primary" style="width:100%; justify-content:center; padding:14px;" onclick="submitReplacementAction('${plate}', 'return_original')"><svg width="20" height="20"><use href="#icon-check"/></svg> นำรถคันเดิมกลับมาใช้งาน (ยกเลิกรถทดแทน)</button>
+                    <button class="btn-primary" style="width:100%; justify-content:center; padding:14px; background:var(--primary);" onclick="submitReplacementAction('${plate}', 'return_original')"><svg width="20" height="20"><use href="#icon-check"/></svg> นำรถคันเดิมกลับมาใช้งาน (ยกเลิกรถทดแทน)</button>
                 `;
             } else if (car.Status === 'Archived') {
-                html = `<div style="text-align:center; color:var(--danger); padding:30px; font-weight:700;">รถคันนี้ถูกปลดระวาง/เปลี่ยนถาวรไปแล้ว</div>`;
+                html = `<div style="text-align:center; color:#ef4444; padding:30px; font-weight:700;">รถคันนี้ถูกปลดระวาง/เปลี่ยนถาวรไปแล้ว</div>`;
             } else {
                 html = `
                     <div class="form-group" style="margin-bottom: 15px;">
-                        <label>ทะเบียนรถชั่วคราว (ที่นำมาทดแทน)</label>
+                        <label style="color:var(--primary-dark) !important;">ทะเบียนรถชั่วคราว (ที่นำมาทดแทน)</label>
                         <input type="text" class="form-control" id="rep-new-plate" placeholder="เช่น ทด 9999">
                     </div>
                     <div class="form-group" style="margin-bottom: 25px;">
-                        <label>กำหนดคืนรถทดแทน</label>
+                        <label style="color:var(--primary-dark) !important;">กำหนดคืนรถทดแทน</label>
                         <input type="date" class="form-control" id="rep-return-date">
                     </div>
-                    <button class="btn-primary" style="width:100%; justify-content:center; padding:14px; margin-bottom:15px;" onclick="submitReplacementAction('${plate}', 'set_replacement')"><svg width="20" height="20"><use href="#icon-car"/></svg> ยืนยันการใช้รถทดแทน</button>
+                    <button class="btn-primary" style="width:100%; justify-content:center; padding:14px; margin-bottom:15px; background:var(--primary);" onclick="submitReplacementAction('${plate}', 'set_replacement')"><svg width="20" height="20"><use href="#icon-car"/></svg> ยืนยันการใช้รถทดแทน</button>
                     
                     <div style="border-top: 1px dashed var(--border-color); margin: 20px 0;"></div>
                     
                     <div style="background: rgba(239,68,68,0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(239,68,68,0.2);">
-                        <p style="margin:0 0 10px 0; color:var(--danger); font-size:13px; font-weight:600;">⚠️ กรณีรถเกิดอุบัติเหตุหนัก หรือหมดสัญญาเช่า</p>
-                        <button class="btn-secondary" style="color:var(--danger) !important; border-color:var(--danger); width:100%; justify-content:center;" onclick="submitReplacementAction('${plate}', 'archive')"><svg width="20" height="20"><use href="#icon-close"/></svg> ปลดระวาง / เปลี่ยนคันถาวร</button>
+                        <p style="margin:0 0 10px 0; color:#ef4444; font-size:13px; font-weight:600;">⚠️ กรณีรถเกิดอุบัติเหตุหนัก หรือหมดสัญญาเช่า</p>
+                        <button class="btn-secondary" style="color:#ef4444 !important; border-color:#ef4444 !important; width:100%; justify-content:center;" onclick="submitReplacementAction('${plate}', 'archive')"><svg width="20" height="20"><use href="#icon-close"/></svg> ปลดระวาง / เปลี่ยนคันถาวร</button>
                     </div>
                 `;
             }
@@ -1404,7 +1811,7 @@
             } catch(e) { showToast('เกิดข้อผิดพลาด', 'danger'); } 
         }
 
-        // --- 📅 CALENDAR LOGIC ---
+        // --- 📅 CALENDAR LOGIC (อัปเดตเฉดสี) ---
         function changeMonth(step) {
             currentCalDate.setMonth(currentCalDate.getMonth() + step);
             renderCalendar();
@@ -1421,7 +1828,7 @@
 
             cal.innerHTML = `
                 <div class="day-header">จ.</div><div class="day-header">อ.</div><div class="day-header">พ.</div>
-                <div class="day-header">พฤ.</div><div class="day-header">ศ.</div><div class="day-header" style="color:var(--danger)">ส.</div><div class="day-header" style="color:var(--danger)">อา.</div>
+                <div class="day-header">พฤ.</div><div class="day-header">ศ.</div><div class="day-header" style="color:#ef4444">ส.</div><div class="day-header" style="color:#ef4444">อา.</div>
             `;
             
             let firstDay = new Date(currentYear, currentMonth, 1).getDay();
@@ -1451,30 +1858,28 @@
                 let av = totalCars - iu; if (av < 0) av = 0;
 
                 let percent = totalCars === 0 ? 0 : (iu / totalCars) * 100;
-                let borderColor = 'var(--border-color)'; let bgColor = 'var(--card-bg)';
+                
+                let usageClass = '';
                 let alertIcon = '';
-
-                if (percent > 0 && percent <= 50) {
-                    bgColor = 'rgba(139, 92, 246, 0.08)'; 
-                    borderColor = 'rgba(139, 92, 246, 0.3)';
-                } else if (percent > 50 && percent < 90) {
-                    bgColor = 'rgba(139, 92, 246, 0.2)'; 
-                    borderColor = 'rgba(139, 92, 246, 0.6)';
-                } else if (percent >= 90) {
-                    bgColor = 'rgba(139, 92, 246, 0.35)'; 
-                    borderColor = '#7c3aed';
-                    alertIcon = `<svg class="alert-svg" width="20" height="20" style="color:#b91c1c; position:absolute; top:6px; right:6px; animation: alert-pulse 1s infinite; filter: drop-shadow(0 0 4px rgba(220,38,38,0.6));"><use href="#icon-warning"/></svg>`;
-                } else if (percent === 0 && totalCars > 0) {
-                    borderColor = 'rgba(16, 185, 129, 0.4)'; 
+                
+                if (percent > 0 && percent <= 33) {
+                    usageClass = 'usage-low';
+                } else if (percent > 33 && percent <= 66) {
+                    usageClass = 'usage-med';
+                } else if (percent > 66) {
+                    usageClass = 'usage-high';
+                    if (percent >= 90) {
+                        alertIcon = `<svg class="alert-svg" width="20" height="20" style="color:#fff; position:absolute; top:6px; right:6px; animation: alert-pulse 1s infinite;"><use href="#icon-warning"/></svg>`;
+                    }
                 }
 
                 let todayMark = isToday ? `<div style="position:absolute; top:-6px; left:-6px; background:var(--primary); color:white; font-size:10px; padding:3px 8px; border-radius:10px; font-weight:700; box-shadow:var(--shadow);">วันนี้</div>` : '';
 
                 cal.innerHTML += `
-                    <div class="cal-day ${isToday}" style="border-color:${borderColor}; background-color:${bgColor};" onclick="showCalendarDetails('${checkDateStr}')">
+                    <div class="cal-day ${isToday} ${usageClass}" onclick="showCalendarDetails('${checkDateStr}')">
                         ${todayMark}
                         ${alertIcon}
-                        <div class="day-num" style="${isToday?'color:var(--primary)':''}">${d}</div>
+                        <div class="day-num" style="${isToday && !usageClass.includes('med') && !usageClass.includes('high') ? 'color:var(--primary)':''}">${d}</div>
                         <div class="cal-bar-container">
                             <div class="cal-stat-bar used"><span class="cal-label">จองใช้</span><span>${iu}</span></div>
                             <div class="cal-stat-bar avail"><span class="cal-label">ว่าง</span><span>${av}</span></div>
@@ -1502,6 +1907,14 @@
                     let fullStart = formatFullThaiDate(activeBooking.StartDate);
                     let fullEnd = formatFullThaiDate(activeBooking.EndDate);
                     
+                    let adminReturnBtn = '';
+                    if(isAdminLoggedIn && activeBooking.Status === 'Active') {
+                        adminReturnBtn = `
+                        <button class="btn-primary" style="margin-top:15px; width:100%; justify-content:center; background:#ef4444;" onclick="handleReturnClick('${c.Plate}', '${activeBooking.BookingID}')">
+                            <svg width="20" height="20"><use href="#icon-check"/></svg> รับคืนรถ (Admin)
+                        </button>`;
+                    }
+                    
                     modalBody.innerHTML += `
                         <div class="v-book-card">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px dashed var(--border-color); padding-bottom:12px;">
@@ -1511,7 +1924,8 @@
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</span><span class="info-val">${activeBooking.UserName} <span style="color:var(--text-muted); font-size:12px; font-weight:normal;">(${activeBooking.Department})</span></span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-phone"/></svg> ติดต่อ</span><span class="info-val">${activeBooking.Tel || '-'}</span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${activeBooking.Destination || '-'}</span></div>
-                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เริ่ม-คืน</span><span class="info-val" style="color:var(--danger)">${fullStart} - ${fullEnd}</span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เริ่ม-คืน</span><span class="info-val" style="color:#ef4444">${fullStart} - ${fullEnd}</span></div>
+                            ${adminReturnBtn}
                         </div>
                     `;
                 }
@@ -1560,10 +1974,12 @@
 
             let data = type === 'ทั้งหมด' ? activeCars : activeCars.filter(c => {
                 let activeBooking = getActiveBookingForDate(c.Plate, dashDateStr);
-                let currentStatus = (c.Status === 'Maintenance' || c.Status === 'Replacement') ? c.Status : (activeBooking ? 'In Use' : 'Available');
+                let exp = isCarExpired(c);
+                let currentStatus = exp.expired ? 'Expired' : ((c.Status === 'Maintenance' || c.Status === 'Replacement') ? c.Status : (activeBooking ? 'In Use' : 'Available'));
+                
                 if(type === 'ว่าง') return currentStatus === 'Available';
                 if(type === 'ใช้งาน') return currentStatus === 'In Use';
-                return currentStatus === 'Maintenance' || currentStatus === 'Replacement';
+                return currentStatus === 'Maintenance' || currentStatus === 'Replacement' || currentStatus === 'Expired';
             });
 
             if (data.length === 0) {
@@ -1579,10 +1995,10 @@
                         let fullStart = formatFullThaiDate(activeBooking.StartDate);
                         let fullEnd = formatFullThaiDate(activeBooking.EndDate);
                         modalBody.innerHTML += `
-                        <div class="v-book-card" style="border-left-color:var(--danger); cursor:pointer;" onclick="showCarDetailPopup('${c.Plate}', 'dashboard')">
+                        <div class="v-book-card" style="border-left-color:#ef4444 !important; cursor:pointer;" onclick="showCarDetailPopup('${c.Plate}', 'dashboard')">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px dashed var(--border-color); padding-bottom:12px;">
                                 <span style="font-weight:800; font-size:18px; color:var(--text-main);"><svg width="18" height="18"><use href="#icon-car"/></svg> ${c.Plate}</span>
-                                <span style="font-weight:700; color:var(--danger); background:var(--bg-color); padding:4px 10px; border-radius:20px; font-size:13px; border:1px solid var(--danger);">ใช้งาน</span>
+                                <span style="font-weight:700; color:#ef4444; background:var(--bg-color); padding:4px 10px; border-radius:20px; font-size:13px; border:1px solid #ef4444;">ใช้งาน</span>
                             </div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</span><span class="info-val">${activeBooking.UserName}</span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${activeBooking.Destination}</span></div>
@@ -1593,15 +2009,17 @@
             } else {
                 data.forEach(c => { 
                     let activeBooking = getActiveBookingForDate(c.Plate, dashDateStr);
-                    let currentStatus = (c.Status === 'Maintenance' || c.Status === 'Replacement') ? c.Status : (activeBooking ? 'In Use' : 'Available');
+                    let exp = isCarExpired(c);
+                    let currentStatus = exp.expired ? 'Expired' : ((c.Status === 'Maintenance' || c.Status === 'Replacement') ? c.Status : (activeBooking ? 'In Use' : 'Available'));
                     
-                    let cText = 'ว่างพร้อมใช้'; let cCol = 'var(--success)';
-                    if(currentStatus==='In Use'){ cText='ใช้งาน'; cCol='var(--danger)'; }
-                    if(currentStatus==='Maintenance'){ cText='ซ่อมบำรุง'; cCol='var(--warning)'; }
-                    if(currentStatus==='Replacement'){ cText=`ทดแทน: ${c.ReplacementPlate}`; cCol='var(--warning)'; }
+                    let cText = 'ว่างพร้อมใช้'; let cCol = '#10b981';
+                    if(currentStatus==='In Use'){ cText='ใช้งาน'; cCol='#ef4444'; }
+                    if(currentStatus==='Maintenance'){ cText='ซ่อมบำรุง'; cCol='#f59e0b'; }
+                    if(currentStatus==='Replacement'){ cText=`ทดแทน: ${c.ReplacementPlate}`; cCol='#f59e0b'; }
+                    if(currentStatus==='Expired'){ cText='ห้ามใช้ (หมดอายุ)'; cCol='#ef4444'; }
 
                     modalBody.innerHTML += `
-                        <div class="v-book-card" style="border-left-color:${cCol}; cursor:pointer;" onclick="showCarDetailPopup('${c.Plate}', 'dashboard')">
+                        <div class="v-book-card" style="border-left-color:${cCol} !important; cursor:pointer;" onclick="showCarDetailPopup('${c.Plate}', 'dashboard')">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px dashed var(--border-color); padding-bottom:12px;">
                                 <span style="font-weight:800; font-size:18px; color:var(--text-main);"><svg width="18" height="18"><use href="#icon-car"/></svg> ${c.Plate} <span style="font-size:12px; color:var(--text-muted); font-weight:normal;">(${c.Brand})</span></span>
                                 <span style="font-weight:700; color:${cCol}; background:var(--bg-color); padding:4px 10px; border-radius:20px; font-size:13px; border:1px solid ${cCol};">${cText}</span>
@@ -1614,14 +2032,14 @@
             modal.style.display = 'flex';
         }
 
-        // --- POST API HANDLERS ---
+        // --- POST API HANDLERS & MILEAGE LOGIC ---
         function openBookingModal() { 
             document.getElementById('modal-booking').style.display = 'flex'; 
             document.getElementById('book-start').value = "";
             document.getElementById('book-end').value = "";
             
             document.getElementById('book-user').value = "";
-            document.getElementById('book-dept').value = "";
+            document.getElementById('book-dept').value = "Central Service 1"; 
             document.getElementById('book-tel').value = "";
             document.getElementById('book-dest').value = "";
             document.getElementById('book-mileage').value = "";
@@ -1643,6 +2061,7 @@
 
             let reqStart = new Date(startStr); reqStart.setHours(0,0,0,0);
             let reqEnd = new Date(endStr); reqEnd.setHours(23,59,59,999);
+            let todayNoTime = new Date(); todayNoTime.setHours(0,0,0,0);
 
             if (reqEnd < reqStart) {
                 showToast('วันคืนรถต้องไม่ก่อนวันยืม', 'warning');
@@ -1658,6 +2077,11 @@
             carsData.forEach(c => {
                 if (c.Status === 'Maintenance' || c.Status === 'Archived') return; 
 
+                let expCheck = isCarExpired(c);
+                if (expCheck.expired) {
+                    return; 
+                }
+
                 let isOverlap = false;
                 let checkDate = new Date(reqStart);
                 while(checkDate <= reqEnd) {
@@ -1669,7 +2093,8 @@
                 }
 
                 if (!isOverlap) {
-                    let optVal = `${c.Plate}|${c.Mileage}`;
+                    let baseMile = Number(c.Mileage || 0);
+                    let optVal = `${c.Plate}|${baseMile}`;
                     let showPlate = c.Status === 'Replacement' ? `(แทน) ${c.ReplacementPlate}` : c.Plate;
                     availableOptions += `<option value="${optVal}">${showPlate} - ${c.Brand}</option>`;
                     count++;
@@ -1694,15 +2119,17 @@
                 
                 const car = carsData.find(c => c.Plate === plate);
                 if(car) {
-                    let currentMile = Number(car.Mileage||0);
+                    let currentMile = Number(parts[1]); 
                     let lastSrvMile = Number(car.LastServiceMileage);
                     if (isNaN(lastSrvMile) || String(car.LastServiceMileage).trim() === '') lastSrvMile = 0;
                     
                     let remainMile = (lastSrvMile + 10000) - currentMile;
                     
                     if(remainMile <= 0) {
-                        document.getElementById('maint-exceed-mile').innerText = Math.abs(remainMile).toLocaleString();
-                        document.getElementById('modal-maint-warning').style.display = 'flex';
+                        document.getElementById('modal-maint-alert').style.display = 'flex';
+                        if (window.navigator && window.navigator.vibrate) {
+                            window.navigator.vibrate([200, 100, 200]);
+                        }
                     }
                 }
             } else {
@@ -1716,7 +2143,7 @@
             
             const plate = carVal.split('|')[0];
             const user = document.getElementById('book-user').value || 'ไม่ระบุชื่อ';
-            const dept = document.getElementById('book-dept').value || 'Central Service 2';
+            const dept = document.getElementById('book-dept').value || 'Central Service 1';
             const tel = document.getElementById('book-tel').value || '-';
             const dest = document.getElementById('book-dest').value || '-';
             
@@ -1743,26 +2170,13 @@
             finally { btn.disabled = false; btn.innerHTML = 'บันทึกข้อมูลเข้าสู่ระบบ'; }
         }
 
-        // 💡 🔑 ฟังก์ชันรับคืนรถ: ค้นหาไมล์คืนล่าสุดจากประวัติ (แม่นยำ 100%)
         function handleReturnClick(plate, bookingId) {
             if(!isAdminLoggedIn) { showToast("เข้าสู่ระบบ Admin เพื่อคืนรถ", "danger"); return; }
             
-            // 💡 1. ดึงไมล์จาก "ประวัติการคืนรถล่าสุด (Completed)" ของรถคันนี้
-            let sortedBookings = [...bookingsData].sort((a,b) => {
-                let d1 = parseDateString(b.StartDate); let d2 = parseDateString(a.StartDate);
-                return (d2 ? d2.getTime() : 0) - (d1 ? d1.getTime() : 0);
-            });
+            closeModal('modal-summary');
 
-            let lastCompletedBooking = sortedBookings.find(b => String(b.Plate).trim() === String(plate).trim() && b.Status === 'Completed');
-            let startMile = 0;
-
-            if (lastCompletedBooking && lastCompletedBooking.ReturnMileage && String(lastCompletedBooking.ReturnMileage).trim() !== '') {
-                startMile = Number(lastCompletedBooking.ReturnMileage); 
-            } else {
-                // แผนสำรอง: ถ้าไม่เคยมีการคืนรถเลย ให้ดึงจากไมล์สะสมล่าสุด
-                let car = carsData.find(c => String(c.Plate).trim() === String(plate).trim());
-                startMile = car ? Number(car.Mileage || 0) : 0;
-            }
+            let car = carsData.find(c => String(c.Plate).trim() === String(plate).trim());
+            let startMile = car ? Number(car.Mileage || 0) : 0;
 
             document.getElementById('ret-plate-text').innerText = `ทะเบียน: ${plate}`;
             document.getElementById('ret-booking-id-hidden').value = bookingId; 
@@ -1780,7 +2194,6 @@
             document.getElementById('modal-return').style.display = 'flex';
         }
 
-        // 💡 🔑 Live Preview & Validation (คำนวณสด)
         function calculateReturnPreview() {
             let startMileStr = document.getElementById('ret-start-mile').value;
             let endMileStr = document.getElementById('ret-end-mile').value;
@@ -1801,14 +2214,14 @@
 
             if (endMile < startMile) {
                 previewBox.style.background = 'rgba(239,68,68,0.1)';
-                previewBox.style.color = 'var(--danger)';
+                previewBox.style.color = '#ef4444';
                 previewBox.style.border = '1px solid rgba(239,68,68,0.3)';
                 previewBox.innerHTML = `<svg width="18" height="18" style="vertical-align:text-bottom; margin-right:6px;"><use href="#icon-warning"/></svg> ⚠️ แจ้งเตือน: เลขไมล์คืนรถน้อยกว่าไมล์ตั้งต้น!`;
                 btnSave.disabled = true; 
             } else {
                 let distance = endMile - startMile;
                 previewBox.style.background = 'rgba(16,185,129,0.1)';
-                previewBox.style.color = 'var(--success)';
+                previewBox.style.color = '#10b981';
                 previewBox.style.border = '1px solid rgba(16,185,129,0.3)';
                 previewBox.innerHTML = `<svg width="18" height="18" style="vertical-align:text-bottom; margin-right:6px;"><use href="#icon-check"/></svg> ระยะทางวิ่งใช้งานรอบนี้ = <span style="font-size:18px;">${distance.toLocaleString()}</span> กม.`;
                 btnSave.disabled = false; 
@@ -1917,133 +2330,6 @@
             finally { btn.disabled = false; btn.innerText = 'บันทึกข้อมูลรถเข้าสู่ระบบ'; }
         }
 
-        // --- MISC (EXPORT, ADMIN LOGIC) ---
-        function showCarMonthlyStats(plate) {
-            const monthVal = document.getElementById('export-month').value;
-            if(!monthVal) { showToast('กรุณาเลือกเดือนในหน้าสถิติก่อน', 'warning'); return; }
-
-            const modal = document.getElementById('modal-summary');
-            const modalBody = document.getElementById('summary-modal-body');
-            modalBody.innerHTML = '';
-            
-            let [y, m] = monthVal.split('-');
-            document.getElementById('summary-title').innerHTML = `<svg width="24" height="24"><use href="#icon-list"/></svg> ประวัติการใช้งาน ${plate} <span style="font-size:14px; font-weight:normal; margin-left:10px;">(เดือน ${m}/${y})</span>`;
-            
-            let totalKm = 0;
-            let found = false;
-            
-            let sortedBookings = [...bookingsData].sort((a,b) => {
-                let d1 = parseDateString(b.StartDate); let d2 = parseDateString(a.StartDate);
-                return (d2 ? d2.getTime() : 0) - (d1 ? d1.getTime() : 0);
-            });
-
-            sortedBookings.forEach(b => {
-                if(String(b.Plate).trim() !== String(plate).trim()) return;
-                
-                let d = parseDateString(b.StartDate);
-                if(d && d.getFullYear() === Number(y) && (d.getMonth() + 1) === Number(m)) {
-                    found = true;
-                    let km = Number(b.TotalDistance) || 0;
-                    if(b.Status === 'Completed') totalKm += km;
-                    
-                    let stBadge = b.Status === 'Active' ? `<span style="color:white; background:var(--primary); padding:4px 10px; border-radius:20px; font-weight:700; font-size:12px;">กำลังใช้งาน</span>` : `<span style="color:var(--success); border:1px solid var(--success); padding:4px 10px; border-radius:20px; font-weight:700; font-size:12px;">คืนแล้ว</span>`;
-                    let realRet = b.RealReturnDate && b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate;
-                    let fullStart = formatFullThaiDate(b.StartDate);
-                    let fullEnd = formatFullThaiDate(realRet);
-
-                    modalBody.innerHTML += `
-                        <div class="v-book-card" style="border-left-color: ${b.Status === 'Active' ? 'var(--primary)' : 'var(--success)'};">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px dashed var(--border-color); padding-bottom:12px;">
-                                <span style="font-weight:800; font-size:18px; color:var(--text-main);"><svg width="18" height="18"><use href="#icon-user"/></svg> ${b.UserName}</span>
-                                ${stBadge}
-                            </div>
-                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก</span><span class="info-val">${b.Department || '-'}</span></div>
-                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เริ่ม-คืน</span><span class="info-val">${fullStart} - ${fullEnd}</span></div>
-                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-mileage"/></svg> ระยะทางที่ใช้</span><span class="info-val" style="color:var(--primary-dark); font-size:16px;">${km > 0 ? km.toLocaleString() : '-'} กม.</span></div>
-                        </div>
-                    `;
-                }
-            });
-
-            if(!found) {
-                modalBody.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px; font-size:16px; border:2px dashed var(--border-color); border-radius:12px;">ไม่มีประวัติการใช้งานในเดือนที่เลือก</div>`;
-            } else {
-                modalBody.innerHTML += `
-                    <div style="background:var(--primary-light); padding:16px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid var(--primary); margin-top:10px;">
-                        <span style="font-weight:700; color:var(--primary-dark);"><svg width="20" height="20" style="vertical-align:bottom"><use href="#icon-car"/></svg> ระยะทางวิ่งรวม (เฉพาะเดือนนี้)</span>
-                        <span style="font-weight:800; font-size:22px; color:var(--primary-dark);">${totalKm.toLocaleString()} กม.</span>
-                    </div>
-                `;
-            }
-            
-            modal.style.display = 'flex';
-        }
-
-        function renderAnalytics() {
-            const tbody = document.getElementById('analytics-table-body'); tbody.innerHTML = '';
-            
-            let activeCars = carsData.filter(c => c.Status !== 'Archived'); 
-            if(activeCars.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted)">ไม่มีข้อมูล</td></tr>`; return; }
-            
-            const dashDateStr = document.getElementById('dash-date').value || new Date().toISOString().split('T')[0];
-
-            [...activeCars].sort((a,b) => Number(b.Mileage||0) - Number(a.Mileage||0)).forEach((c, index) => {
-                let badgeRank = index < 3 ? `<span style="font-size:24px;">🏆</span>` : `<span style="font-size:16px; font-weight:700;">#${index+1}</span>`;
-                let rankStyle = index < 3 ? 'font-weight:700; color:var(--primary);' : 'color:var(--text-muted);';
-                
-                let activeBooking = getActiveBookingForDate(c.Plate, dashDateStr);
-                let currentStatus = (c.Status === 'Maintenance' || c.Status === 'Replacement') ? c.Status : (activeBooking ? 'In Use' : 'Available');
-
-                tbody.innerHTML += `<tr onclick="showCarMonthlyStats('${c.Plate}')"><td style="${rankStyle}">${badgeRank}</td><td style="font-weight:700; font-size:15px;">${c.Plate}</td><td>${c.Brand || '-'}</td><td>${currentStatus === 'Available' ? '<span style="color:var(--success); font-weight:600;"><svg width="14" height="14"><use href="#icon-check"/></svg> ว่าง</span>' : '<span style="color:var(--danger); font-weight:600;"><svg width="14" height="14"><use href="#icon-time"/></svg> ใช้งาน</span>'}</td><td style="font-weight:700; color:var(--primary-dark); font-size:15px;">${Number(c.Mileage||0).toLocaleString()} กม.</td></tr>`;
-            });
-        }
-
-        function renderAuditLog() {
-            const tbody = document.getElementById('audit-log-body'); tbody.innerHTML = '';
-            if(auditData.length === 0) return;
-            auditData.slice().reverse().slice(0, 15).forEach(log => {
-                let d = parseDateString(log.Timestamp) || log.Timestamp;
-                let dateStr = d instanceof Date && !isNaN(d) ? d.toLocaleString('th-TH') : d;
-                tbody.innerHTML += `<tr><td style="font-size:13px; color:var(--text-muted);">${dateStr}</td><td style="font-weight:700; color:var(--primary);">${log.AdminName}</td><td style="font-weight:500;">${log.Details}</td></tr>`;
-            });
-        }
-
-        function downloadExcel() {
-            const selectedMonth = document.getElementById('export-month').value; 
-            const selectedPlate = document.getElementById('export-select-car').value;
-            if(!selectedMonth) { showToast('กรุณาเลือกเดือน', 'warning'); return; }
-            if(bookingsData.length === 0) { showToast('ไม่พบประวัติ', 'warning'); return; }
-
-            let [y, m] = selectedMonth.split('-'); let checkStr = `${m}/${y}`;
-
-            let filtered = bookingsData.filter(b => {
-                if(selectedPlate !== 'ทั้งหมด' && b.Plate !== selectedPlate) return false;
-                if(!b.StartDate) return false;
-                return String(b.StartDate).includes(checkStr) || String(b.StartDate).includes(selectedMonth); 
-            });
-
-            if(filtered.length === 0) { showToast(`ไม่มีประวัติเดือนนี้`, 'warning'); return; }
-
-            const excelData = filtered.map(b => {
-                let dStart = parseDateString(b.StartDate);
-                let dEnd = parseDateString(b.EndDate);
-                let days = dStart && dEnd ? Math.ceil((dEnd - dStart) / (1000 * 60 * 60 * 24)) + 1 : 0;
-                if(days <= 0 && dEnd) days = 1; 
-
-                return {
-                    "รหัสการจอง": b.BookingID, "ทะเบียนรถ": b.Plate, "ผู้ใช้งาน": b.UserName, "หน่วยงาน": b.Department,
-                    "เบอร์ติดต่อ": b.Tel, "ปลายทาง": b.Destination, "เริ่มยืม": b.StartDate || '', "กำหนดคืน": b.EndDate || '-', "คืนจริง": b.RealReturnDate || '-',
-                    "เลขไมล์เริ่ม": b.StartMileage || 0, "เลขไมล์คืน": b.ReturnMileage || '-', "ระยะทาง (กม.)": b.TotalDistance || 0,
-                    "สถานะ": b.Status === 'Completed' ? 'คืนแล้ว' : 'กำลังใช้งาน'
-                };
-            });
-
-            const ws = XLSX.utils.json_to_sheet(excelData); const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Report");
-            XLSX.writeFile(wb, `Fleet_Report_${selectedPlate === 'ทั้งหมด' ? 'AllCars' : selectedPlate}_${selectedMonth}.xlsx`);
-            showToast('ดาวน์โหลด Excel สำเร็จ!', 'success');
-        }
-
         function loginAdmin() {
             const userIn = document.getElementById('admin-user-input').value; const passIn = document.getElementById('admin-pass-input').value;
             if(adminsData.length === 0) { showToast('ไม่มีข้อมูลใน Sheets', 'danger'); return; }
@@ -2070,8 +2356,14 @@
             if(element) element.classList.add('active'); 
             document.querySelectorAll('.view-section').forEach(e => e.classList.remove('active')); 
             document.getElementById(`view-${m}`).classList.add('active'); 
+            
+            if(m === 'export') {
+                setTimeout(renderAnalytics, 50);
+            }
+            
             if(window.innerWidth <= 768) toggleMobileSidebar();
         }
+        
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
         function toggleMobileSidebar() { 
             document.getElementById('sidebar').classList.toggle('mobile-open'); 
@@ -2089,6 +2381,7 @@
         window.onload = () => {
             document.getElementById('dash-date').value = new Date().toISOString().split('T')[0];
             document.getElementById('booking-month-filter').value = new Date().toISOString().substring(0,7);
+            document.getElementById('export-month').value = new Date().toISOString().substring(0,7);
             fetchInitialData(); 
             setInterval(updateTime, 1000); updateTime();
         };
