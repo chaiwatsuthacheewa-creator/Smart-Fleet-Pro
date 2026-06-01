@@ -319,6 +319,7 @@
     <div class="smart-bar-container"><div class="smart-bar"></div></div>
     <div id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
 
+    <!-- Alert Modal สำหรับแจ้งเตือนเข้าศูนย์ -->
     <div class="modal-overlay" id="modal-maint-alert" style="z-index: 100002;">
         <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid #ef4444; background: var(--card-bg);">
             <div style="color: #ef4444; margin-bottom: 15px;">
@@ -330,6 +331,7 @@
         </div>
     </div>
 
+    <!-- Global Alert Modal (รถที่มีปัญหา พรบ/ศูนย์ด่วน) -->
     <div class="modal-overlay" id="modal-global-alert" style="z-index: 100001;">
         <div class="modal-content" style="max-width: 500px; text-align: left; background: var(--bg-color);">
             <div class="modal-header" style="background: transparent; border-bottom: 1px solid var(--border-color); padding: 20px 25px;">
@@ -405,6 +407,7 @@
 
         <div class="content-area">
             
+            <!-- VIEW: Dashboard (ภาพรวมระบบ) -->
             <div id="view-dashboard" class="view-section active">
                 <div id="persistent-global-alert" style="display:none; margin-bottom: 25px; background: rgba(220,38,38,0.1); border: 2px solid #dc2626; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(220,38,38,0.2);">
                     <h3 style="margin:0 0 10px 0; color:#dc2626; display:flex; align-items:center; gap:8px;">
@@ -446,6 +449,7 @@
                 </div>
             </div>
 
+            <!-- VIEW: Calendar -->
             <div id="view-calendar" class="view-section">
                 <div class="header-title" style="margin-bottom: 25px;"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-cal"/></svg> ปฏิทินการใช้งานระบบ</div>
                 
@@ -460,6 +464,7 @@
                 </div>
             </div>
 
+            <!-- VIEW: Booking List -->
             <div id="view-bookinglist" class="view-section">
                 <div class="header-flex">
                     <div>
@@ -497,6 +502,7 @@
                 </div>
             </div>
 
+            <!-- VIEW: Car Module -->
             <div id="view-carmodule" class="view-section">
                 <div class="header-flex">
                     <div>
@@ -528,6 +534,7 @@
                 </div>
             </div>
 
+            <!-- VIEW: Export/Analytics -->
             <div id="view-export" class="view-section">
                 <div class="header-flex">
                     <div>
@@ -578,6 +585,7 @@
                 </div>
             </div>
 
+            <!-- VIEW: Admin -->
             <div id="view-admin" class="view-section">
                 <div class="header-title" style="margin-bottom: 25px;"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-shield"/></svg> การจัดการระบบผู้ดูแล</div>
                 
@@ -615,6 +623,7 @@
         </div>
     </div>
 
+    <!-- Modals -->
     <div id="toast-container"></div>
 
     <div class="modal-overlay" id="modal-booking">
@@ -644,6 +653,7 @@
         </div>
     </div>
 
+    <!-- ฟอร์มรับคืนรถ (Admin) -->
     <div class="modal-overlay" id="modal-return">
         <div class="modal-content" style="max-width: 450px;">
             <div class="modal-header" style="background: linear-gradient(135deg, #f59e0b, #d97706); border-bottom:none;">
@@ -676,6 +686,7 @@
         </div>
     </div>
 
+    <!-- Modals อื่นๆ (Summary, Detail, Service, Replacement, EditCar) -->
     <div class="modal-overlay" id="modal-summary">
         <div class="modal-content">
             <div class="modal-header">
@@ -761,9 +772,10 @@
         </div>
     </div>
 
+    <!-- MAIN CORE SCRIPT -->
     <script>
         // ==========================================
-        // 🚀 API URL (อัปเดตตรงนี้ให้ตรงกับของคุณ)
+        // 🚀 API URL (ห้ามเปลี่ยนหากยังใช้ฐานข้อมูลเดิม)
         // ==========================================
         const API_URL = "https://script.google.com/macros/s/AKfycbyMkA46RFH3ktS757TBBBZ9bBpX0kVcQ1hocIQfc2OZUmXSNFoyXYzxctKi9rj29Q/exec";
 
@@ -2422,8 +2434,28 @@
         };
     </script>
 
+    <!-- ========================================== -->
+    <!-- 🚀 QR QUICK UPDATE & AUTO-FILL MODULE (V2) -->
+    <!-- ========================================== -->
     <script>
     (function() {
+        // ฟังก์ชันสำหรับปิดหน้าต่าง (Safe Exit)
+        window.exitQRMode = function() {
+            // เคลียร์เนื้อหาหน้าเว็บทิ้งทั้งหมด ป้องกันการเข้าถึง Dashboard
+            document.body.innerHTML = `
+                <div style="display:flex; justify-content:center; align-items:center; height:100vh; background:var(--bg-color); color:var(--text-main); font-family:'Sarabun', sans-serif; flex-direction:column; gap:15px; text-align:center; padding:20px;">
+                    <div style="width:80px; height:80px; background:rgba(16,185,129,0.1); color:#10b981; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:10px;">
+                        <svg width="40" height="40" style="fill:currentColor;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    </div>
+                    <h2 style="margin:0; font-size:24px;">รายการเสร็จสมบูรณ์</h2>
+                    <p style="margin:0; font-size:16px; color:var(--text-muted);">ขอบคุณที่อัปเดตข้อมูลครับ<br>คุณสามารถกดปิดหน้าต่างเบราว์เซอร์นี้ได้เลย</p>
+                    <button class="btn-primary" style="margin-top:20px; padding:12px 30px; border-radius:30px; box-shadow:0 4px 15px rgba(0,0,0,0.1);" onclick="window.close()">ลองกดเพื่อปิดหน้าต่าง (Close)</button>
+                </div>
+            `;
+            // พยายามสั่งปิดเบราว์เซอร์อัตโนมัติ
+            setTimeout(() => { window.close(); }, 300);
+        };
+
         // 1. สร้างหน้าต่าง Modal สำหรับผู้ใช้งาน (คนขับ) สแกน QR
         const qrModal = document.createElement('div');
         qrModal.className = 'modal-overlay';
@@ -2431,8 +2463,9 @@
         qrModal.style.zIndex = '100005';
         qrModal.innerHTML = `
             <div class="modal-content" style="max-width: 400px;">
-                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-bottom:none;">
-                    <h2 style="color: white !important; margin:0;"><svg width="24" height="24"><use href="#icon-mileage"/></svg> คืนรถด่วน (สแกนจากรถ)</h2>
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-bottom:none; display:flex; justify-content:space-between; align-items:center;">
+                    <h2 style="color: white !important; margin:0; display:flex; align-items:center; gap:8px;"><svg width="24" height="24"><use href="#icon-mileage"/></svg> คืนรถด่วน (สแกนจากรถ)</h2>
+                    <button class="btn-close" style="background: rgba(0,0,0,0.2); border-color:transparent; color:white;" onclick="window.exitQRMode()"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
                 </div>
                 <div class="modal-body">
                     <div style="background:var(--bg-color); padding:15px; border-radius:12px; margin-bottom:20px; text-align:center; border:1px solid var(--border-color);">
@@ -2451,11 +2484,13 @@
                             <input type="number" class="form-control" id="qr-end-mile" placeholder="ระบุเลขไมล์ก่อนดับเครื่อง" style="border-color:#ef4444; font-size:20px; font-weight:bold; color:#ef4444;" oninput="window.validateQRMileage()">
                         </div>
                         <button class="btn-primary" id="btn-save-qr" style="width:100%; justify-content:center; padding:16px; font-size:18px;" onclick="window.submitQRUpdate()" disabled>ยืนยันการคืนรถและไมล์</button>
+                        <button class="btn-secondary" style="width:100%; justify-content:center; padding:12px; font-size:16px; margin-top:10px; color:var(--text-muted) !important; border-color:var(--border-color) !important;" onclick="window.exitQRMode()">ยกเลิก / ปิดหน้าต่าง</button>
                     </div>
 
                     <div id="qr-error-area" style="display:none; text-align:center; background:rgba(239,68,68,0.1); border:1px dashed #ef4444; border-radius:12px; color:#ef4444; font-weight:bold; padding:30px 20px;">
                         <svg width="40" height="40" style="margin-bottom:10px;"><use href="#icon-warning"/></svg><br>
                         รถคันนี้ไม่ได้อยู่ในสถานะ "กำลังใช้งาน"<br>หรือไม่มีข้อมูลการจองของคุณในระบบ
+                        <button class="btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:16px; margin-top:20px; background:#ef4444; border:none; box-shadow:none;" onclick="window.exitQRMode()">ออก / ปิดหน้าต่าง</button>
                     </div>
                 </div>
             </div>
@@ -2529,7 +2564,9 @@
             try {
                 await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'returnCar', payload: payload }) });
                 alert('บันทึกข้อมูลเรียบร้อย ขอบคุณที่อัปเดตเลขไมล์ครับ!');
-                window.location.href = window.location.pathname; 
+                
+                // ออกจากระบบและปิดหน้าจอ 
+                window.exitQRMode();
             } catch(e) { 
                 alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง'); 
                 btn.disabled = false; btn.innerText = 'ยืนยันการคืนรถและไมล์';
