@@ -2434,14 +2434,13 @@
         };
     </script>
 
-    <!-- ========================================== -->
-    <!-- 🚀 QR QUICK UPDATE & AUTO-FILL MODULE (V2) -->
+   <!-- ========================================== -->
+    <!-- 🚀 QR QUICK UPDATE & AUTO-FILL MODULE (V3) -->
     <!-- ========================================== -->
     <script>
     (function() {
         // ฟังก์ชันสำหรับปิดหน้าต่าง (Safe Exit)
         window.exitQRMode = function() {
-            // เคลียร์เนื้อหาหน้าเว็บทิ้งทั้งหมด ป้องกันการเข้าถึง Dashboard
             document.body.innerHTML = `
                 <div style="display:flex; justify-content:center; align-items:center; height:100vh; background:var(--bg-color); color:var(--text-main); font-family:'Sarabun', sans-serif; flex-direction:column; gap:15px; text-align:center; padding:20px;">
                     <div style="width:80px; height:80px; background:rgba(16,185,129,0.1); color:#10b981; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:10px;">
@@ -2452,11 +2451,10 @@
                     <button class="btn-primary" style="margin-top:20px; padding:12px 30px; border-radius:30px; box-shadow:0 4px 15px rgba(0,0,0,0.1);" onclick="window.close()">ลองกดเพื่อปิดหน้าต่าง (Close)</button>
                 </div>
             `;
-            // พยายามสั่งปิดเบราว์เซอร์อัตโนมัติ
             setTimeout(() => { window.close(); }, 300);
         };
 
-        // 1. สร้างหน้าต่าง Modal สำหรับผู้ใช้งาน (คนขับ) สแกน QR
+        // 1. สร้างหน้าต่าง Modal สำหรับผู้ใช้งานสแกน QR
         const qrModal = document.createElement('div');
         qrModal.className = 'modal-overlay';
         qrModal.id = 'modal-qr-update';
@@ -2563,9 +2561,6 @@
 
             try {
                 await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'returnCar', payload: payload }) });
-                alert('บันทึกข้อมูลเรียบร้อย ขอบคุณที่อัปเดตเลขไมล์ครับ!');
-                
-                // ออกจากระบบและปิดหน้าจอ 
                 window.exitQRMode();
             } catch(e) { 
                 alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง'); 
@@ -2573,7 +2568,7 @@
             }
         };
 
-        // 4. สร้างปุ่มให้ Admin ปริ้นต์ QR Code
+        // 4. สร้างปุ่มให้ Admin ปริ้นต์และดาวน์โหลด QR Code
         const origShowDetail = window.showCarDetailPopup;
         window.showCarDetailPopup = function(plate, source) {
             origShowDetail(plate, source);
@@ -2590,16 +2585,43 @@
                         qrBtn.onclick = () => {
                             const currentUrl = window.location.origin + window.location.pathname;
                             const qrUrl = currentUrl + '?plate=' + encodeURIComponent(plate);
-                            const qrApi = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(qrUrl);
+                            const qrApi = 'https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=' + encodeURIComponent(qrUrl);
                             
                             const win = window.open('', '_blank');
                             win.document.write(`
                                 <div style="text-align:center; font-family:'Sarabun', sans-serif; margin-top:50px;">
-                                    <h2 style="color:#111827;">สแกนเพื่อคืนรถและอัปเดตไมล์</h2>
+                                    <h2 style="color:#111827; font-size:28px;">สแกนเพื่อคืนรถและอัปเดตไมล์</h2>
                                     <h1 style="color:#0071e3; font-size:60px; margin:20px 0;">${plate}</h1>
-                                    <img src="${qrApi}" style="border:4px solid #0071e3; padding:15px; border-radius:24px; box-shadow: 0 10px 30px rgba(0,113,227,0.2);">
-                                    <h3 style="color:#6b7280; margin-top:30px;">Smart Fleet Pro (NTL)</h3>
-                                    <button onclick="window.print()" style="margin-top:20px; padding:10px 20px; background:#0071e3; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer;">พิมพ์ / บันทึกรูป</button>
+                                    <img id="qr-image" src="${qrApi}" crossorigin="anonymous" style="border:4px solid #0071e3; padding:15px; border-radius:24px; box-shadow: 0 10px 30px rgba(0,113,227,0.2);">
+                                    <h3 style="color:#6b7280; margin-top:30px; font-size:20px;">Smart Fleet Pro (NTL)</h3>
+                                    
+                                    <div style="display:flex; gap:15px; justify-content:center; margin-top:30px;">
+                                        <button onclick="window.print()" style="padding:12px 24px; background:#0071e3; color:white; border:none; border-radius:12px; font-size:18px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:8px;">
+                                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> พิมพ์ (Print)
+                                        </button>
+                                        <button onclick="downloadQR()" style="padding:12px 24px; background:#10b981; color:white; border:none; border-radius:12px; font-size:18px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:8px;">
+                                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> บันทึกรูป (Save)
+                                        </button>
+                                    </div>
+                                    <script>
+                                        // ฟังก์ชันดึงภาพข้ามโดเมนและสั่งให้เบราว์เซอร์ดาวน์โหลด
+                                        function downloadQR() {
+                                            fetch('${qrApi}')
+                                                .then(response => response.blob())
+                                                .then(blob => {
+                                                    const url = window.URL.createObjectURL(blob);
+                                                    const a = document.createElement('a');
+                                                    a.style.display = 'none';
+                                                    a.href = url;
+                                                    a.download = 'QR_${plate}.png';
+                                                    document.body.appendChild(a);
+                                                    a.click();
+                                                    window.URL.revokeObjectURL(url);
+                                                    a.remove();
+                                                })
+                                                .catch(() => alert('โปรดคลิกขวาที่รูป (หรือกดค้างในมือถือ) แล้วเลือก "บันทึกรูปภาพ"'));
+                                        }
+                                    <\/script>
                                 </div>
                             `);
                         };
@@ -2609,7 +2631,7 @@
             }, 50);
         };
 
-        // 5. อัปเกรดหน้าต่าง "รับคืนรถ" ของฝั่ง Admin เพื่อทำ Auto-Fill
+        // 5. อัปเกรดหน้าต่าง "รับคืนรถ" ของฝั่ง Admin เพื่อทำ Auto-Fill และล็อกการพิมพ์
         if(typeof window.handleReturnClick === 'function') {
             const origHandleReturnClick = window.handleReturnClick;
             
@@ -2617,18 +2639,38 @@
                 origHandleReturnClick(plate, bookingId);
                 
                 let activeBooking = bookingsData.find(b => String(b.BookingID) === String(bookingId));
+                const endMileInput = document.getElementById('ret-end-mile');
+                
+                // ตรวจสอบและสร้าง Badge ข้อความแจ้งเตือน ถ้ายังไม่มี
+                let badge = document.getElementById('qr-filled-badge');
+                if(!badge) {
+                    badge = document.createElement('div');
+                    badge.id = 'qr-filled-badge';
+                    badge.style.cssText = 'display:none; color:#10b981; font-size:13px; font-weight:700; margin-top:8px;';
+                    badge.innerHTML = '<svg width="14" height="14" style="vertical-align:text-bottom; margin-right:4px;" viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> ผู้ใช้งานสแกนบันทึกเลขไมล์แล้ว (ไม่ต้องกรอกใหม่)';
+                    endMileInput.parentNode.appendChild(badge);
+                }
                 
                 if(activeBooking && activeBooking.ReturnMileage && Number(activeBooking.ReturnMileage) > 0) {
-                    const endMileInput = document.getElementById('ret-end-mile');
+                    // หากมีข้อมูลจากการสแกน QR 
                     endMileInput.value = activeBooking.ReturnMileage;
+                    endMileInput.readOnly = true; // ล็อกไม่ให้ Admin แก้ไข
+                    endMileInput.style.backgroundColor = 'rgba(16,185,129,0.1)';
+                    endMileInput.style.borderColor = '#10b981';
+                    endMileInput.style.color = '#10b981';
+                    
+                    badge.style.display = 'block'; // แสดงข้อความ
                     
                     if(typeof window.calculateReturnPreview === 'function') {
                         window.calculateReturnPreview();
                     }
-                    
-                    setTimeout(() => {
-                        showToast('ดึงเลขไมล์จากที่คนขับสแกน QR Code สำเร็จ!', 'success');
-                    }, 300);
+                } else {
+                    // กรณีไม่มีข้อมูล QR (Admin ต้องกรอกเอง)
+                    endMileInput.readOnly = false;
+                    endMileInput.style.backgroundColor = '';
+                    endMileInput.style.borderColor = '#f59e0b';
+                    endMileInput.style.color = '';
+                    badge.style.display = 'none';
                 }
             };
         }
