@@ -405,7 +405,6 @@
 
         <div class="content-area">
             
-            <!-- VIEW: Dashboard (ภาพรวมระบบ) -->
             <div id="view-dashboard" class="view-section active">
                 <div id="persistent-global-alert" style="display:none; margin-bottom: 25px; background: rgba(220,38,38,0.1); border: 2px solid #dc2626; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(220,38,38,0.2);">
                     <h3 style="margin:0 0 10px 0; color:#dc2626; display:flex; align-items:center; gap:8px;">
@@ -447,7 +446,6 @@
                 </div>
             </div>
 
-            <!-- VIEW: Calendar -->
             <div id="view-calendar" class="view-section">
                 <div class="header-title" style="margin-bottom: 25px;"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-cal"/></svg> ปฏิทินการใช้งานระบบ</div>
                 
@@ -462,7 +460,6 @@
                 </div>
             </div>
 
-            <!-- VIEW: Booking List -->
             <div id="view-bookinglist" class="view-section">
                 <div class="header-flex">
                     <div>
@@ -500,7 +497,6 @@
                 </div>
             </div>
 
-            <!-- VIEW: Car Module -->
             <div id="view-carmodule" class="view-section">
                 <div class="header-flex">
                     <div>
@@ -532,7 +528,6 @@
                 </div>
             </div>
 
-            <!-- VIEW: Export/Analytics -->
             <div id="view-export" class="view-section">
                 <div class="header-flex">
                     <div>
@@ -583,7 +578,6 @@
                 </div>
             </div>
 
-            <!-- VIEW: Admin -->
             <div id="view-admin" class="view-section">
                 <div class="header-title" style="margin-bottom: 25px;"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-shield"/></svg> การจัดการระบบผู้ดูแล</div>
                 
@@ -621,7 +615,6 @@
         </div>
     </div>
 
-    <!-- Modals -->
     <div id="toast-container"></div>
 
     <div class="modal-overlay" id="modal-booking">
@@ -1198,7 +1191,7 @@
             document.getElementById('st-maint').innerText = maint;
         }
 
-        // --- 📊 EXPORT / ANALYTICS (สถิติ และ Plot กราฟแยกคัน) ---
+        // --- EXPORT / ANALYTICS ---
         function renderAnalytics() {
             const monthVal = document.getElementById('export-month').value;
             const selectedPlate = document.getElementById('export-select-car').value;
@@ -1207,7 +1200,6 @@
             let [y, m] = monthVal.split('-');
             let daysInMonth = new Date(y, m, 0).getDate();
             
-            // กรองข้อมูลรายการจองที่ตรงกับเดือนที่เลือก และเป็นสถานะ "Completed" เท่านั้น
             let monthBookings = bookingsData.filter(b => {
                 if(b.Status !== 'Completed') return false;
                 
@@ -1223,13 +1215,11 @@
                 return (dStart <= monthEnd && dEnd >= monthStart);
             });
             
-            // กรองตามรถที่เลือก
             let plotBookings = monthBookings;
             if(selectedPlate !== 'ทั้งหมด') {
                 plotBookings = monthBookings.filter(b => String(b.Plate).trim() === selectedPlate);
             }
             
-            // คำนวณสรุปยอด
             let totalTrips = plotBookings.length;
             let totalKm = 0;
             let carUsageMap = {}; 
@@ -1244,7 +1234,6 @@
                 carUsageMap[p] = (carUsageMap[p] || 0) + km;
                 
                 if(selectedPlate !== 'ทั้งหมด') {
-                    // กระจายกิโลเมตรเฉลี่ยลงในแต่ละวัน
                     let dStart = parseDateString(b.StartDate);
                     let dEnd = parseDateString(b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
                     if(!dEnd) dEnd = dStart;
@@ -1260,11 +1249,9 @@
                 }
             });
 
-            // อัปเดต Summary Cards
             document.getElementById('export-sum-trips').innerText = totalTrips.toLocaleString() + " ครั้ง";
             document.getElementById('export-sum-km').innerText = totalKm.toLocaleString() + " กม.";
 
-            // สร้างกราฟ Plot แยกคัน หรือ ทั้งหมด
             const ctx = document.getElementById('exportChart').getContext('2d');
             if(exportChartInstance) exportChartInstance.destroy();
             
@@ -1315,7 +1302,6 @@
                 });
             } catch(e) { console.warn("Chart rendering skipped"); }
 
-            // สร้างตารางจัดอันดับ (เฉพาะที่คืนรถแล้วในเดือน)
             const tbody = document.getElementById('analytics-table-body');
             tbody.innerHTML = '';
             
@@ -2311,155 +2297,7 @@
             finally { btn.disabled = false; btn.innerText = 'บันทึกข้อมูลรถเข้าสู่ระบบ'; }
         }
 
-        // --- 📊 EXPORT / ANALYTICS (สถิติ และ Plot กราฟแยกคัน) ---
-        function renderAnalytics() {
-            const monthVal = document.getElementById('export-month').value;
-            const selectedPlate = document.getElementById('export-select-car').value;
-            if(!monthVal) return;
-            
-            let [y, m] = monthVal.split('-');
-            let daysInMonth = new Date(y, m, 0).getDate();
-            
-            // กรองข้อมูลรายการจองที่ตรงกับเดือนที่เลือก และเป็นสถานะ "Completed" เท่านั้น
-            let monthBookings = bookingsData.filter(b => {
-                if(b.Status !== 'Completed') return false;
-                
-                let dStart = parseDateString(b.StartDate);
-                let dEnd = parseDateString(b.RealReturnDate && b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
-                if(!dStart) return false;
-                
-                let monthStart = new Date(y, m-1, 1);
-                let monthEnd = new Date(y, m-1, daysInMonth, 23, 59, 59);
-                
-                if (!dEnd) dEnd = dStart;
-                
-                return (dStart <= monthEnd && dEnd >= monthStart);
-            });
-            
-            // กรองตามรถที่เลือก
-            let plotBookings = monthBookings;
-            if(selectedPlate !== 'ทั้งหมด') {
-                plotBookings = monthBookings.filter(b => String(b.Plate).trim() === selectedPlate);
-            }
-            
-            // คำนวณสรุปยอด
-            let totalTrips = plotBookings.length;
-            let totalKm = 0;
-            let carUsageMap = {}; 
-            let dailyKmMap = {}; 
-            for(let i=1; i<=daysInMonth; i++) dailyKmMap[i] = 0;
-
-            plotBookings.forEach(b => {
-                let km = Number(b.TotalDistance) || 0;
-                totalKm += km;
-                
-                let p = String(b.Plate).trim();
-                carUsageMap[p] = (carUsageMap[p] || 0) + km;
-                
-                if(selectedPlate !== 'ทั้งหมด') {
-                    // กระจายกิโลเมตรเฉลี่ยลงในแต่ละวัน
-                    let dStart = parseDateString(b.StartDate);
-                    let dEnd = parseDateString(b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
-                    if(!dEnd) dEnd = dStart;
-                    
-                    let tripDays = getDiffDays(b.StartDate, b.RealReturnDate !== '-' ? b.RealReturnDate : b.EndDate);
-                    let kmPerDay = tripDays > 0 ? (km / tripDays) : km;
-                    
-                    for(let d=new Date(dStart); d<=dEnd; d.setDate(d.getDate()+1)) {
-                        if(d.getFullYear() == y && (d.getMonth()+1) == m) {
-                            dailyKmMap[d.getDate()] += kmPerDay;
-                        }
-                    }
-                }
-            });
-
-            // อัปเดต Summary Cards
-            document.getElementById('export-sum-trips').innerText = totalTrips.toLocaleString() + " ครั้ง";
-            document.getElementById('export-sum-km').innerText = totalKm.toLocaleString() + " กม.";
-
-            // สร้างกราฟ Plot แยกคัน หรือ ทั้งหมด
-            const ctx = document.getElementById('exportChart').getContext('2d');
-            if(exportChartInstance) exportChartInstance.destroy();
-            
-            let chartLabels = [];
-            let chartData = [];
-            let chartLabelText = '';
-            
-            let computedStyle = getComputedStyle(document.body);
-            let primaryColor = computedStyle.getPropertyValue('--primary').trim() || '#0071e3';
-            let textColor = computedStyle.getPropertyValue('--text-main').trim() || '#111827';
-            let gridColor = computedStyle.getPropertyValue('--border-color').trim() || '#e5e7eb';
-            
-            try {
-                Chart.defaults.color = textColor;
-                
-                if(selectedPlate === 'ทั้งหมด') {
-                    chartLabelText = 'ระยะทางวิ่งรวมตลอดเดือน (กม.)';
-                    for(let plate in carUsageMap) {
-                        chartLabels.push(plate);
-                        chartData.push(carUsageMap[plate]);
-                    }
-                } else {
-                    chartLabelText = `การใช้งานรายวันของ ${selectedPlate} (กม.)`;
-                    for(let i=1; i<=daysInMonth; i++) {
-                        chartLabels.push(i);
-                        chartData.push(Math.round(dailyKmMap[i]));
-                    }
-                }
-
-                exportChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: chartLabels,
-                        datasets: [{
-                            label: chartLabelText,
-                            data: chartData,
-                            backgroundColor: primaryColor,
-                            borderRadius: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        scales: {
-                            x: { grid: { color: gridColor }, ticks: { color: textColor } },
-                            y: { grid: { color: gridColor }, ticks: { color: textColor }, beginAtZero: true }
-                        }
-                    }
-                });
-            } catch(e) { console.warn("Chart rendering skipped"); }
-
-            // สร้างตารางจัดอันดับ (เฉพาะที่คืนรถแล้วในเดือน)
-            const tbody = document.getElementById('analytics-table-body');
-            tbody.innerHTML = '';
-            
-            if(selectedPlate === 'ทั้งหมด') {
-                let rankedCars = Object.keys(carUsageMap).map(p => ({plate: p, km: carUsageMap[p]})).sort((a,b) => b.km - a.km);
-                
-                if(rankedCars.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted)">ไม่มีการคืนรถในเดือนที่เลือก</td></tr>`;
-                } else {
-                    rankedCars.forEach((c, index) => {
-                        let carInfo = carsData.find(x => x.Plate === c.plate) || {};
-                        let badgeRank = index < 3 ? `<span style="font-size:24px;">🏆</span>` : `<span style="font-size:16px; font-weight:700;">#${index+1}</span>`;
-                        let rankStyle = index < 3 ? 'font-weight:700; color:var(--primary);' : 'color:var(--text-muted);';
-                        
-                        tbody.innerHTML += `
-                            <tr onclick="showCarMonthlyStats('${c.plate}')" style="cursor:pointer;">
-                                <td style="${rankStyle}">${badgeRank}</td>
-                                <td style="font-weight:700; font-size:15px;">${c.plate}</td>
-                                <td>${carInfo.Brand || '-'}</td>
-                                <td style="font-weight:700; color:var(--primary-dark);">${c.km.toLocaleString()} กม.</td>
-                                <td style="color:var(--primary); font-weight:600;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-list"/></svg> ดูประวัติ</td>
-                            </tr>
-                        `;
-                    });
-                }
-            } else {
-                 tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted)">กำลังดูกราฟแยกคันด้านบน กรุณาเลือก "ทั้งหมด" เพื่อดูตารางจัดอันดับใหม่</td></tr>`;
-            }
-        }
-
-        // --- AUDIT LOG (แก้ปัญหาการอ่านวัน-เดือน สลับกัน) ---
+        // --- AUDIT LOG ---
         function renderAuditLog() {
             const tbody = document.getElementById('audit-log-body'); 
             if(!tbody) return;
@@ -2474,7 +2312,6 @@
                 let dateStr = log.Timestamp || '-';
                 
                 try {
-                    // จัดการกรณีเป็น String วันที่ที่มีรูปแบบมี Slash
                     if (typeof log.Timestamp === 'string' && log.Timestamp.includes('/')) {
                         let dtParts = log.Timestamp.split(' ');
                         let dParts = dtParts[0].split('/');
@@ -2488,7 +2325,6 @@
                             let day = p0;
                             let month = p1;
                             
-                            // ถ้าเดือน > 12 แสดงว่าสลับเป็น MM/DD/YYYY
                             if (p0 > 12) {
                                 day = p1; 
                                 month = p0;
@@ -2504,7 +2340,6 @@
                             dateStr = `${String(day).padStart(2, '0')} ${thMonth} ${thYear} ${timePart ? timePart + ' น.' : ''}`;
                         }
                     } else {
-                        // หากเป็น Object Date หรือรูปแบบอื่นที่ JS อ่านได้ปกติ
                         let d = new Date(log.Timestamp);
                         if (!isNaN(d.getTime())) {
                             const months = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
@@ -2585,6 +2420,182 @@
             fetchInitialData(); 
             setInterval(updateTime, 1000); updateTime();
         };
+    </script>
+
+    <script>
+    (function() {
+        // 1. สร้างหน้าต่าง Modal สำหรับผู้ใช้งาน (คนขับ) สแกน QR
+        const qrModal = document.createElement('div');
+        qrModal.className = 'modal-overlay';
+        qrModal.id = 'modal-qr-update';
+        qrModal.style.zIndex = '100005';
+        qrModal.innerHTML = `
+            <div class="modal-content" style="max-width: 400px;">
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-bottom:none;">
+                    <h2 style="color: white !important; margin:0;"><svg width="24" height="24"><use href="#icon-mileage"/></svg> คืนรถด่วน (สแกนจากรถ)</h2>
+                </div>
+                <div class="modal-body">
+                    <div style="background:var(--bg-color); padding:15px; border-radius:12px; margin-bottom:20px; text-align:center; border:1px solid var(--border-color);">
+                        <p style="margin:0; font-weight:700; font-size:26px; color:var(--text-main);" id="qr-plate-text">กำลังโหลด...</p>
+                        <p style="margin:5px 0 0 0; font-size:15px; color:var(--primary); font-weight:600;" id="qr-booking-user">กรุณารอสักครู่...</p>
+                    </div>
+                    
+                    <div id="qr-form-area" style="display:none;">
+                        <input type="hidden" id="qr-booking-id">
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-flag"/></svg> เลขไมล์ตอนนำรถไป</label>
+                            <input type="text" class="form-control" id="qr-start-mile" readonly style="background:rgba(0,0,0,0.02); color:var(--text-muted); font-weight:bold;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="color:#ef4444 !important;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-mileage"/></svg> กรอกเลขไมล์ปัจจุบันบนหน้าปัด</label>
+                            <input type="number" class="form-control" id="qr-end-mile" placeholder="ระบุเลขไมล์ก่อนดับเครื่อง" style="border-color:#ef4444; font-size:20px; font-weight:bold; color:#ef4444;" oninput="window.validateQRMileage()">
+                        </div>
+                        <button class="btn-primary" id="btn-save-qr" style="width:100%; justify-content:center; padding:16px; font-size:18px;" onclick="window.submitQRUpdate()" disabled>ยืนยันการคืนรถและไมล์</button>
+                    </div>
+
+                    <div id="qr-error-area" style="display:none; text-align:center; background:rgba(239,68,68,0.1); border:1px dashed #ef4444; border-radius:12px; color:#ef4444; font-weight:bold; padding:30px 20px;">
+                        <svg width="40" height="40" style="margin-bottom:10px;"><use href="#icon-warning"/></svg><br>
+                        รถคันนี้ไม่ได้อยู่ในสถานะ "กำลังใช้งาน"<br>หรือไม่มีข้อมูลการจองของคุณในระบบ
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(qrModal);
+
+        // 2. ดักจับ URL พารามิเตอร์ ?plate=... ตอนโหลดหน้าเว็บ
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const plateStr = params.get('plate');
+            
+            if(plateStr) {
+                document.getElementById('modal-qr-update').style.display = 'flex';
+                
+                let attempt = 0;
+                let checker = setInterval(() => {
+                    attempt++;
+                    if(typeof carsData !== 'undefined' && carsData.length > 0) {
+                        clearInterval(checker);
+                        window.setupQRMode(plateStr);
+                    } else if(attempt > 30) {
+                        clearInterval(checker);
+                        document.getElementById('qr-plate-text').innerText = "เชื่อมต่อล้มเหลว";
+                    }
+                }, 500);
+            }
+        });
+
+        // 3. ฟังก์ชันการทำงานของ QR Mode
+        window.setupQRMode = function(plate) {
+            document.getElementById('qr-plate-text').innerText = plate;
+            
+            let activeBooking = getActiveBookingForDate(plate, new Date().toISOString().split('T')[0]);
+            
+            if(activeBooking && activeBooking.Status === 'Active') {
+                document.getElementById('qr-booking-user').innerHTML = `<svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-user"/></svg> ผู้จอง: ${activeBooking.UserName}`;
+                document.getElementById('qr-booking-id').value = activeBooking.BookingID;
+                document.getElementById('qr-start-mile').value = activeBooking.StartMileage || 0;
+                document.getElementById('qr-form-area').style.display = 'block';
+
+                if(activeBooking.ReturnMileage && Number(activeBooking.ReturnMileage) > 0) {
+                    document.getElementById('qr-end-mile').value = activeBooking.ReturnMileage;
+                    if(typeof window.validateQRMileage === 'function') {
+                        window.validateQRMileage();
+                    }
+                }
+            } else {
+                document.getElementById('qr-booking-user').innerText = "สถานะ: รถว่าง";
+                document.getElementById('qr-error-area').style.display = 'block';
+            }
+        };
+
+        window.validateQRMileage = function() {
+            let start = Number(document.getElementById('qr-start-mile').value);
+            let end = Number(document.getElementById('qr-end-mile').value);
+            document.getElementById('btn-save-qr').disabled = (!end || end < start);
+        };
+
+        window.submitQRUpdate = async function() {
+            const plate = document.getElementById('qr-plate-text').innerText;
+            const bookingId = document.getElementById('qr-booking-id').value;
+            const endMile = document.getElementById('qr-end-mile').value;
+            const realDateStr = new Date().toISOString().split('T')[0];
+
+            const btn = document.getElementById('btn-save-qr');
+            btn.disabled = true; 
+            btn.innerHTML = '<svg width="20" height="20" style="animation: pulse 1s infinite;"><use href="#icon-time"/></svg> กำลังส่งข้อมูล...';
+
+            const payload = { plate: plate, bookingId: bookingId, returnMileage: endMile, returnDate: realDateStr, adminName: "Self-Service (คนขับ)" };
+
+            try {
+                await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'returnCar', payload: payload }) });
+                alert('บันทึกข้อมูลเรียบร้อย ขอบคุณที่อัปเดตเลขไมล์ครับ!');
+                window.location.href = window.location.pathname; 
+            } catch(e) { 
+                alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง'); 
+                btn.disabled = false; btn.innerText = 'ยืนยันการคืนรถและไมล์';
+            }
+        };
+
+        // 4. สร้างปุ่มให้ Admin ปริ้นต์ QR Code
+        const origShowDetail = window.showCarDetailPopup;
+        window.showCarDetailPopup = function(plate, source) {
+            origShowDetail(plate, source);
+            
+            setTimeout(() => {
+                const adminArea = document.getElementById('car-detail-admin-area');
+                if(adminArea && typeof isAdminLoggedIn !== 'undefined' && isAdminLoggedIn) {
+                    if(!document.getElementById('btn-print-qr')) {
+                        const qrBtn = document.createElement('button');
+                        qrBtn.id = 'btn-print-qr';
+                        qrBtn.className = 'btn-secondary';
+                        qrBtn.style.flex = '1';
+                        qrBtn.innerHTML = '<svg width="18" height="18"><use href="#icon-export"/></svg> สร้าง QR Code';
+                        qrBtn.onclick = () => {
+                            const currentUrl = window.location.origin + window.location.pathname;
+                            const qrUrl = currentUrl + '?plate=' + encodeURIComponent(plate);
+                            const qrApi = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(qrUrl);
+                            
+                            const win = window.open('', '_blank');
+                            win.document.write(`
+                                <div style="text-align:center; font-family:'Sarabun', sans-serif; margin-top:50px;">
+                                    <h2 style="color:#111827;">สแกนเพื่อคืนรถและอัปเดตไมล์</h2>
+                                    <h1 style="color:#0071e3; font-size:60px; margin:20px 0;">${plate}</h1>
+                                    <img src="${qrApi}" style="border:4px solid #0071e3; padding:15px; border-radius:24px; box-shadow: 0 10px 30px rgba(0,113,227,0.2);">
+                                    <h3 style="color:#6b7280; margin-top:30px;">Smart Fleet Pro (NTL)</h3>
+                                    <button onclick="window.print()" style="margin-top:20px; padding:10px 20px; background:#0071e3; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer;">พิมพ์ / บันทึกรูป</button>
+                                </div>
+                            `);
+                        };
+                        adminArea.appendChild(qrBtn);
+                    }
+                }
+            }, 50);
+        };
+
+        // 5. อัปเกรดหน้าต่าง "รับคืนรถ" ของฝั่ง Admin เพื่อทำ Auto-Fill
+        if(typeof window.handleReturnClick === 'function') {
+            const origHandleReturnClick = window.handleReturnClick;
+            
+            window.handleReturnClick = function(plate, bookingId) {
+                origHandleReturnClick(plate, bookingId);
+                
+                let activeBooking = bookingsData.find(b => String(b.BookingID) === String(bookingId));
+                
+                if(activeBooking && activeBooking.ReturnMileage && Number(activeBooking.ReturnMileage) > 0) {
+                    const endMileInput = document.getElementById('ret-end-mile');
+                    endMileInput.value = activeBooking.ReturnMileage;
+                    
+                    if(typeof window.calculateReturnPreview === 'function') {
+                        window.calculateReturnPreview();
+                    }
+                    
+                    setTimeout(() => {
+                        showToast('ดึงเลขไมล์จากที่คนขับสแกน QR Code สำเร็จ!', 'success');
+                    }, 300);
+                }
+            };
+        }
+    })();
     </script>
 </body>
 </html>
