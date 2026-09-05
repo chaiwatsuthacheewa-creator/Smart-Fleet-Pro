@@ -233,16 +233,31 @@
         .planner-toolbar { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px; padding:18px; margin-bottom:20px; box-shadow:var(--shadow); }
         .planner-toolbar .form-group { min-width:210px; flex:1; }
         .planner-calendar { min-width:980px; }
-        .planner-day { min-height:180px; padding:10px; background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; transition:var(--transition); }
+        .planner-hero { position:relative; overflow:hidden; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:24px; align-items:center; color:#fff; padding:26px 28px; margin-bottom:20px; border-radius:22px; background:linear-gradient(135deg,var(--primary-dark),var(--primary) 60%,#38bdf8); box-shadow:0 16px 40px var(--theme-glow); }
+        .planner-hero::after { content:''; position:absolute; right:-55px; top:-75px; width:230px; height:230px; border:38px solid rgba(255,255,255,.12); border-radius:50%; }
+        .planner-hero-icon { width:74px; height:74px; border-radius:22px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); z-index:1; }
+        .planner-hero h1 { color:#fff; margin:0; font-size:27px; }
+        .planner-hero p { margin:8px 0 0; opacity:.88; font-size:14px; }
+        .planner-kpis { display:grid; grid-template-columns:repeat(3,minmax(130px,1fr)); gap:12px; margin-bottom:20px; }
+        .planner-kpi { background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px; padding:16px 18px; box-shadow:var(--shadow); display:flex; align-items:center; gap:12px; }
+        .planner-kpi-icon { width:40px; height:40px; flex:none; border-radius:12px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; }
+        .planner-kpi strong { display:block; font-size:22px; line-height:1; color:var(--text-main); }
+        .planner-kpi span { display:block; margin-top:5px; color:var(--text-muted); font-size:12px; font-weight:600; }
+        .planner-day { min-height:180px; padding:10px; background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; transition:var(--transition); cursor:pointer; }
         .planner-day:hover { border-color:var(--primary); box-shadow:0 8px 22px var(--theme-glow); transform:translateY(-2px); }
         .planner-day.today { outline:2px solid var(--primary); outline-offset:2px; }
         .planner-day-number { font-weight:800; font-size:16px; color:var(--text-main); margin-bottom:8px; display:flex; justify-content:space-between; }
-        .fleet-slot { display:flex; align-items:center; gap:7px; padding:6px 8px; margin-bottom:5px; border-radius:8px; font-size:11px; font-weight:700; line-height:1.25; }
+        .fleet-slot { display:flex; align-items:center; gap:7px; padding:7px 8px; margin-bottom:5px; border-radius:8px; font-size:11px; font-weight:700; line-height:1.25; cursor:pointer; transition:.2s; }
+        .fleet-slot:hover { transform:translateX(2px); filter:brightness(.97); box-shadow:0 3px 9px rgba(0,0,0,.08); }
+        .fleet-slot:focus-visible, .driver-card:focus-visible, .driver-assignment:focus-visible { outline:3px solid var(--primary); outline-offset:2px; }
         .fleet-slot.available { background:rgba(16,185,129,.12); color:#047857; border:1px solid rgba(16,185,129,.28); }
         .fleet-slot.busy { background:rgba(239,68,68,.10); color:#dc2626; border:1px solid rgba(239,68,68,.24); }
-        .driver-assignment { padding:8px; border-radius:9px; background:var(--primary-light); border-left:3px solid var(--primary); margin-bottom:6px; font-size:11px; line-height:1.35; }
+        .driver-assignment { padding:8px; border-radius:9px; background:var(--primary-light); border-left:3px solid var(--primary); margin-bottom:6px; font-size:11px; line-height:1.35; cursor:pointer; transition:.2s; }
+        .driver-assignment:hover { transform:translateX(2px); box-shadow:0 3px 10px var(--theme-glow); }
         .driver-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:16px; margin-bottom:22px; }
-        .driver-card { background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px; padding:18px; box-shadow:var(--shadow); display:flex; gap:14px; align-items:center; }
+        .driver-card { background:var(--card-bg); border:1px solid var(--border-color); border-radius:18px; padding:18px; box-shadow:var(--shadow); display:flex; gap:14px; align-items:center; cursor:pointer; transition:var(--transition); position:relative; overflow:hidden; }
+        .driver-card::after { content:'›'; position:absolute; right:16px; color:var(--primary); font-size:26px; font-weight:300; }
+        .driver-card:hover { transform:translateY(-4px); border-color:var(--primary); box-shadow:0 12px 28px var(--theme-glow); }
         .driver-avatar { width:48px; height:48px; border-radius:14px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; flex:none; }
         .driver-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 9px; border-radius:20px; background:rgba(59,130,246,.12); color:#2563eb; font-size:12px; font-weight:700; }
         .driver-option-panel { grid-column:span 2; background:var(--primary-light); border:1px solid var(--primary); border-radius:14px; padding:16px; }
@@ -251,6 +266,20 @@
         .switch-control::after { content:''; position:absolute; width:20px; height:20px; top:3px; left:3px; background:white; border-radius:50%; box-shadow:0 2px 6px rgba(0,0,0,.25); transition:.2s; }
         .switch-control:checked { background:var(--primary); }
         .switch-control:checked::after { transform:translateX(20px); }
+        .planner-modal-summary { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-bottom:16px; }
+        .planner-detail-tile { background:var(--card-bg); border:1px solid var(--border-color); border-radius:13px; padding:14px; }
+        .planner-detail-tile .label { color:var(--text-muted); font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+        .planner-detail-tile .value { color:var(--text-main); font-size:15px; font-weight:700; word-break:break-word; }
+        .popup-status { display:inline-flex; align-items:center; gap:7px; padding:7px 12px; border-radius:999px; font-size:13px; font-weight:800; }
+        .popup-status.available { color:#047857; background:rgba(16,185,129,.12); }
+        .popup-status.busy { color:#dc2626; background:rgba(239,68,68,.11); }
+
+        /* Corporate polish */
+        .sidebar { background:linear-gradient(180deg,var(--card-bg),color-mix(in srgb,var(--card-bg) 94%,var(--primary-light))); }
+        .top-nav { box-shadow:0 5px 22px rgba(15,23,42,.04); }
+        .header-title { line-height:1.2; }
+        .form-control { min-height:48px; }
+        button, select, input { -webkit-tap-highlight-color:transparent; }
 
         #toast-container { position: fixed; top: 24px; right: 24px; z-index: 10000; display: flex; flex-direction: column; gap: 12px; max-width: calc(100vw - 48px); }
         .toast { background: var(--card-bg); border-left: 6px solid #10b981; color: var(--text-main); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 14px; font-weight: 600; font-family: 'Sarabun'; font-size: 15px; animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -264,13 +293,17 @@
         @media (max-width: 1024px) {
             .summary-grid { grid-template-columns: repeat(2, 1fr); }
             .car-grid { grid-template-columns: repeat(2, 1fr); }
+            .planner-calendar { min-width:840px; }
+            .planner-kpis { grid-template-columns:repeat(3,1fr); }
         }
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -100%; top: 0; bottom: 0; height: 100vh; box-shadow: 20px 0 30px rgba(0,0,0,0.1); }
             .sidebar.mobile-open { left: 0; width: 280px; }
             .btn-mobile-menu { display: block; }
             .btn-toggle { display: none; } 
-            .top-nav { padding: 0 20px; }
+            .top-nav { min-height:72px; height:auto; padding:10px 14px; gap:8px; }
+            .nav-left, .theme-controls { gap:8px; }
+            .theme-controls .btn-primary { padding:8px 10px !important; font-size:12px !important; }
             .sync-status { display: none; } 
             .content-area { padding: 15px; }
             .header-flex { flex-direction: column; align-items: stretch; gap: 15px; margin-bottom: 20px; }
@@ -278,6 +311,14 @@
             .form-grid { grid-template-columns: 1fr; }
             .form-group.full { grid-column: span 1; }
             .driver-option-panel { grid-column: span 1; }
+            .planner-hero { padding:22px; border-radius:18px; }
+            .planner-hero h1 { font-size:23px; }
+            .planner-hero-icon { width:60px; height:60px; border-radius:18px; }
+            .planner-kpis { grid-template-columns:repeat(3,1fr); gap:8px; }
+            .planner-kpi { padding:12px; flex-direction:column; align-items:flex-start; gap:8px; }
+            .calendar-grid.planner-calendar { min-width:0; grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+            .planner-calendar .day-header, .planner-calendar .planner-empty { display:none; }
+            .planner-day { min-height:135px; }
             
             .theme-picker { max-width: 100%; padding: 8px 12px; -webkit-overflow-scrolling: touch; }
             .color-dot { width: 28px; height: 28px; border-width: 3px; }
@@ -299,6 +340,14 @@
             #car-detail-admin-area { flex-direction: column; }
         }
         @media (max-width: 480px) {
+            .planner-hero { grid-template-columns:1fr; padding:20px; }
+            .planner-hero-icon { display:none; }
+            .planner-kpis { grid-template-columns:1fr; }
+            .planner-kpi { flex-direction:row; align-items:center; }
+            .calendar-grid.planner-calendar { grid-template-columns:1fr !important; }
+            .planner-day { min-height:auto; }
+            .planner-modal-summary { grid-template-columns:1fr; }
+            .planner-toolbar .form-group { min-width:100%; }
             .summary-grid { grid-template-columns: 1fr; gap: 10px;}
             .modal-content { max-height: 95vh; padding: 0; border-radius: 16px;}
             .detail-row { flex-direction: column; gap: 4px; padding: 12px 16px;}
@@ -487,15 +536,21 @@
 
             <!-- VIEW: Vehicle Availability Calendar -->
             <div id="view-vehicleusage" class="view-section">
-                <div class="header-flex">
+                <div class="planner-hero">
                     <div>
-                        <h1 class="header-title"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-car"/></svg> ข้อมูลการใช้งานรถยนต์</h1>
-                        <div style="font-size:14px; color:var(--text-muted); margin-top:8px;">ปฏิทินรายเดือน แสดงรถว่างและรถที่ถูกจองแยกตามทะเบียน</div>
+                        <h1 class="header-title"><svg width="32" height="32" style="color:#fff"><use href="#icon-car"/></svg> ข้อมูลการใช้งานรถยนต์</h1>
+                        <p>ตรวจสอบรถว่างและรายละเอียดการจองรายวันได้ในหน้าจอเดียว</p>
                     </div>
+                    <div class="planner-hero-icon"><svg width="42" height="42"><use href="#icon-cal"/></svg></div>
+                </div>
+                <div class="planner-kpis">
+                    <div class="planner-kpi"><div class="planner-kpi-icon"><svg width="22" height="22"><use href="#icon-car"/></svg></div><div><strong id="vehicle-kpi-total">0</strong><span>รถในมุมมอง</span></div></div>
+                    <div class="planner-kpi"><div class="planner-kpi-icon" style="color:#10b981;background:rgba(16,185,129,.12)"><svg width="22" height="22"><use href="#icon-check"/></svg></div><div><strong id="vehicle-kpi-free">0</strong><span>วัน-คันว่างในเดือน</span></div></div>
+                    <div class="planner-kpi"><div class="planner-kpi-icon" style="color:#ef4444;background:rgba(239,68,68,.1)"><svg width="22" height="22"><use href="#icon-time"/></svg></div><div><strong id="vehicle-kpi-used">0</strong><span>วัน-คันถูกใช้งาน</span></div></div>
                 </div>
                 <div class="planner-toolbar">
-                    <div class="form-group"><label>เลือกเดือน</label><input type="month" id="vehicle-usage-month" class="form-control" onchange="setVehicleUsageMonth(this.value)"></div>
-                    <div class="form-group"><label>เลือกทะเบียนรถ</label><select id="vehicle-usage-plate" class="form-control" onchange="renderVehicleUsageCalendar()"><option value="ทั้งหมด">ทั้งหมด (ทุกคัน)</option></select></div>
+                    <div class="form-group"><label><svg width="15" height="15"><use href="#icon-cal"/></svg> เลือกเดือน</label><input type="month" id="vehicle-usage-month" class="form-control" onchange="setVehicleUsageMonth(this.value)"></div>
+                    <div class="form-group"><label><svg width="15" height="15"><use href="#icon-car"/></svg> เลือกทะเบียนรถ</label><select id="vehicle-usage-plate" class="form-control" onchange="renderVehicleUsageCalendar()"><option value="ทั้งหมด">ทั้งหมด (ทุกคัน)</option></select></div>
                     <div style="display:flex; gap:8px;"><button class="btn-secondary" onclick="changeVehicleUsageMonth(-1)">◀</button><button class="btn-secondary" onclick="changeVehicleUsageMonth(1)">▶</button></div>
                 </div>
                 <div class="calendar-wrap">
@@ -505,17 +560,22 @@
 
             <!-- VIEW: Driver Calendar & Directory -->
             <div id="view-drivers" class="view-section">
-                <div class="header-flex">
+                <div class="planner-hero">
                     <div>
-                        <h1 class="header-title"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-driver"/></svg> ข้อมูลคนขับรถ</h1>
-                        <div style="font-size:14px; color:var(--text-muted); margin-top:8px;">ดูตารางงานรายเดือน ชื่อผู้ปฏิบัติงาน และทะเบียนรถที่ได้รับมอบหมาย</div>
+                        <h1 class="header-title"><svg width="32" height="32" style="color:#fff"><use href="#icon-driver"/></svg> ข้อมูลคนขับรถ</h1>
+                        <p>ดูรายชื่อ ตารางงาน ปลายทาง และทะเบียนรถที่ได้รับมอบหมาย</p>
                     </div>
-                    <button class="btn-primary admin-driver-control" style="display:none;" onclick="openDriverModal()"><svg width="20" height="20"><use href="#icon-driver"/></svg> เพิ่มคนขับรถ</button>
+                    <div class="planner-hero-icon"><svg width="42" height="42"><use href="#icon-driver"/></svg></div>
+                </div>
+                <div class="planner-kpis">
+                    <div class="planner-kpi"><div class="planner-kpi-icon"><svg width="22" height="22"><use href="#icon-driver"/></svg></div><div><strong id="driver-kpi-total">0</strong><span>คนขับพร้อมใช้งาน</span></div></div>
+                    <div class="planner-kpi"><div class="planner-kpi-icon" style="color:#f59e0b;background:rgba(245,158,11,.12)"><svg width="22" height="22"><use href="#icon-time"/></svg></div><div><strong id="driver-kpi-jobs">0</strong><span>รายการงานในเดือน</span></div></div>
+                    <div class="planner-kpi"><button class="btn-primary admin-driver-control" style="display:none;width:100%;" onclick="openDriverModal()"><svg width="20" height="20"><use href="#icon-driver"/></svg> เพิ่มคนขับรถ</button><span class="non-admin-driver-note" style="font-size:12px;color:var(--text-muted)">เข้าสู่ระบบ Admin เพื่อเพิ่มคนขับรถ</span></div>
                 </div>
                 <div class="driver-grid" id="driver-directory"></div>
                 <div class="planner-toolbar">
-                    <div class="form-group"><label>เลือกเดือน</label><input type="month" id="driver-calendar-month" class="form-control" onchange="setDriverCalendarMonth(this.value)"></div>
-                    <div class="form-group"><label>เลือกคนขับรถ</label><select id="driver-calendar-filter" class="form-control" onchange="renderDriverCalendar()"><option value="ทั้งหมด">ทั้งหมด (ทุกคน)</option></select></div>
+                    <div class="form-group"><label><svg width="15" height="15"><use href="#icon-cal"/></svg> เลือกเดือน</label><input type="month" id="driver-calendar-month" class="form-control" onchange="setDriverCalendarMonth(this.value)"></div>
+                    <div class="form-group"><label><svg width="15" height="15"><use href="#icon-driver"/></svg> เลือกคนขับรถ</label><select id="driver-calendar-filter" class="form-control" onchange="renderDriverCalendar()"><option value="ทั้งหมด">ทั้งหมด (ทุกคน)</option></select></div>
                     <div style="display:flex; gap:8px;"><button class="btn-secondary" onclick="changeDriverCalendarMonth(-1)">◀</button><button class="btn-secondary" onclick="changeDriverCalendarMonth(1)">▶</button></div>
                 </div>
                 <div class="calendar-wrap">
@@ -736,6 +796,19 @@
                 <div class="form-group"><label>ชื่อเล่น</label><input type="text" class="form-control" id="driver-nickname" placeholder="ชื่อที่ใช้เรียก"></div>
                 <div class="form-group"><label>เบอร์ติดต่อ</label><input type="tel" class="form-control" id="driver-phone" placeholder="08X-XXX-XXXX"></div>
                 <div class="form-group full"><button class="btn-primary" id="btn-save-driver" style="width:100%;" onclick="saveDriver()"><svg width="19" height="19"><use href="#icon-check"/></svg> บันทึกข้อมูลคนขับรถ</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-planner-detail" onclick="if(event.target===this) closeModal('modal-planner-detail')">
+        <div class="modal-content large" style="max-width:760px;">
+            <div class="modal-header">
+                <h2 id="planner-popup-title"><svg width="24" height="24"><use href="#icon-list"/></svg> รายละเอียด</h2>
+                <button class="btn-close" onclick="closeModal('modal-planner-detail')" aria-label="ปิดหน้าต่าง"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
+            </div>
+            <div class="modal-body" id="planner-popup-body" style="background:var(--bg-color);"></div>
+            <div style="padding:14px 20px; border-top:1px solid var(--border-color); background:var(--card-bg); display:flex; justify-content:flex-end;">
+                <button class="btn-secondary" onclick="closeModal('modal-planner-detail')"><svg width="18" height="18"><use href="#icon-close"/></svg> ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>
@@ -1106,6 +1179,7 @@
                 const adminBtn = document.getElementById('admin-add-car-btn');
                 if (adminBtn) adminBtn.style.display = isAdminLoggedIn ? 'block' : 'none';
                 document.querySelectorAll('.admin-driver-control').forEach(el => el.style.display = isAdminLoggedIn ? 'inline-flex' : 'none');
+                document.querySelectorAll('.non-admin-driver-note').forEach(el => el.style.display = isAdminLoggedIn ? 'none' : 'block');
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdminLoggedIn ? 'table-cell' : 'none');
             } catch(e) {}
             
@@ -1250,20 +1324,29 @@
             const y=currentVehicleUsageDate.getFullYear(), m=currentVehicleUsageDate.getMonth(), selected=document.getElementById('vehicle-usage-plate').value;
             const fleet = carsData.filter(c => c.Status !== 'Archived' && (selected === 'ทั้งหมด' || String(c.Plate) === selected));
             let html=calendarHead(), first=new Date(y,m,1).getDay(), offset=first===0?6:first-1;
-            html += '<div></div>'.repeat(offset);
+            html += '<div class="planner-empty"></div>'.repeat(offset);
             const todayKey=new Date().toISOString().slice(0,10);
-            for(let day=1; day<=new Date(y,m+1,0).getDate(); day++) {
+            const daysInMonth=new Date(y,m+1,0).getDate();
+            let usedUnitDays=0;
+            for(let day=1; day<=daysInMonth; day++) {
                 const key=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-                const slots=fleet.map(c => { const b=getActiveBookingForDate(c.Plate,key); const driverText=b?(bookingUsesDriver(b)?` · ${bookingDriverName(b)}`:' · ไม่ใช้คนขับรถ'):''; return `<div class="fleet-slot ${b?'busy':'available'}"><svg width="13" height="13"><use href="#icon-car"/></svg><span>${escapeHtml(c.Plate)} · ${b?'ไม่ว่าง':'ว่าง'}${escapeHtml(driverText)}</span></div>`; }).join('');
-                html += `<div class="planner-day ${key===todayKey?'today':''}"><div class="planner-day-number"><span>${day}</span><span style="font-size:10px;color:var(--text-muted)">${fleet.filter(c=>!getActiveBookingForDate(c.Plate,key)).length}/${fleet.length} ว่าง</span></div>${slots || '<div style="color:var(--text-muted);font-size:12px">ไม่พบรถ</div>'}</div>`;
+                const usedToday=fleet.filter(c=>getActiveBookingForDate(c.Plate,key)).length; usedUnitDays+=usedToday;
+                const slots=fleet.map(c => { const b=getActiveBookingForDate(c.Plate,key); const driverText=b?(bookingUsesDriver(b)?` · ${bookingDriverName(b)}`:' · ไม่ใช้คนขับรถ'):''; return `<div class="fleet-slot ${b?'busy':'available'}" role="button" tabindex="0" onclick="event.stopPropagation();showVehicleUsagePopup('${encodeURIComponent(c.Plate)}','${key}')"><svg width="14" height="14"><use href="#icon-car"/></svg><span>${escapeHtml(c.Plate)} · ${b?'ไม่ว่าง':'ว่าง'}${escapeHtml(driverText)}</span></div>`; }).join('');
+                html += `<div class="planner-day ${key===todayKey?'today':''}" onclick="showVehicleDayPopup('${key}')"><div class="planner-day-number"><span>${day}</span><span style="font-size:10px;color:var(--text-muted)">${fleet.length-usedToday}/${fleet.length} ว่าง</span></div>${slots || '<div style="color:var(--text-muted);font-size:12px">ไม่พบรถในมุมมอง</div>'}</div>`;
             }
             el.innerHTML=html;
+            document.getElementById('vehicle-kpi-total').textContent=fleet.length.toLocaleString();
+            document.getElementById('vehicle-kpi-used').textContent=usedUnitDays.toLocaleString();
+            document.getElementById('vehicle-kpi-free').textContent=Math.max(0,(fleet.length*daysInMonth)-usedUnitDays).toLocaleString();
         }
 
         function renderDriverDirectory() {
             const el=document.getElementById('driver-directory'); if(!el) return;
-            if(!driversData.length) { el.innerHTML='<div class="empty-state">ยังไม่มีข้อมูลคนขับรถในระบบ</div>'; return; }
-            el.innerHTML=driversData.filter(d=>d.Status!=='Archived').map(d=>`<div class="driver-card"><div class="driver-avatar"><svg width="28" height="28"><use href="#icon-driver"/></svg></div><div style="min-width:0"><div style="font-weight:800;font-size:16px">${escapeHtml(fullDriverName(d))}</div><div style="color:var(--text-muted);font-size:13px;margin-top:4px">${escapeHtml(d.Phone || '-')}</div><div class="driver-badge" style="margin-top:8px">พร้อมรับงาน</div></div></div>`).join('');
+            const active=driversData.filter(d=>d.Status!=='Archived');
+            document.getElementById('driver-kpi-total').textContent=active.length.toLocaleString();
+            if(!active.length) { el.innerHTML='<div class="empty-state"><svg width="42" height="42"><use href="#icon-driver"/></svg>ยังไม่มีข้อมูลคนขับรถในระบบ</div>'; return; }
+            const monthStart=new Date(currentDriverCalDate.getFullYear(),currentDriverCalDate.getMonth(),1), monthEnd=new Date(currentDriverCalDate.getFullYear(),currentDriverCalDate.getMonth()+1,0);
+            el.innerHTML=active.map(d=>{ const jobs=bookingsData.filter(b=>{const start=parseDateString(b.StartDate),end=parseDateString(b.EndDate)||start;return bookingUsesDriver(b)&&String(b.DriverID)===String(d.DriverID)&&start&&end&&start<=monthEnd&&end>=monthStart;}).length; return `<div class="driver-card" role="button" tabindex="0" onclick="showDriverPopup('${encodeURIComponent(d.DriverID)}')"><div class="driver-avatar"><svg width="28" height="28"><use href="#icon-driver"/></svg></div><div style="min-width:0;padding-right:26px"><div style="font-weight:800;font-size:16px">${escapeHtml(fullDriverName(d))}</div><div style="color:var(--text-muted);font-size:13px;margin-top:4px;display:flex;align-items:center;gap:5px"><svg width="14" height="14"><use href="#icon-phone"/></svg>${escapeHtml(d.Phone || '-')}</div><div class="driver-badge" style="margin-top:8px"><svg width="13" height="13"><use href="#icon-cal"/></svg>${jobs} งานเดือนนี้</div></div></div>`; }).join('');
         }
 
         function setDriverCalendarMonth(v) { if(v) { const p=v.split('-'); currentDriverCalDate=new Date(+p[0],+p[1]-1,1); renderDriverCalendar(); } }
@@ -1274,14 +1357,67 @@
             input.value=thaiMonthValue(currentDriverCalDate);
             const y=currentDriverCalDate.getFullYear(),m=currentDriverCalDate.getMonth(),filter=document.getElementById('driver-calendar-filter').value;
             const list=driversData.filter(d=>d.Status!=='Archived'&&(filter==='ทั้งหมด'||String(d.DriverID)===filter));
-            let html=calendarHead(),first=new Date(y,m,1).getDay(),offset=first===0?6:first-1; html+='<div></div>'.repeat(offset);
+            let html=calendarHead(),first=new Date(y,m,1).getDay(),offset=first===0?6:first-1; html+='<div class="planner-empty"></div>'.repeat(offset);
             const todayKey=new Date().toISOString().slice(0,10);
+            const bookingIds=new Set();
             for(let day=1;day<=new Date(y,m+1,0).getDate();day++){
                 const key=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-                const jobs=list.map(d=>({d,b:driverBookingOnDate(d,key)})).filter(x=>x.b).map(x=>`<div class="driver-assignment"><b>${escapeHtml(fullDriverName(x.d))}</b><br><svg width="12" height="12"><use href="#icon-car"/></svg> ${escapeHtml(x.b.Plate||'-')} · ${escapeHtml(x.b.Destination||'-')}</div>`).join('');
-                html+=`<div class="planner-day ${key===todayKey?'today':''}"><div class="planner-day-number"><span>${day}</span><span style="font-size:10px;color:var(--text-muted)">${jobs?'มีงาน':'ว่าง'}</span></div>${jobs||'<div style="color:#047857;background:rgba(16,185,129,.1);padding:7px;border-radius:8px;font-size:11px;font-weight:700">คนขับว่าง</div>'}</div>`;
+                const jobItems=list.map(d=>({d,b:driverBookingOnDate(d,key)})).filter(x=>x.b); jobItems.forEach(x=>bookingIds.add(x.b.BookingID));
+                const jobs=jobItems.map(x=>`<div class="driver-assignment" role="button" tabindex="0" onclick="event.stopPropagation();showDriverAssignmentPopup('${encodeURIComponent(x.d.DriverID)}','${encodeURIComponent(x.b.BookingID)}','${key}')"><b><svg width="13" height="13"><use href="#icon-driver"/></svg> ${escapeHtml(fullDriverName(x.d))}</b><br><svg width="12" height="12"><use href="#icon-car"/></svg> ${escapeHtml(x.b.Plate||'-')} · ${escapeHtml(x.b.Destination||'-')}</div>`).join('');
+                html+=`<div class="planner-day ${key===todayKey?'today':''}" onclick="showDriverDayPopup('${key}')"><div class="planner-day-number"><span>${day}</span><span style="font-size:10px;color:var(--text-muted)">${jobItems.length?'มีงาน':'ว่าง'}</span></div>${jobs||'<div style="color:#047857;background:rgba(16,185,129,.1);padding:8px;border-radius:8px;font-size:11px;font-weight:700;display:flex;gap:6px;align-items:center"><svg width="14" height="14"><use href="#icon-check"/></svg> คนขับว่าง</div>'}</div>`;
             }
             el.innerHTML=html;
+            document.getElementById('driver-kpi-jobs').textContent=bookingIds.size.toLocaleString();
+            renderDriverDirectory();
+        }
+
+        function openPlannerPopup(title, icon, bodyHtml) {
+            document.getElementById('planner-popup-title').innerHTML=`<svg width="24" height="24"><use href="#${icon}"/></svg> ${title}`;
+            document.getElementById('planner-popup-body').innerHTML=bodyHtml;
+            document.getElementById('modal-planner-detail').style.display='flex';
+        }
+
+        function plannerTile(icon,label,value) {
+            return `<div class="planner-detail-tile"><div class="label"><svg width="15" height="15"><use href="#${icon}"/></svg>${escapeHtml(label)}</div><div class="value">${escapeHtml(value || '-')}</div></div>`;
+        }
+
+        function plannerDateLabel(dateStr) { return formatFullThaiDate(dateStr); }
+
+        function showVehicleUsagePopup(encodedPlate,dateStr) {
+            const plate=decodeURIComponent(encodedPlate),car=carsData.find(c=>String(c.Plate)===plate),b=getActiveBookingForDate(plate,dateStr);
+            if(!car) return;
+            let body=`<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap"><div style="font-size:23px;font-weight:800">${escapeHtml(plate)}</div><span class="popup-status ${b?'busy':'available'}"><svg width="16" height="16"><use href="#${b?'icon-time':'icon-check'}"/></svg>${b?'ไม่ว่าง':'ว่างพร้อมใช้'}</span></div><div class="planner-modal-summary">${plannerTile('icon-car','ยี่ห้อ / รุ่น',car.Brand||'-')}${plannerTile('icon-flag','ประเภทรถ',car.Type||'-')}${plannerTile('icon-loc','จุดจอด',car.Location||'Ari Hills')}${plannerTile('icon-cal','วันที่ตรวจสอบ',plannerDateLabel(dateStr))}</div>`;
+            if(b) body+=`<div class="detail-group">${detailPopupRow('icon-user','ผู้ใช้งาน',`${b.UserName||'-'} · ${b.Department||'-'}`)}${detailPopupRow('icon-phone','เบอร์ติดต่อ',b.Tel||'-')}${detailPopupRow('icon-loc','ปลายทาง',b.Destination||'-')}${detailPopupRow('icon-cal','ช่วงใช้งาน',`${plannerDateLabel(b.StartDate)} – ${plannerDateLabel(b.EndDate)}`)}${detailPopupRow('icon-driver','คนขับรถ',bookingDriverName(b))}</div>`;
+            else body+=`<div style="padding:18px;text-align:center;border:1px dashed #10b981;border-radius:14px;color:#047857;background:rgba(16,185,129,.08)"><svg width="30" height="30"><use href="#icon-check"/></svg><div style="font-weight:800;margin-top:6px">รถคันนี้ว่างในวันที่เลือก</div></div>`;
+            openPlannerPopup(`ข้อมูลรถ · ${escapeHtml(plate)}`,'icon-car',body);
+        }
+
+        function detailPopupRow(icon,label,value) { return `<div class="detail-row"><span class="detail-label"><svg width="16" height="16"><use href="#${icon}"/></svg>${escapeHtml(label)}</span><span class="detail-value">${escapeHtml(value||'-')}</span></div>`; }
+
+        function showVehicleDayPopup(dateStr) {
+            const selected=document.getElementById('vehicle-usage-plate').value, fleet=carsData.filter(c=>c.Status!=='Archived'&&(selected==='ทั้งหมด'||String(c.Plate)===selected));
+            const rows=fleet.map(c=>{const b=getActiveBookingForDate(c.Plate,dateStr);return `<div class="v-book-card" style="border-left-color:${b?'#ef4444':'#10b981'} !important;cursor:pointer" onclick="showVehicleUsagePopup('${encodeURIComponent(c.Plate)}','${dateStr}')"><div style="display:flex;justify-content:space-between;gap:10px"><b><svg width="16" height="16"><use href="#icon-car"/></svg> ${escapeHtml(c.Plate)}</b><span class="popup-status ${b?'busy':'available'}">${b?'ไม่ว่าง':'ว่าง'}</span></div>${b?`<div style="margin-top:8px;color:var(--text-muted);font-size:13px">${escapeHtml(b.UserName||'-')} · ${escapeHtml(bookingDriverName(b))}</div>`:''}</div>`}).join('');
+            openPlannerPopup(`สถานะรถ · ${plannerDateLabel(dateStr)}`,'icon-cal',rows||'<div class="empty-state">ไม่พบข้อมูลรถ</div>');
+        }
+
+        function showDriverPopup(encodedId) {
+            const id=decodeURIComponent(encodedId),d=driversData.find(x=>String(x.DriverID)===id); if(!d)return;
+            const jobs=bookingsData.filter(b=>bookingUsesDriver(b)&&String(b.DriverID)===id).sort((a,b)=>(parseDateString(b.StartDate)||0)-(parseDateString(a.StartDate)||0));
+            let body=`<div class="planner-modal-summary">${plannerTile('icon-driver','ชื่อ-นามสกุล',`${d.FirstName} ${d.LastName}`)}${plannerTile('icon-user','ชื่อเล่น',d.Nickname||'-')}${plannerTile('icon-phone','เบอร์ติดต่อ',d.Phone||'-')}${plannerTile('icon-shield','สถานะ',d.Status==='Archived'?'ปิดใช้งาน':'พร้อมรับงาน')}</div><h3 style="display:flex;align-items:center;gap:8px"><svg width="19" height="19"><use href="#icon-cal"/></svg> ประวัติงาน (${jobs.length})</h3>`;
+            body+=jobs.length?jobs.map(b=>`<div class="v-book-card" style="cursor:pointer" onclick="showDriverAssignmentPopup('${encodeURIComponent(id)}','${encodeURIComponent(b.BookingID)}','${escapeHtml(b.StartDate||'')}')"><b>${escapeHtml(b.Plate||'-')} · ${escapeHtml(b.Destination||'-')}</b><div style="font-size:12px;color:var(--text-muted);margin-top:5px">${escapeHtml(plannerDateLabel(b.StartDate))} – ${escapeHtml(plannerDateLabel(b.EndDate))} · ${escapeHtml(b.Status==='Completed'?'คืนรถแล้ว':'กำลังใช้งาน')}</div></div>`).join(''):'<div class="empty-state">ยังไม่มีประวัติงาน</div>';
+            openPlannerPopup(`ข้อมูลคนขับ · ${escapeHtml(fullDriverName(d))}`,'icon-driver',body);
+        }
+
+        function showDriverAssignmentPopup(encodedDriverId,encodedBookingId,dateStr) {
+            const id=decodeURIComponent(encodedDriverId),bookingId=decodeURIComponent(encodedBookingId),d=driversData.find(x=>String(x.DriverID)===id),b=bookingsData.find(x=>String(x.BookingID)===bookingId); if(!d||!b)return;
+            const body=`<div class="planner-modal-summary">${plannerTile('icon-driver','คนขับรถ',fullDriverName(d))}${plannerTile('icon-phone','เบอร์คนขับ',d.Phone||b.DriverPhone||'-')}${plannerTile('icon-car','ทะเบียนรถ',b.Plate||'-')}${plannerTile('icon-shield','สถานะงาน',b.Status==='Completed'?'เสร็จสิ้น':'กำลังใช้งาน')}</div><div class="detail-group">${detailPopupRow('icon-user','ผู้ใช้งาน',`${b.UserName||'-'} · ${b.Department||'-'}`)}${detailPopupRow('icon-phone','เบอร์ผู้ใช้งาน',b.Tel||'-')}${detailPopupRow('icon-loc','ปลายทาง',b.Destination||'-')}${detailPopupRow('icon-cal','วันที่เริ่ม',plannerDateLabel(b.StartDate))}${detailPopupRow('icon-time','กำหนดคืน',plannerDateLabel(b.EndDate))}</div>`;
+            openPlannerPopup(`รายละเอียดงาน · ${plannerDateLabel(dateStr)}`,'icon-list',body);
+        }
+
+        function showDriverDayPopup(dateStr) {
+            const filter=document.getElementById('driver-calendar-filter').value,list=driversData.filter(d=>d.Status!=='Archived'&&(filter==='ทั้งหมด'||String(d.DriverID)===filter));
+            const rows=list.map(d=>({d,b:driverBookingOnDate(d,dateStr)})).map(x=>`<div class="v-book-card" style="border-left-color:${x.b?'var(--primary)':'#10b981'} !important;cursor:pointer" onclick="${x.b?`showDriverAssignmentPopup('${encodeURIComponent(x.d.DriverID)}','${encodeURIComponent(x.b.BookingID)}','${dateStr}')`:`showDriverPopup('${encodeURIComponent(x.d.DriverID)}')`}"><div style="display:flex;justify-content:space-between;gap:10px"><b><svg width="16" height="16"><use href="#icon-driver"/></svg> ${escapeHtml(fullDriverName(x.d))}</b><span class="popup-status ${x.b?'busy':'available'}">${x.b?'มีงาน':'ว่าง'}</span></div>${x.b?`<div style="font-size:13px;color:var(--text-muted);margin-top:7px">รถ ${escapeHtml(x.b.Plate||'-')} · ${escapeHtml(x.b.Destination||'-')}</div>`:''}</div>`).join('');
+            openPlannerPopup(`ตารางคนขับ · ${plannerDateLabel(dateStr)}`,'icon-cal',rows||'<div class="empty-state">ไม่พบข้อมูลคนขับ</div>');
         }
 
         function openDriverModal() {
@@ -1297,10 +1433,12 @@
             const btn=document.getElementById('btn-save-driver'); btn.disabled=true;
             try {
                 const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'addDriver',payload:{...driver,adminName:currentAdminName}})});
-                if(!response.ok) throw new Error('API error');
+                const result=await response.json();
+                if(!response.ok || result.status !== 'success') throw new Error(result.message || 'API error');
+                driver.DriverID=result.driverId || driver.DriverID;
                 driversData.push(driver); localStorage.setItem('smartFleetDrivers',JSON.stringify(driversData));
                 closeModal('modal-driver'); populateDriverAndFleetFilters(); renderDriverDirectory(); renderDriverCalendar(); showToast('เพิ่มข้อมูลคนขับรถสำเร็จ','success');
-            } catch(e) { showToast('บันทึกคนขับรถไม่สำเร็จ กรุณาตรวจสอบ API','danger'); }
+            } catch(e) { showToast(e.message || 'บันทึกคนขับรถไม่สำเร็จ กรุณาตรวจสอบ API','danger'); }
             finally { btn.disabled=false; }
         }
 
@@ -2424,10 +2562,12 @@
             const payload = { plate, user, dept, tel, dest, startDate, endDate, startMileage, useDriver, driverId, driverName: driver ? fullDriverName(driver) : '', driverPhone: driver ? driver.Phone : '' };
 
             try {
-                await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'bookCar', payload: payload }) });
+                const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'bookCar', payload: payload }) });
+                const result = await response.json();
+                if(!response.ok || result.status !== 'success') throw new Error(result.message || 'ไม่สามารถบันทึกการจองได้');
                 showToast('บันทึกการจองสำเร็จ!', 'success');
                 closeModal('modal-booking'); fetchInitialData(true); 
-            } catch(e) { showToast('เกิดข้อผิดพลาดในการบันทึก', 'danger'); } 
+            } catch(e) { showToast(e.message || 'เกิดข้อผิดพลาดในการบันทึก', 'danger'); } 
             finally { btn.disabled = false; btn.innerHTML = 'บันทึกข้อมูลเข้าสู่ระบบ'; }
         }
 
