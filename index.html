@@ -52,11 +52,6 @@
         .bg-watermark { position: fixed; bottom: -10vh; right: -5vw; width: 70vh; height: 70vh; opacity: 0.03; pointer-events: none; z-index: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' fill='none' stroke='%23000' stroke-width='0.5' stroke-dasharray='2 2'%3E%3Cpath d='M10 45 L15 25 L40 25 L55 45 Z'/%3E%3Ccircle cx='20' cy='45' r='5'/%3E%3Ccircle cx='45' cy='45' r='5'/%3E%3Cpath d='M5 45 L65 45'/%3E%3Cpath d='M25 25 L25 45 M35 25 L35 45'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-size: contain; background-position: bottom right; transition: var(--transition); }
         body.dark-mode .bg-watermark { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' fill='none' stroke='%23fff' stroke-width='0.5' stroke-dasharray='2 2'%3E%3Cpath d='M10 45 L15 25 L40 25 L55 45 Z'/%3E%3Ccircle cx='20' cy='45' r='5'/%3E%3Ccircle cx='45' cy='45' r='5'/%3E%3Cpath d='M5 45 L65 45'/%3E%3Cpath d='M25 25 L25 45 M35 25 L35 45'/%3E%3C/svg%3E"); opacity: 0.05; }
 
-        .smart-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 100000; background: rgba(0,0,0,0.05); overflow: hidden; }
-        .smart-bar { position: absolute; top: 0; left: -300px; width: 300px; height: 100%; background: linear-gradient(90deg, transparent, var(--primary), #ffffff); box-shadow: 0 0 12px var(--primary), 0 0 20px var(--primary); animation: cyber-scan 2s infinite cubic-bezier(0.4, 0, 0.2, 1); }
-        body.dark-mode .smart-bar-container { background: rgba(255,255,255,0.05); }
-        
-        @keyframes cyber-scan { 0% { left: -300px; } 100% { left: 100%; } }
         @keyframes alert-pulse { 0% { filter: drop-shadow(0 0 4px rgba(220,38,38,0.5)); transform: scale(1); } 50% { filter: drop-shadow(0 0 12px rgba(220,38,38,1)); transform: scale(1.1); } 100% { filter: drop-shadow(0 0 4px rgba(220,38,38,0.5)); transform: scale(1); } }
 
         .sidebar { width: var(--sidebar-width); background: var(--card-bg); display: flex; flex-direction: column; border-right: 1px solid var(--border-color); z-index: 200; transition: var(--transition); overflow-x: hidden; box-shadow: 4px 0 20px rgba(0,0,0,0.02); }
@@ -234,6 +229,29 @@
         .v-book-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--theme-glow); border-color: var(--primary-light);}
         .ticket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
+        /* Fleet & Driver planning */
+        .planner-toolbar { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px; padding:18px; margin-bottom:20px; box-shadow:var(--shadow); }
+        .planner-toolbar .form-group { min-width:210px; flex:1; }
+        .planner-calendar { min-width:980px; }
+        .planner-day { min-height:180px; padding:10px; background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; transition:var(--transition); }
+        .planner-day:hover { border-color:var(--primary); box-shadow:0 8px 22px var(--theme-glow); transform:translateY(-2px); }
+        .planner-day.today { outline:2px solid var(--primary); outline-offset:2px; }
+        .planner-day-number { font-weight:800; font-size:16px; color:var(--text-main); margin-bottom:8px; display:flex; justify-content:space-between; }
+        .fleet-slot { display:flex; align-items:center; gap:7px; padding:6px 8px; margin-bottom:5px; border-radius:8px; font-size:11px; font-weight:700; line-height:1.25; }
+        .fleet-slot.available { background:rgba(16,185,129,.12); color:#047857; border:1px solid rgba(16,185,129,.28); }
+        .fleet-slot.busy { background:rgba(239,68,68,.10); color:#dc2626; border:1px solid rgba(239,68,68,.24); }
+        .driver-assignment { padding:8px; border-radius:9px; background:var(--primary-light); border-left:3px solid var(--primary); margin-bottom:6px; font-size:11px; line-height:1.35; }
+        .driver-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:16px; margin-bottom:22px; }
+        .driver-card { background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px; padding:18px; box-shadow:var(--shadow); display:flex; gap:14px; align-items:center; }
+        .driver-avatar { width:48px; height:48px; border-radius:14px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; flex:none; }
+        .driver-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 9px; border-radius:20px; background:rgba(59,130,246,.12); color:#2563eb; font-size:12px; font-weight:700; }
+        .driver-option-panel { grid-column:span 2; background:var(--primary-light); border:1px solid var(--primary); border-radius:14px; padding:16px; }
+        .switch-row { display:flex; align-items:center; justify-content:space-between; gap:15px; }
+        .switch-control { width:46px; height:26px; appearance:none; background:#cbd5e1; border-radius:999px; position:relative; cursor:pointer; transition:.2s; }
+        .switch-control::after { content:''; position:absolute; width:20px; height:20px; top:3px; left:3px; background:white; border-radius:50%; box-shadow:0 2px 6px rgba(0,0,0,.25); transition:.2s; }
+        .switch-control:checked { background:var(--primary); }
+        .switch-control:checked::after { transform:translateX(20px); }
+
         #toast-container { position: fixed; top: 24px; right: 24px; z-index: 10000; display: flex; flex-direction: column; gap: 12px; max-width: calc(100vw - 48px); }
         .toast { background: var(--card-bg); border-left: 6px solid #10b981; color: var(--text-main); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 14px; font-weight: 600; font-family: 'Sarabun'; font-size: 15px; animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .toast.danger { border-left-color: #ef4444; }
@@ -259,6 +277,7 @@
             .car-grid { grid-template-columns: 1fr; }
             .form-grid { grid-template-columns: 1fr; }
             .form-group.full { grid-column: span 1; }
+            .driver-option-panel { grid-column: span 1; }
             
             .theme-picker { max-width: 100%; padding: 8px 12px; -webkit-overflow-scrolling: touch; }
             .color-dot { width: 28px; height: 28px; border-width: 3px; }
@@ -309,6 +328,7 @@
         <symbol id="icon-edit" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></symbol>
         <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></symbol>
         <symbol id="icon-user" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></symbol>
+        <symbol id="icon-driver" viewBox="0 0 24 24"><path d="M12 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-7 19v-2c0-3.31 3.13-6 7-6s7 2.69 7 6v2h-2v-2c0-.55-.17-1.07-.47-1.54L14.2 21h-4.4l-2.33-3.54C7.17 17.93 7 18.45 7 19v2H5zm5-6 2 3 2-3c-.63-.2-1.3-.3-2-.3s-1.37.1-2 .3z"/></symbol>
         <symbol id="icon-building" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5L5 6.27V14l7 3.5 7-3.5V6.27L12 9.5zm0 10.5l-7-3.5V11l7 3.5 7-3.5v5.5l-7 3.5z"/></symbol>
         <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.15 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></symbol>
         <symbol id="icon-flag" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></symbol>
@@ -316,7 +336,6 @@
     </svg>
 
     <div class="bg-watermark"></div>
-    <div class="smart-bar-container"><div class="smart-bar"></div></div>
     <div id="mobile-overlay" onclick="toggleMobileSidebar()"></div>
 
     <!-- Alert Modal สำหรับแจ้งเตือนเข้าศูนย์ -->
@@ -357,6 +376,8 @@
         <div class="menu-container">
             <div class="menu-item active" onclick="switchMenu('dashboard', this)"><svg class="menu-icon"><use href="#icon-dash"/></svg><span class="menu-text">ภาพรวมระบบ</span></div>
             <div class="menu-item" onclick="switchMenu('calendar', this)"><svg class="menu-icon"><use href="#icon-cal"/></svg><span class="menu-text">ปฏิทินการใช้งาน</span></div>
+            <div class="menu-item" onclick="switchMenu('vehicleusage', this)"><svg class="menu-icon"><use href="#icon-car"/></svg><span class="menu-text">ข้อมูลการใช้งานรถยนต์</span></div>
+            <div class="menu-item" onclick="switchMenu('drivers', this)"><svg class="menu-icon"><use href="#icon-driver"/></svg><span class="menu-text">ข้อมูลคนขับรถ</span></div>
             <div class="menu-item" onclick="switchMenu('bookinglist', this)"><svg class="menu-icon"><use href="#icon-list"/></svg><span class="menu-text">รายการจองทั้งหมด</span></div>
             <div class="menu-item" onclick="switchMenu('carmodule', this)"><svg class="menu-icon"><use href="#icon-car"/></svg><span class="menu-text">ข้อมูลรถส่วนกลาง</span></div>
             <div class="menu-item" onclick="switchMenu('export', this)"><svg class="menu-icon"><use href="#icon-export"/></svg><span class="menu-text">รายงานสถิติ</span></div>
@@ -464,6 +485,44 @@
                 </div>
             </div>
 
+            <!-- VIEW: Vehicle Availability Calendar -->
+            <div id="view-vehicleusage" class="view-section">
+                <div class="header-flex">
+                    <div>
+                        <h1 class="header-title"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-car"/></svg> ข้อมูลการใช้งานรถยนต์</h1>
+                        <div style="font-size:14px; color:var(--text-muted); margin-top:8px;">ปฏิทินรายเดือน แสดงรถว่างและรถที่ถูกจองแยกตามทะเบียน</div>
+                    </div>
+                </div>
+                <div class="planner-toolbar">
+                    <div class="form-group"><label>เลือกเดือน</label><input type="month" id="vehicle-usage-month" class="form-control" onchange="setVehicleUsageMonth(this.value)"></div>
+                    <div class="form-group"><label>เลือกทะเบียนรถ</label><select id="vehicle-usage-plate" class="form-control" onchange="renderVehicleUsageCalendar()"><option value="ทั้งหมด">ทั้งหมด (ทุกคัน)</option></select></div>
+                    <div style="display:flex; gap:8px;"><button class="btn-secondary" onclick="changeVehicleUsageMonth(-1)">◀</button><button class="btn-secondary" onclick="changeVehicleUsageMonth(1)">▶</button></div>
+                </div>
+                <div class="calendar-wrap">
+                    <div class="calendar-grid planner-calendar" id="vehicle-usage-calendar"></div>
+                </div>
+            </div>
+
+            <!-- VIEW: Driver Calendar & Directory -->
+            <div id="view-drivers" class="view-section">
+                <div class="header-flex">
+                    <div>
+                        <h1 class="header-title"><svg width="32" height="32" style="color:var(--primary)"><use href="#icon-driver"/></svg> ข้อมูลคนขับรถ</h1>
+                        <div style="font-size:14px; color:var(--text-muted); margin-top:8px;">ดูตารางงานรายเดือน ชื่อผู้ปฏิบัติงาน และทะเบียนรถที่ได้รับมอบหมาย</div>
+                    </div>
+                    <button class="btn-primary admin-driver-control" style="display:none;" onclick="openDriverModal()"><svg width="20" height="20"><use href="#icon-driver"/></svg> เพิ่มคนขับรถ</button>
+                </div>
+                <div class="driver-grid" id="driver-directory"></div>
+                <div class="planner-toolbar">
+                    <div class="form-group"><label>เลือกเดือน</label><input type="month" id="driver-calendar-month" class="form-control" onchange="setDriverCalendarMonth(this.value)"></div>
+                    <div class="form-group"><label>เลือกคนขับรถ</label><select id="driver-calendar-filter" class="form-control" onchange="renderDriverCalendar()"><option value="ทั้งหมด">ทั้งหมด (ทุกคน)</option></select></div>
+                    <div style="display:flex; gap:8px;"><button class="btn-secondary" onclick="changeDriverCalendarMonth(-1)">◀</button><button class="btn-secondary" onclick="changeDriverCalendarMonth(1)">▶</button></div>
+                </div>
+                <div class="calendar-wrap">
+                    <div class="calendar-grid planner-calendar" id="driver-calendar"></div>
+                </div>
+            </div>
+
             <!-- VIEW: Booking List -->
             <div id="view-bookinglist" class="view-section">
                 <div class="header-flex">
@@ -486,6 +545,7 @@
                                 <th>รหัสจอง</th>
                                 <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-car"/></svg> รถที่ใช้</th>
                                 <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-user"/></svg> ผู้ใช้งาน / แผนก</th>
+                                <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-driver"/></svg> คนขับรถ</th>
                                 <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-cal"/></svg> วันที่ยืม</th>
                                 <th><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-time"/></svg> กำหนดคืน</th>
                                 <th style="color:#10b981;"><svg width="16" height="16" style="vertical-align:text-bottom"><use href="#icon-check"/></svg> รับรถคืน (จริง)</th>
@@ -496,7 +556,7 @@
                             </tr>
                         </thead>
                         <tbody id="booking-list-body">
-                            <tr><td colspan="10" style="text-align:center; padding: 40px;">กำลังเชื่อมต่อข้อมูล...</td></tr>
+                            <tr><td colspan="11" style="text-align:center; padding: 40px;">กำลังเชื่อมต่อข้อมูล...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -647,8 +707,35 @@
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก/หน่วยงาน</label><input type="text" class="form-control" id="book-dept" placeholder="เช่น Central Service 1"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-phone"/></svg> เบอร์ติดต่อ</label><input type="text" class="form-control" id="book-tel" placeholder="08X-XXX-XXXX"></div>
                 <div class="form-group"><label><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</label><input type="text" class="form-control" id="book-dest" placeholder="ระบุสถานที่"></div>
+                <div class="driver-option-panel">
+                    <div class="switch-row">
+                        <div><label style="font-size:16px;"><svg width="19" height="19"><use href="#icon-driver"/></svg> ต้องการคนขับรถ</label><div style="font-size:12px; color:var(--text-muted); margin-top:4px;">เปิดเพื่อเลือกคนขับรถที่ว่างในช่วงวันที่จอง</div></div>
+                        <input type="checkbox" id="book-use-driver" class="switch-control" onchange="toggleDriverBooking()" aria-label="ต้องการคนขับรถ">
+                    </div>
+                    <div id="book-driver-wrap" style="display:none; margin-top:14px;">
+                        <label><svg width="16" height="16"><use href="#icon-driver"/></svg> เลือกคนขับรถ</label>
+                        <select class="form-control" id="book-driver"><option value="">-- เลือกคนขับรถ --</option></select>
+                        <div id="book-driver-help" style="font-size:12px; color:var(--text-muted); margin-top:6px;"></div>
+                    </div>
+                </div>
                 <div class="form-group full"><label><svg width="16" height="16"><use href="#icon-mileage"/></svg> เลขไมล์เริ่มต้น (ดึงข้อมูลล่าสุดอัตโนมัติ)</label><input type="number" class="form-control" id="book-mileage" readonly style="background:var(--border-color); font-weight:bold; color:var(--text-main);"></div>
                 <div class="form-group full"><button class="btn-primary" id="btn-save-book" style="width:100%; justify-content:center; margin-top:15px; padding:14px; font-size:16px;" onclick="saveBooking()"><svg width="20" height="20"><use href="#icon-check"/></svg> บันทึกข้อมูลเข้าสู่ระบบ</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-driver">
+        <div class="modal-content" style="max-width:560px;">
+            <div class="modal-header">
+                <h2><svg width="24" height="24"><use href="#icon-driver"/></svg> เพิ่มข้อมูลคนขับรถ</h2>
+                <button class="btn-close" onclick="closeModal('modal-driver')"><svg width="20" height="20"><use href="#icon-close"/></svg></button>
+            </div>
+            <div class="modal-body form-grid">
+                <div class="form-group"><label>ชื่อ</label><input type="text" class="form-control" id="driver-firstname" placeholder="ชื่อจริง"></div>
+                <div class="form-group"><label>นามสกุล</label><input type="text" class="form-control" id="driver-lastname" placeholder="นามสกุล"></div>
+                <div class="form-group"><label>ชื่อเล่น</label><input type="text" class="form-control" id="driver-nickname" placeholder="ชื่อที่ใช้เรียก"></div>
+                <div class="form-group"><label>เบอร์ติดต่อ</label><input type="tel" class="form-control" id="driver-phone" placeholder="08X-XXX-XXXX"></div>
+                <div class="form-group full"><button class="btn-primary" id="btn-save-driver" style="width:100%;" onclick="saveDriver()"><svg width="19" height="19"><use href="#icon-check"/></svg> บันทึกข้อมูลคนขับรถ</button></div>
             </div>
         </div>
     </div>
@@ -781,8 +868,10 @@
 
         let isAdminLoggedIn = false;
         let currentAdminName = "";
-        let carsData = [], auditData = [], adminsData = [], bookingsData = []; 
+        let carsData = [], auditData = [], adminsData = [], bookingsData = [], driversData = []; 
         let currentCalDate = new Date();
+        let currentVehicleUsageDate = new Date();
+        let currentDriverCalDate = new Date();
         
         let exportChartInstance = null;
 
@@ -986,6 +1075,8 @@
                     auditData = json.auditLog || [];
                     adminsData = json.admins || [];
                     bookingsData = json.bookings || []; 
+                    const localDrivers = JSON.parse(localStorage.getItem('smartFleetDrivers') || '[]');
+                    driversData = (json.drivers && json.drivers.length ? json.drivers : localDrivers).map(normalizeDriver);
                     
                     document.getElementById('btn-create-book').disabled = false;
                     
@@ -1014,12 +1105,14 @@
             try {
                 const adminBtn = document.getElementById('admin-add-car-btn');
                 if (adminBtn) adminBtn.style.display = isAdminLoggedIn ? 'block' : 'none';
+                document.querySelectorAll('.admin-driver-control').forEach(el => el.style.display = isAdminLoggedIn ? 'inline-flex' : 'none');
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdminLoggedIn ? 'table-cell' : 'none');
             } catch(e) {}
             
             try { populateCarDropdowns(); } catch(e) { console.error('Error populateCarDropdowns', e); }
             try { renderDashboard(); } catch(e) { console.error('Error renderDashboard', e); }
             try { renderCalendar(); } catch(e) { console.error('Error renderCalendar', e); }
+            try { populateDriverAndFleetFilters(); renderVehicleUsageCalendar(); renderDriverDirectory(); renderDriverCalendar(); } catch(e) { console.error('Error driver/fleet planner', e); }
             try { renderBookingList(); } catch(e) { console.error('Error renderBookingList', e); }
             try { renderCarTable(); } catch(e) { console.error('Error renderCarTable', e); }
             try { renderAnalytics(); } catch(e) { console.error('Error renderAnalytics', e); }
@@ -1067,6 +1160,148 @@
                 bEnd.setHours(23,59,59,999);
                 return (checkDate >= bStart && checkDate <= bEnd);
             });
+        }
+
+        function escapeHtml(value) {
+            return String(value == null ? '' : value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+        }
+
+        function normalizeDriver(d, index = 0) {
+            const firstName = d.FirstName || d.firstName || d.Name || '';
+            const lastName = d.LastName || d.lastName || '';
+            const nickname = d.Nickname || d.nickname || '';
+            return {
+                DriverID: String(d.DriverID || d.driverId || `DRV-${String(index + 1).padStart(3,'0')}`),
+                FirstName: String(firstName), LastName: String(lastName), Nickname: String(nickname),
+                Phone: String(d.Phone || d.phone || d.Tel || ''), Status: String(d.Status || 'Active')
+            };
+        }
+
+        function fullDriverName(d) {
+            if(!d) return '-';
+            const full = `${d.FirstName || ''} ${d.LastName || ''}`.trim();
+            return d.Nickname ? `${full} (${d.Nickname})` : full || '-';
+        }
+
+        function bookingUsesDriver(b) {
+            const v = b.UseDriver ?? b.useDriver ?? b.WithDriver;
+            return ['true','yes','1','ใช่','พร้อมคนขับ'].includes(String(v).toLowerCase()) || !!(b.DriverID || b.DriverName);
+        }
+
+        function bookingDriverName(b) {
+            if(!bookingUsesDriver(b)) return 'ไม่ใช้คนขับรถ';
+            if(b.DriverName) return b.DriverName;
+            const d = driversData.find(x => String(x.DriverID) === String(b.DriverID));
+            return d ? fullDriverName(d) : 'ระบุใช้คนขับรถ';
+        }
+
+        function driverBookingOnDate(driver, dateStr) {
+            return bookingsData.find(b => {
+                if(!bookingUsesDriver(b)) return false;
+                const same = (b.DriverID && String(b.DriverID) === String(driver.DriverID)) ||
+                    (!b.DriverID && String(bookingDriverName(b)) === String(fullDriverName(driver)));
+                return same && !!getBookingForExactDate(b, dateStr);
+            }) || null;
+        }
+
+        function getBookingForExactDate(b, dateStr) {
+            const check = parseDateString(dateStr), start = parseDateString(b.StartDate);
+            if(!check || !start) return false;
+            let end = b.Status === 'Completed' && b.RealReturnDate ? parseDateString(b.RealReturnDate) : parseDateString(b.EndDate);
+            end = end || new Date(start);
+            [check,start,end].forEach(d => d.setHours(0,0,0,0));
+            return check >= start && check <= end;
+        }
+
+        function thaiMonthValue(date) {
+            return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;
+        }
+
+        function populateDriverAndFleetFilters() {
+            const plateSelect = document.getElementById('vehicle-usage-plate');
+            const driverFilter = document.getElementById('driver-calendar-filter');
+            const bookingDriver = document.getElementById('book-driver');
+            if(plateSelect) {
+                const old = plateSelect.value;
+                plateSelect.innerHTML = '<option value="ทั้งหมด">ทั้งหมด (ทุกคัน)</option>' + carsData.filter(c => c.Status !== 'Archived').map(c => `<option value="${escapeHtml(c.Plate)}">${escapeHtml(c.Plate)} · ${escapeHtml(c.Brand || '')}</option>`).join('');
+                if([...plateSelect.options].some(o => o.value === old)) plateSelect.value = old;
+            }
+            if(driverFilter) {
+                const old = driverFilter.value;
+                driverFilter.innerHTML = '<option value="ทั้งหมด">ทั้งหมด (ทุกคน)</option>' + driversData.filter(d => d.Status !== 'Archived').map(d => `<option value="${escapeHtml(d.DriverID)}">${escapeHtml(fullDriverName(d))}</option>`).join('');
+                if([...driverFilter.options].some(o => o.value === old)) driverFilter.value = old;
+            }
+            if(bookingDriver && !document.getElementById('book-use-driver').checked) {
+                bookingDriver.innerHTML = '<option value="">-- เปิดตัวเลือก “ต้องการคนขับรถ” ก่อน --</option>';
+            }
+        }
+
+        function calendarHead() {
+            return '<div class="day-header">จ.</div><div class="day-header">อ.</div><div class="day-header">พ.</div><div class="day-header">พฤ.</div><div class="day-header">ศ.</div><div class="day-header" style="color:#ef4444">ส.</div><div class="day-header" style="color:#ef4444">อา.</div>';
+        }
+
+        function setVehicleUsageMonth(v) { if(v) { const p=v.split('-'); currentVehicleUsageDate=new Date(+p[0],+p[1]-1,1); renderVehicleUsageCalendar(); } }
+        function changeVehicleUsageMonth(delta) { currentVehicleUsageDate.setMonth(currentVehicleUsageDate.getMonth()+delta); renderVehicleUsageCalendar(); }
+
+        function renderVehicleUsageCalendar() {
+            const el = document.getElementById('vehicle-usage-calendar'), input = document.getElementById('vehicle-usage-month');
+            if(!el || !input) return;
+            input.value = thaiMonthValue(currentVehicleUsageDate);
+            const y=currentVehicleUsageDate.getFullYear(), m=currentVehicleUsageDate.getMonth(), selected=document.getElementById('vehicle-usage-plate').value;
+            const fleet = carsData.filter(c => c.Status !== 'Archived' && (selected === 'ทั้งหมด' || String(c.Plate) === selected));
+            let html=calendarHead(), first=new Date(y,m,1).getDay(), offset=first===0?6:first-1;
+            html += '<div></div>'.repeat(offset);
+            const todayKey=new Date().toISOString().slice(0,10);
+            for(let day=1; day<=new Date(y,m+1,0).getDate(); day++) {
+                const key=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                const slots=fleet.map(c => { const b=getActiveBookingForDate(c.Plate,key); const driverText=b?(bookingUsesDriver(b)?` · ${bookingDriverName(b)}`:' · ไม่ใช้คนขับรถ'):''; return `<div class="fleet-slot ${b?'busy':'available'}"><svg width="13" height="13"><use href="#icon-car"/></svg><span>${escapeHtml(c.Plate)} · ${b?'ไม่ว่าง':'ว่าง'}${escapeHtml(driverText)}</span></div>`; }).join('');
+                html += `<div class="planner-day ${key===todayKey?'today':''}"><div class="planner-day-number"><span>${day}</span><span style="font-size:10px;color:var(--text-muted)">${fleet.filter(c=>!getActiveBookingForDate(c.Plate,key)).length}/${fleet.length} ว่าง</span></div>${slots || '<div style="color:var(--text-muted);font-size:12px">ไม่พบรถ</div>'}</div>`;
+            }
+            el.innerHTML=html;
+        }
+
+        function renderDriverDirectory() {
+            const el=document.getElementById('driver-directory'); if(!el) return;
+            if(!driversData.length) { el.innerHTML='<div class="empty-state">ยังไม่มีข้อมูลคนขับรถในระบบ</div>'; return; }
+            el.innerHTML=driversData.filter(d=>d.Status!=='Archived').map(d=>`<div class="driver-card"><div class="driver-avatar"><svg width="28" height="28"><use href="#icon-driver"/></svg></div><div style="min-width:0"><div style="font-weight:800;font-size:16px">${escapeHtml(fullDriverName(d))}</div><div style="color:var(--text-muted);font-size:13px;margin-top:4px">${escapeHtml(d.Phone || '-')}</div><div class="driver-badge" style="margin-top:8px">พร้อมรับงาน</div></div></div>`).join('');
+        }
+
+        function setDriverCalendarMonth(v) { if(v) { const p=v.split('-'); currentDriverCalDate=new Date(+p[0],+p[1]-1,1); renderDriverCalendar(); } }
+        function changeDriverCalendarMonth(delta) { currentDriverCalDate.setMonth(currentDriverCalDate.getMonth()+delta); renderDriverCalendar(); }
+
+        function renderDriverCalendar() {
+            const el=document.getElementById('driver-calendar'), input=document.getElementById('driver-calendar-month'); if(!el||!input) return;
+            input.value=thaiMonthValue(currentDriverCalDate);
+            const y=currentDriverCalDate.getFullYear(),m=currentDriverCalDate.getMonth(),filter=document.getElementById('driver-calendar-filter').value;
+            const list=driversData.filter(d=>d.Status!=='Archived'&&(filter==='ทั้งหมด'||String(d.DriverID)===filter));
+            let html=calendarHead(),first=new Date(y,m,1).getDay(),offset=first===0?6:first-1; html+='<div></div>'.repeat(offset);
+            const todayKey=new Date().toISOString().slice(0,10);
+            for(let day=1;day<=new Date(y,m+1,0).getDate();day++){
+                const key=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                const jobs=list.map(d=>({d,b:driverBookingOnDate(d,key)})).filter(x=>x.b).map(x=>`<div class="driver-assignment"><b>${escapeHtml(fullDriverName(x.d))}</b><br><svg width="12" height="12"><use href="#icon-car"/></svg> ${escapeHtml(x.b.Plate||'-')} · ${escapeHtml(x.b.Destination||'-')}</div>`).join('');
+                html+=`<div class="planner-day ${key===todayKey?'today':''}"><div class="planner-day-number"><span>${day}</span><span style="font-size:10px;color:var(--text-muted)">${jobs?'มีงาน':'ว่าง'}</span></div>${jobs||'<div style="color:#047857;background:rgba(16,185,129,.1);padding:7px;border-radius:8px;font-size:11px;font-weight:700">คนขับว่าง</div>'}</div>`;
+            }
+            el.innerHTML=html;
+        }
+
+        function openDriverModal() {
+            if(!isAdminLoggedIn) { showToast('กรุณาเข้าสู่ระบบ Admin ก่อนเพิ่มคนขับรถ','warning'); return; }
+            ['driver-firstname','driver-lastname','driver-nickname','driver-phone'].forEach(id=>document.getElementById(id).value='');
+            document.getElementById('modal-driver').style.display='flex';
+        }
+
+        async function saveDriver() {
+            const firstName=document.getElementById('driver-firstname').value.trim(), lastName=document.getElementById('driver-lastname').value.trim(), nickname=document.getElementById('driver-nickname').value.trim(), phone=document.getElementById('driver-phone').value.trim();
+            if(!firstName || !lastName || !phone) { showToast('กรุณากรอกชื่อ นามสกุล และเบอร์ติดต่อ','warning'); return; }
+            const driver=normalizeDriver({DriverID:`DRV-${Date.now()}`,FirstName:firstName,LastName:lastName,Nickname:nickname,Phone:phone});
+            const btn=document.getElementById('btn-save-driver'); btn.disabled=true;
+            try {
+                const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'addDriver',payload:{...driver,adminName:currentAdminName}})});
+                if(!response.ok) throw new Error('API error');
+                driversData.push(driver); localStorage.setItem('smartFleetDrivers',JSON.stringify(driversData));
+                closeModal('modal-driver'); populateDriverAndFleetFilters(); renderDriverDirectory(); renderDriverCalendar(); showToast('เพิ่มข้อมูลคนขับรถสำเร็จ','success');
+            } catch(e) { showToast('บันทึกคนขับรถไม่สำเร็จ กรุณาตรวจสอบ API','danger'); }
+            finally { btn.disabled=false; }
         }
 
         // --- DASHBOARD ---
@@ -1153,6 +1388,7 @@
                         <div style="margin-bottom: 15px; padding: 12px; background: rgba(139,92,246,0.05); border-radius: 12px; border: 1px solid rgba(139,92,246,0.2);">
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้</span><span class="info-val" style="color:var(--primary);">${activeBooking.UserName} <br><span style="font-size:12px; color:var(--text-muted); font-weight:normal;">${activeBooking.Tel || '-'}</span></span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${activeBooking.Destination}</span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-driver"/></svg> คนขับรถ</span><span class="info-val"><span class="driver-badge">${escapeHtml(bookingDriverName(activeBooking))}</span></span></div>
                             
                             <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(139,92,246,0.3);">
                                 <div class="info-row" style="margin-bottom:4px;"><span class="info-label" style="color:#ef4444"><svg width="16" height="16"><use href="#icon-time"/></svg> เริ่ม-คืน</span>
@@ -1370,6 +1606,8 @@
                     "หน่วยงาน": b.Department,
                     "เบอร์ติดต่อ": b.Tel, 
                     "ปลายทาง": b.Destination, 
+                    "ใช้คนขับรถ": bookingUsesDriver(b) ? "ใช่" : "ไม่ใช้",
+                    "ชื่อคนขับรถ": bookingDriverName(b),
                     "วันที่เริ่มยืม": b.StartDate || '', 
                     "กำหนดคืน": b.EndDate || '-', 
                     "วันที่คืนจริง": b.RealReturnDate || '-',
@@ -1427,6 +1665,7 @@
                             </div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-building"/></svg> แผนก</span><span class="info-val">${b.Department || '-'}</span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เริ่ม-คืน</span><span class="info-val">${fullStart} - ${fullEnd}</span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-driver"/></svg> คนขับรถ</span><span class="info-val"><span class="driver-badge">${escapeHtml(bookingDriverName(b))}</span></span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-mileage"/></svg> ระยะทางที่ใช้</span><span class="info-val" style="color:var(--primary-dark); font-size:16px;">${km > 0 ? km.toLocaleString() : '-'} กม.</span></div>
                         </div>
                     `;
@@ -1456,7 +1695,7 @@
             tbody.innerHTML = '';
             
             if(bookingsData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${isAdminLoggedIn ? 10 : 9}" style="text-align:center; padding:40px; color:var(--text-muted);">ไม่มีข้อมูลการจองในระบบ</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${isAdminLoggedIn ? 11 : 10}" style="text-align:center; padding:40px; color:var(--text-muted);">ไม่มีข้อมูลการจองในระบบ</td></tr>`;
                 kmDisplay.innerHTML = `<svg width="20" height="20"><use href="#icon-mileage"/></svg> รวม 0 กม.`; return;
             }
 
@@ -1493,6 +1732,7 @@
                             <td style="color:var(--text-muted); font-size:13px;">${bId}</td>
                             <td style="font-weight:700; color:var(--text-main);">${b.Plate}</td>
                             <td><span style="font-weight:600; color:var(--primary);">${b.UserName || '-'}</span> <br><span style="font-size:12px; color:var(--text-muted);">${b.Department || '-'}</span></td>
+                            <td><span class="driver-badge"><svg width="14" height="14"><use href="#icon-driver"/></svg>${escapeHtml(bookingDriverName(b))}</span></td>
                             <td style="font-weight:600;">${b.StartDate || '-'}</td>
                             <td style="color:#f59e0b; font-weight:600;">${b.EndDate || '-'}</td>
                             <td style="color:#10b981; font-weight:700;">${realRet}</td>
@@ -1508,7 +1748,7 @@
                 }
             });
             
-            if(!found) tbody.innerHTML = `<tr><td colspan="${isAdminLoggedIn ? 10 : 9}" style="text-align:center; padding:40px; color:var(--text-muted);">ไม่มีประวัติการใช้งานในเดือนที่เลือก</td></tr>`;
+            if(!found) tbody.innerHTML = `<tr><td colspan="${isAdminLoggedIn ? 11 : 10}" style="text-align:center; padding:40px; color:var(--text-muted);">ไม่มีประวัติการใช้งานในเดือนที่เลือก</td></tr>`;
             kmDisplay.innerHTML = `<svg width="20" height="20"><use href="#icon-mileage"/></svg> รวมระยะทาง: ${totalKm.toLocaleString()} กม.`;
         }
 
@@ -1658,6 +1898,10 @@
                                 <div>
                                     <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; text-transform: uppercase;">ปลายทาง</div>
                                     <div style="font-size: 15px; font-weight: 600; color: var(--text-main);">${activeBooking.Destination || '-'}</div>
+                                </div>
+                                <div style="background: rgba(59,130,246,0.1); padding: 10px; border-radius: 8px; border-left: 3px solid #3b82f6;">
+                                    <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px;">คนขับรถ</div>
+                                    <div style="font-size: 15px; font-weight: 700; color: #2563eb;">${escapeHtml(bookingDriverName(activeBooking))}</div>
                                 </div>
                                 <div style="background: rgba(16,185,129,0.1); padding: 10px; border-radius: 8px; border-left: 3px solid #10b981;">
                                     <div style="font-size: 12px; color: #10b981; font-weight: 700; margin-bottom: 2px;">วันที่เริ่มยืม</div>
@@ -1907,6 +2151,7 @@
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</span><span class="info-val">${activeBooking.UserName} <span style="color:var(--text-muted); font-size:12px; font-weight:normal;">(${activeBooking.Department})</span></span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-phone"/></svg> ติดต่อ</span><span class="info-val">${activeBooking.Tel || '-'}</span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${activeBooking.Destination || '-'}</span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-driver"/></svg> คนขับรถ</span><span class="info-val"><span class="driver-badge">${escapeHtml(bookingDriverName(activeBooking))}</span></span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-cal"/></svg> เริ่ม-คืน</span><span class="info-val" style="color:#ef4444">${fullStart} - ${fullEnd}</span></div>
                             ${adminReturnBtn}
                         </div>
@@ -1938,6 +2183,8 @@
             document.getElementById('book-dept').value = "Central Service 1"; 
             document.getElementById('book-tel').value = "";
             document.getElementById('book-dest').value = "";
+            document.getElementById('book-use-driver').checked = false;
+            toggleDriverBooking();
             document.getElementById('book-mileage').value = "";
             
             checkAvailableCars(); 
@@ -1985,6 +2232,7 @@
                             </div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-user"/></svg> ผู้ใช้งาน</span><span class="info-val">${activeBooking.UserName}</span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-loc"/></svg> ปลายทาง</span><span class="info-val">${activeBooking.Destination}</span></div>
+                            <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-driver"/></svg> คนขับรถ</span><span class="info-val"><span class="driver-badge">${escapeHtml(bookingDriverName(activeBooking))}</span></span></div>
                             <div class="info-row"><span class="info-label"><svg width="16" height="16"><use href="#icon-time"/></svg> เริ่ม-คืน</span><span class="info-val">${fullStart} - ${fullEnd}</span></div>
                         </div>`; 
                     }
@@ -2026,6 +2274,8 @@
             document.getElementById('book-tel').value = "";
             document.getElementById('book-dest').value = "";
             document.getElementById('book-mileage').value = "";
+            document.getElementById('book-use-driver').checked = false;
+            toggleDriverBooking();
             
             checkAvailableCars(); 
         }
@@ -2039,6 +2289,7 @@
                 carSelect.innerHTML = '<option value="">-- กรุณาเลือกวันที่เริ่มยืม และวันคืนก่อน --</option>';
                 carSelect.disabled = true;
                 document.getElementById('book-mileage').value = '';
+                checkAvailableDrivers();
                 return;
             }
 
@@ -2051,6 +2302,7 @@
                 carSelect.innerHTML = '<option value="">-- วันที่ไม่ถูกต้อง --</option>';
                 carSelect.disabled = true;
                 document.getElementById('book-mileage').value = '';
+                checkAvailableDrivers();
                 return;
             }
 
@@ -2093,6 +2345,29 @@
                 carSelect.disabled = true;
             }
             document.getElementById('book-mileage').value = '';
+            checkAvailableDrivers();
+        }
+
+        function toggleDriverBooking() {
+            const enabled=document.getElementById('book-use-driver').checked;
+            document.getElementById('book-driver-wrap').style.display=enabled?'block':'none';
+            checkAvailableDrivers();
+        }
+
+        function checkAvailableDrivers() {
+            const select=document.getElementById('book-driver'), help=document.getElementById('book-driver-help');
+            if(!select || !document.getElementById('book-use-driver').checked) { if(select) select.innerHTML='<option value="">-- ไม่ใช้คนขับรถ --</option>'; return; }
+            const start=document.getElementById('book-start').value,end=document.getElementById('book-end').value;
+            if(!start||!end) { select.disabled=true; select.innerHTML='<option value="">-- กรุณาเลือกวันที่ก่อน --</option>'; help.textContent=''; return; }
+            const available=driversData.filter(d=>d.Status!=='Archived' && !bookingsData.some(b=>{
+                if(!bookingUsesDriver(b)) return false;
+                const same=(b.DriverID&&String(b.DriverID)===String(d.DriverID))||(!b.DriverID&&bookingDriverName(b)===fullDriverName(d));
+                if(!same) return false;
+                const bs=parseDateString(b.StartDate),be=parseDateString(b.EndDate)||bs,rs=parseDateString(start),re=parseDateString(end);
+                return bs&&be&&rs&&re&&rs<=be&&re>=bs;
+            }));
+            select.innerHTML='<option value="">-- เลือกคนขับรถที่ว่าง --</option>'+available.map(d=>`<option value="${escapeHtml(d.DriverID)}">${escapeHtml(fullDriverName(d))} · ${escapeHtml(d.Phone||'-')}</option>`).join('');
+            select.disabled=!available.length; help.textContent=available.length?`ว่าง ${available.length} คนในช่วงวันที่เลือก`:'ไม่มีคนขับรถว่างในช่วงวันที่เลือก';
         }
 
         function autoFillMileage() { 
@@ -2138,11 +2413,15 @@
             if(!endDate) { showToast('กรุณาเลือกวันที่คืน', 'warning'); return; }
 
             const startMileage = document.getElementById('book-mileage').value;
+            const useDriver = document.getElementById('book-use-driver').checked;
+            const driverId = useDriver ? document.getElementById('book-driver').value : '';
+            if(useDriver && !driverId) { showToast('กรุณาเลือกคนขับรถ','warning'); return; }
+            const driver = driversData.find(d=>String(d.DriverID)===String(driverId));
 
             const btn = document.getElementById('btn-save-book');
             btn.disabled = true; btn.innerHTML = '<svg width="20" height="20" style="animation: pulse 1s infinite;"><use href="#icon-time"/></svg> กำลังส่งข้อมูล...';
 
-            const payload = { plate, user, dept, tel, dest, startDate, endDate, startMileage };
+            const payload = { plate, user, dept, tel, dest, startDate, endDate, startMileage, useDriver, driverId, driverName: driver ? fullDriverName(driver) : '', driverPhone: driver ? driver.Phone : '' };
 
             try {
                 await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'bookCar', payload: payload }) });
@@ -2429,6 +2708,8 @@
             document.getElementById('dash-date').value = new Date().toISOString().split('T')[0];
             document.getElementById('booking-month-filter').value = new Date().toISOString().substring(0,7);
             document.getElementById('export-month').value = new Date().toISOString().substring(0,7);
+            document.getElementById('vehicle-usage-month').value = thaiMonthValue(currentVehicleUsageDate);
+            document.getElementById('driver-calendar-month').value = thaiMonthValue(currentDriverCalDate);
             fetchInitialData(); 
             setInterval(updateTime, 1000); updateTime();
         };
